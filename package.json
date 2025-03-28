@@ -23,7 +23,7 @@
     "@antv/g2": "^3.4.10",
     "drawflow": "^0.0.60",
     "mockjs": "1.1.0",
-    "ng-zorro-antd": "16.1.0",
+    "ng-zorro-antd": "19.2.0",
     "ngx-quill": "^16.1.1",
     "quill": "^1.3.7",
     "rxjs": "~7.8.0",
