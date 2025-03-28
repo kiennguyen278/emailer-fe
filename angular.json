@@ -83,10 +83,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ng-ant-design-pro-platform:build:production"
+              "buildTarget": "ng-ant-design-pro-platform:build:production"
             },
             "development": {
-              "browserTarget": "ng-ant-design-pro-platform:build:development"
+              "buildTarget": "ng-ant-design-pro-platform:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -94,7 +94,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng-ant-design-pro-platform:build"
+            "buildTarget": "ng-ant-design-pro-platform:build"
           }
         },
         "test": {
