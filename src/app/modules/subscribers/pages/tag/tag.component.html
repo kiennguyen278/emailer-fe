@@ -7,7 +7,7 @@
         [columns]="columns"
         [items]="tags"
         [scrollX]="'900px'"
-        [loading]="isLoading"
+        [loading]="isLoading$ | async"
         [showPagination]="false"
       >
         <ng-template [appCellTemplate]="'actions'" let-item>

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import { SubscribersService } from '../../state/service';
@@ -7,7 +7,18 @@ import { ValidatorUtil } from '@core/utils/validator.util';
 import { FormUtil } from '@core/utils/form.util';
 import { SaveTagRequest, TagDTO } from '@modules/subscribers/models';
 import { ColumnConfig } from '@core/models';
+import { Store } from '@ngrx/store';
+import {
+  selectDataGetTagsList,
+  selectErrorGetTagsList,
+  selectLoadingGetTagsList
+} from '@modules/subscribers/state/selectors';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Observable } from 'rxjs';
+import { getListTags } from '@modules/subscribers/state/actions';
+import { NotificationService } from '@core/services/notification.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-tag',
   templateUrl: './tag.component.html',
@@ -18,18 +29,20 @@ export class TagComponent implements OnInit {
   @ViewChild('modalEditTag') modalEditTag!: TemplateRef<any>;
 
   tags: TagDTO[] = [];
-  isLoading = false;
   isLoadingSave = false;
 
   tagForm: FormGroup;
   modalRef: NzModalRef;
 
+  isLoading$: Observable<boolean> = this.store.select(selectLoadingGetTagsList);
+
   constructor(
+    private store: Store,
     private subscribersService: SubscribersService,
     private modal: NzModalService,
-    private message: NzMessageService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
+    private notification: NotificationService,
   ) {
     this.buildForm();
   }
@@ -57,21 +70,28 @@ export class TagComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTags();
+
+    this.store.select(selectDataGetTagsList)
+      .pipe(untilDestroyed(this))
+      .subscribe((items) => {
+        this.tags = items;
+        this.cdr.detectChanges();
+      });
+
+    this.store.select(selectErrorGetTagsList)
+      .pipe(untilDestroyed(this))
+      .subscribe((error) => {
+        if (error){
+          this.notification.open({
+            type: 'error',
+            content: error || 'Không thể tải danh sách tag'
+          });
+        }
+      });
   }
 
   loadTags(): void {
-    this.isLoading = true;
-    this.subscribersService.getAllTag().subscribe({
-      next: (res) => {
-        this.tags = res;
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.message.error('Không thể tải danh sách tag');
-        this.isLoading = false;
-      }
-    });
+    this.store.dispatch(getListTags());
   }
 
   openModal(tag?: TagDTO) {
@@ -105,14 +125,20 @@ export class TagComponent implements OnInit {
     this.subscribersService.saveTag(formVal).pipe()
       .subscribe({
         next: () => {
-          this.message.success(formVal?.id ? 'Cập nhật thành công' : 'Tạo mới thành công');
+          this.notification.open({
+            type: 'success',
+            content: formVal?.id ? 'Cập nhật tag thành công' : 'Thêm tag mới thành công'
+          })
           this.modalRef.close();
           this.loadTags();
           this.isLoadingSave = false;
           this.tagForm.reset();
         },
         error: () => {
-          this.message.error('Thao tác thất bại');
+          this.notification.open({
+            type: 'error',
+            content: 'Thao tác thất bại'
+          });
           this.isLoadingSave = false;
         }
       });
@@ -136,14 +162,22 @@ export class TagComponent implements OnInit {
   deleteTag(id: number): void {
     this.subscribersService.delete(id).subscribe({
       next: () => {
-        this.message.success('Đã xoá tag');
+        this.notification.open({
+          type: 'success',
+          content: 'Đã xoá tag'
+        });
+
         this.loadTags();
       },
-      error: () => this.message.error('Xoá tag thất bại')
+      error: () => {
+      this.notification.open({
+        type: 'error',
+        content: 'Xoá tag thất bại'
+      });
+    }
     });
   }
-
-
+  
   buildForm(){
     this.tagForm = this.fb.group({
       name: [null, [ValidatorUtil.required('Tên tag không được để trống!')]],

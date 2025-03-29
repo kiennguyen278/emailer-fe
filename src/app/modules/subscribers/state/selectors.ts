@@ -5,22 +5,17 @@ export const selectSubscribersState =
   createFeatureSelector<SubscribersManagerState>(subscribersFeatureKey);
 
 
-export const selectDataListUser = createSelector(
+export const selectDataGetTagsList = createSelector(
   selectSubscribersState,
-  (state) => {
-
-
-    // return content;
-    return state.userList.data
-  }
+  (state) => state.tagsList.data || []
 );
 
-export const selectLoadingListUser = createSelector(
+export const selectLoadingGetTagsList = createSelector(
   selectSubscribersState,
-  (state) => state.userList.loading
+  (state) => state.tagsList.loading
 );
 
-export const selectTotalListUser = createSelector(
+export const selectErrorGetTagsList = createSelector(
   selectSubscribersState,
-  (state) => state.userList.totalItem
+  (state) => state.tagsList.error
 );

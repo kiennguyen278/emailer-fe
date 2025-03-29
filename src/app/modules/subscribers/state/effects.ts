@@ -2,9 +2,8 @@ import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import * as RoleManagerActions from './actions';
+import * as Actionss from './actions';
 import { SubscribersService } from './service';
-import { GetListUserRequest } from '@modules/user-role/user-manager/models';
 
 @Injectable()
 export class UserManagerEffects {
@@ -14,6 +13,18 @@ export class UserManagerEffects {
     private subscribersService: SubscribersService,
   ) {
   }
+
+  getMachineListEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(Actionss.getListTags),
+      switchMap(() => {
+        return this.subscribersService.getAllTag().pipe(
+          map((data) => Actionss.getListTagsSuccess(data)),
+          catchError(({ error }) => of(Actionss.getListTagsFail(error.error)))
+        )
+      }),
+    )
+  );
 
   // getListRoles$ = createEffect(() =>
   //   this.actions$.pipe(
