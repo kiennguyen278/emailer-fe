@@ -23,6 +23,7 @@
     "@antv/data-set": "^0.10.2",
     "@antv/g2": "^3.4.10",
     "@ctrl/tinycolor": "^3.4.1",
+    "@ngneat/until-destroy": "^10.0.0",
     "@ngrx/effects": "^16.2.0",
     "@ngrx/store": "^16.2.0",
     "@ngrx/store-devtools": "^16.2.0",
