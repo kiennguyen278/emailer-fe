@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  useMock: true,
-  baseUrl: 'http://localhost:8181/api'
+  baseUrl: 'http://222.255.117.224:8126/cms-epass',
+
 };

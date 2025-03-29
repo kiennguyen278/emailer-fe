@@ -1,0 +1,44 @@
+<div class="flex items-center justify-between relative">
+  <div class="flex items-center">
+<!--    <div class="mr-2">-->
+<!--      {{ 'his.common.show_table_list' | translate }}-->
+<!--    </div>-->
+    <nz-select [(ngModel)]="size" (ngModelChange)="sizeChange.emit($event)">
+      <nz-option
+        *ngFor="let option of sizeOptions"
+        [nzValue]="option"
+        [nzLabel]="option+'/trang'"
+      ></nz-option>
+    </nz-select>
+  </div>
+  <div>
+    <span>
+      {{ ranges[0] }} - {{ ranges[1] }}
+      {{ 'his.common.pagination' | translate }} {{ total }}
+    </span>
+    <ng-container *ngFor="let item of pages">
+      <ng-container [ngSwitch]="item.type">
+        <a class="mx-2" (click)="firstPage()" *ngSwitchCase="'first'" [ngClass]="{'text-[#707071] opacity-60 pointer-events-none' : item.disabled}">
+          <i nz-icon nzType="double-left"></i>
+        </a>
+        <a class="mr-2" (click)="prePage()" *ngSwitchCase="'prev'" [ngClass]="{'text-[#707071] opacity-60 pointer-events-none' : item.disabled}"
+          ><i nz-icon nzType="left"></i
+        ></a>
+        <button
+          class="bg-gray-100 w-6 h-6 rounded-md mx-1"
+          [ngClass]="{ 'bg-blue-100 text-[#f48833]': item.index === index }"
+          (click)="onIndexChange(item.index)"
+          *ngSwitchCase="'page'"
+        >
+          {{ item.index }}
+        </button>
+        <a class="ml-2" (click)="nextPage()" *ngSwitchCase="'next'" [ngClass]="{'text-[#707071] opacity-60 pointer-events-none' : item.disabled}"
+          ><i nz-icon nzType="right"></i
+        ></a>
+        <a class="ml-2" (click)="lastPage()" *ngSwitchCase="'last'" [ngClass]="{'text-[#707071] opacity-60 pointer-events-none' : item.disabled}"
+          ><i nz-icon nzType="double-right"></i
+        ></a>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

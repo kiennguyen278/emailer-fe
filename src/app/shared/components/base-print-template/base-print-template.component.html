@@ -1,0 +1,20 @@
+<div class="relative">
+  <div class="w-[850px] h-[842px] border text-black text-xs bg-white mx-auto relative p-4"
+       [ngClass]="classWidth"
+  >
+      <iframe #iframe style="width: 100%; height: 100%;"></iframe>
+
+  </div>
+  <div class="absolute right-0 top-0">
+    <button
+      class="rounded mr-3"
+      (click)="print()"
+      nz-button
+      nzType="primary"
+      nzGhost
+      nzIz
+    >
+      <i nz-icon nzType="icons:print"></i>In
+    </button>
+  </div>
+</div>

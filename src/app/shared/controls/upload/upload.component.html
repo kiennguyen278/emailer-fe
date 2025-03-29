@@ -1,0 +1,21 @@
+<div class="flex">
+  <div class="w-full">
+    <nz-upload [nzShowButton]="fileList.length < maxImages"
+               [nzIconRender]="previewImageTpl"
+               nzListType="picture-card"
+               [nzBeforeUpload]="beforeUpload"
+               [nzAccept]="fileType"
+               [nzDisabled]="disabled"
+               [nzPreview]="handlePreview"
+               [nzRemove]="removeImageOnPreview"
+               [nzMultiple]="allowMulti"
+               [nzShowUploadList]="{ showPreviewIcon: true, showRemoveIcon: !disabled, showDownloadIcon: false }"
+               [(nzFileList)]="fileList">
+      <div>
+        <i nz-icon nzType="plus"></i>
+        <div>Upload</div>
+      </div>
+    </nz-upload>
+  </div>
+  <ng-template #previewImageTpl><img width=150 height='150' [src]="previewImage"/></ng-template>
+</div>

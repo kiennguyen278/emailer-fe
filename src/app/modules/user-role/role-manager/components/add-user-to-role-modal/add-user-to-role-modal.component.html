@@ -1,0 +1,56 @@
+<div class="">
+<!--  <h3 class="border-b py-3 mb-3 mt-[-14px] font-medium">-->
+<!--    Thêm mới người dùng vào vai trò "{{crrRole?.roleName || ''}}"-->
+<!--  </h3>-->
+
+  <div class="table-list">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [key]="'userName'"
+        [pagination]="pagination"
+        [scrollX]="items.length > 0 ? '1100px' : ''"
+        [scrollY]="items.length > 0 ? 'calc(100vh - 390px - 34px)' : ''"
+        (dbClickItem)="onDbClickItem($event)"
+        (queryParams)="onQueryParams($event)"
+        [displayColumns]="displayColumns"
+        [checkedKeys]="selectedKeys"
+        [loading]="loading$ | async"
+        (itemSelected)="onSelectedItem($event)"
+        (checkedKeysChange)="onSelectKeysChange($event)"
+        [showPagination]="false"
+        [showCheckbox]="items.length > 0"
+        [showIndex]="true"
+      >
+      </app-table>
+    </div>
+  </div>
+
+  <div nz-col class="text-right pt-3">
+    <button
+      class="rounded-[8px]"
+      nz-button
+      nzType="default"
+      (click)="closeModal()"
+      style="min-width: 100px;"
+    ><span>Bỏ qua</span>
+    </button>
+
+    <button
+      class="ml-2 rounded-[8px]"
+      *ngIf="items.length > 0"
+      nz-button
+      nzType="primary"
+      [nzLoading]="isLoadingSave"
+      type="button"
+      (click)="saveAddUserToRole()"
+      [disabled]="!selectedKeys.length"
+      style="min-width: 100px;"
+    ><span>Lưu</span>
+    </button>
+  </div>
+
+</div>
+
+

@@ -1,0 +1,190 @@
+<div class="main-content-layout">
+  <nz-layout>
+    <nz-header>
+      <div class="main-layout-header">
+        <div class="flex justify-between">
+          <div class="flex items-center">
+            <button nz-button nzType="text" class="px-[20px] py-0 ml-[5px] text-[20px]"
+                    (click)="changeCollapsed(!isCollapsed)">
+              <i nz-icon [nzType]="'icons:icon-bar'"></i>
+            </button>
+
+            <a [routerLink]=""><img src="./assets/images/logo-epass-white.svg" width="106" height="57"/></a>
+          </div>
+
+          <div class="flex items-center">
+
+            <div nz-popover
+                 [nzPopoverContent]="visibleTpl"
+                 nzPopoverPlacement="bottomRight"
+                 nzPopoverTrigger="click"
+                 (nzPopoverVisibleChange)="changeVisiblePopover()"
+                 [nzPopoverOverlayClassName]="'user-info-popover'"
+            >
+              <div class="user-info flex whitespace-nowrap py-1 items-center">
+                <div class="w-[35px] text-center"><i class="text-[18px]" nz-icon nzType="user" nzTheme="outline"></i></div>
+                <div class="flex items-center justify-between">
+                  <span>{{user.fullName}}</span>
+                  <i nz-icon [nzType]="'icons:icn-arrow-down'" class="text-[24px]"></i>
+                </div>
+
+              </div>
+            </div>
+
+
+            <ng-template #visibleTpl>
+              <div class="user-infor-popover" [ngStyle]="{'min-width': '200px'}">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="openDialogUserInfo()" class="flex items-center py-2">
+                      <i class="pr-3" nz-icon nzType="icons:icn-account-info"></i>
+                      Thông tin tài khoản
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="javascript:void(0)" (click)="openDialogChangePassword()" class="flex items-center py-2">
+                      <i class="pr-3" nz-icon nzType="swap" nzTheme="outline"></i>
+                      Đổi mật khẩu
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="javascript:void(0)" (click)="signOut()" class="flex items-center py-2">
+                      <i class="pr-3" nz-icon nzType="icons:logout"> </i>
+                      Đăng xuất
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </nz-header>
+    <nz-layout>
+      <nz-sider
+        class="menu-sidebar"
+        [nzWidth]="260"
+        [nzCollapsedWidth]="0"
+        [(nzCollapsed)]="isCollapsed"
+        nzTheme="light"
+        [ngStyle]="{
+          'height': 'calc(100vh - 60px)',
+          'position': 'sticky',
+          'top': '60px',
+          'box-shadow': '0 0 4px 0 rgba(0,0,0, 0.12)',
+          'overflow-y': 'overlay'
+        }"
+      >
+        <div class="h-full">
+          <ul
+            nz-menu
+            nzMode="inline"
+            class="side-nav"
+            [nzInlineCollapsed]="isCollapsed"
+          >
+            <ng-container *ngFor="let item of menuItems">
+              <ng-container *ngIf="item.display">
+                <ng-container *ngIf="!item.children.length; else isSubMenu">
+                  <li
+                    nz-menu-item
+                    routerLinkActive="ant-menu-item-selected"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    [ngClass]="{'nav-item-collapsed': !isCollapsed, 'nav-item-collapsed-tab': isCollapsed}"
+                  >
+                    <a [routerLink]="item.path">
+                      <i nz-icon [nzType]="item.icon"></i>
+                      <span>{{ item.name }}</span>
+                    </a>
+                  </li>
+                </ng-container>
+                <ng-template #isSubMenu>
+                  <li
+                    nz-submenu
+                    [nzTitle]="item.name"
+                    [nzIcon]="item.icon"
+                    routerLinkActive="ant-menu-item-selected"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    [ngClass]="{'nav-item': !isCollapsed, 'collapsed-tab': isCollapsed, 'hasChild': item.children.length}"
+                  >
+                    <ul class="side-nav-menu" *ngIf="item.children.length">
+                      <ng-container *ngFor="let submenu of item.children">
+                        <ng-container *ngIf="submenu.display">
+                          <ng-container
+                            *ngIf="submenu.children.length; else isLevelTwo"
+                          >
+                            <ul nz-menu nzMode="vertical">
+                              <li nz-submenu [nzTitle]="submenu.name"
+                                  routerLinkActive="ant-menu-submenu-selected"
+                                  [routerLinkActiveOptions]="{ exact: true }"
+                                  [ngClass]="{'nav-item': !isCollapsed}">
+                                <ul *ngFor="let child of submenu.children"
+                                    class="side-nav-menu-child">
+                                  <li *ngIf="child.display"
+                                      nz-menu-item
+                                      [ngClass]="{'nav-item': !isCollapsed}">
+                                    <a [routerLink]="child.path">
+<!--                                      <i nz-icon [nzType]="'icons:record-menu'"></i> -->
+                                      {{ child.name }}
+                                    </a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </ng-container>
+                          <ng-template #isLevelTwo>
+                            <li nz-menu-item
+                                routerLinkActive="ant-menu-submenu-selected"
+                                [routerLinkActiveOptions]="{ exact: true }"
+                                [ngClass]="{'nav-item': !isCollapsed}">
+                              <a [routerLink]="submenu.path">
+<!--                                <i nz-icon [nzType]="'icons:record-menu'"></i> -->
+                                {{ submenu.name }}
+                              </a>
+                            </li>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                    </ul>
+                  </li>
+                </ng-template>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </div>
+      </nz-sider>
+
+      <!--      <nz-layout [ngStyle]="{height: 'calc(100vh - 60px)'}">-->
+      <nz-layout>
+        <nz-content>
+          <div class="p-[10px] pb-0">
+            <div class="bg-[#fff] p-2 rounded-[8px]">
+              <app-breadcrumb></app-breadcrumb>
+            </div>
+          </div>
+
+          <div class="p-[10px]">
+            <div class="">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+
+          <!--          <div class="overflow-y-auto p-3.5 h-full">-->
+          <!--            -->
+          <!--            <router-outlet></router-outlet>-->
+          <!--          </div>-->
+        </nz-content>
+        <nz-footer class="footer-container">
+          <div class="text-center">
+            <span class="footer-powered">© Bản quyền thuộc VDTC. Phát triển bởi Viettel</span>
+          </div>
+        </nz-footer>
+      </nz-layout>
+
+
+    </nz-layout>
+  </nz-layout>
+
+</div>

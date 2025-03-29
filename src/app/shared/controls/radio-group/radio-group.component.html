@@ -1,0 +1,12 @@
+<nz-radio-group [(ngModel)]="value" (ngModelChange)="onChange($event)" [nzDisabled]="disabled">
+  <ng-container>
+    <label
+      *ngFor="let option of options"
+      [nzDisabled]="option?.disabled"
+      nz-radio
+      [nzValue]="option.value"
+    >
+      {{ option.label | translate }}
+    </label>
+  </ng-container>
+</nz-radio-group>

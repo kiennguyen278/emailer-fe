@@ -1,0 +1,107 @@
+.p-7 {
+    padding: 7px !important;
+}
+.ant-table-body-no-over {
+    overflow-y: hidden !important;
+}
+
+.tr-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+}
+.tr-header td{
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+
+}
+.hightlight-row{
+  td{
+    background: #2C63FF29!important;
+    color: var(--primary);
+  }
+}
+
+.setting {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.rotate svg {
+  -webkit-animation:spin 4s linear infinite;
+  -moz-animation:spin 4s linear infinite;
+  animation:spin 4s linear infinite;
+}
+
+@-moz-keyframes spin {
+  100% { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes spin {
+  100% {
+      -webkit-transform: rotate(360deg);
+      transform:rotate(360deg);
+  }
+}
+
+.input-table input {
+  border-left: hidden;
+  border-top: hidden;
+  border-right: hidden;
+  border-radius: 0px !important;
+}
+
+.input-table input:focus {
+  box-shadow: none;
+}
+
+.input-number-table .ant-input-number {
+  border-left: hidden !important;
+  border-top: hidden !important;
+  border-right: hidden !important;
+  border-radius: 0px !important;
+}
+
+.input-number-table .ant-input-number:focus {
+  box-shadow: none;
+}
+
+.input-timepicker-table .ant-picker {
+  border-left: hidden;
+  border-top: hidden;
+  border-right: hidden;
+  border-radius: 0px !important;
+}
+
+.input-timepicker-table .ant-picker-focused {
+  box-shadow: none;
+}
+
+.input-datepicker-table .ant-picker {
+  border-left: hidden;
+  border-top: hidden;
+  border-right: hidden;
+  border-radius: 0px !important;
+}
+
+.input-datepicker-table .ant-picker-focused {
+  box-shadow: none;
+}
+
+.select-table .ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-left: hidden;
+  border-top: hidden;
+  border-right: hidden;
+  border-radius: 0px !important;
+}
+
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  box-shadow: none;
+}
+
+// .ant-table-body {
+//   max-height: 575px !important;
+// }

@@ -1,0 +1,26 @@
+<nz-date-picker
+  [(ngModel)]="value"
+  (ngModelChange)="onChange($event)"
+  [nzPlaceHolder]="placeholder | translate"
+  [disabled]="disabled"
+  [nzDisabledDate]="disabledDate"
+  [nzDisabledTime]="disabledTime"
+  [nzFormat]="format"
+  [nzAllowClear]="allowClear"
+
+  [nzShowToday]="showToday"
+  [nzDefaultPickerValue]="defaultSelectDate"
+  [nzShowTime]="
+    showTime && {
+      nzFormat: showFullTime ? 'HH:mm:ss' : 'HH:mm',
+      nzHideDisabledOptions: hideDisabledOptions,
+      nzDefaultOpenValue: timeDefaultValue
+    }
+  "
+  [nzId]="id"
+  [nzSuffixIcon]="'icons:datepicker'"
+  #datePickerRef
+>
+</nz-date-picker>
+
+<!--[formatDate]="format"-->

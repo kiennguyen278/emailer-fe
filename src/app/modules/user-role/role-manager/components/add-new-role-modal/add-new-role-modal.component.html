@@ -1,0 +1,81 @@
+<div>
+<!--  <h3 class="border-b py-3 mb-3 mt-[-14px] font-medium">-->
+<!--    {{itemRole ? 'Cập nhật vai trò "' + itemRole?.roleName + '"' : 'Thêm mới vai trò'}}-->
+<!--  </h3>-->
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+
+    <div nz-row [nzGutter]="10">
+
+      <div nz-col [nzSpan]="12" class="pb-2">
+        <div class="required pb-1">Mã vai trò</div>
+        <app-form-control>
+          <app-input
+            formControlName="roleCode"
+            appFormatUppercase
+            [regexPatternAllow]="REGEX_USERNAME"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-2">
+        <div class="required pb-1">Tên vai trò</div>
+        <app-form-control>
+          <app-input
+            formControlName="roleName"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="24" class="pb-4">
+        <div class="pb-1">Mô tả</div>
+        <app-form-control>
+          <app-textarea
+            formControlName="description"
+            [rows]="4"
+          ></app-textarea>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-4">
+        <div class="flex items-center" *ngIf="itemRole?.id">
+          <div class="pr-4">Trạng thái</div>
+          <app-form-control>
+            <app-switch
+              formControlName="status"
+              (switchChange)="form.controls['status'].patchValue(!$event)"
+            ></app-switch>
+          </app-form-control>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="text-right">
+        <button
+          class="rounded-[8px]"
+          nz-button
+          nzType="default"
+          (click)="closeModal()"
+          style="min-width: 100px;"
+          type="button"
+        ><span>Bỏ qua</span>
+        </button>
+
+        <button
+          class="ml-2 rounded-[8px]"
+          nz-button
+          nzType="primary"
+          [nzLoading]="isLoading$ | async"
+          type="submit"
+          style="min-width: 100px;"
+        ><span>Lưu</span>
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+

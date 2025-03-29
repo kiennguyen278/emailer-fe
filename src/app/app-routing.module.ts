@@ -1,93 +1,47 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { RouterGuardService } from './services/core/router-guard.service';
-
-// Layout component
-// import { BackstageTopbannerComponent as BackstageLayoutComponent} from './layouts/backstage-topbanner/backstage-topbanner.component';
-import { BackstageDefaultComponent as BackstageLayoutComponent } from './layouts/backstage-default/backstage-default.component';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthLayoutComponent } from '@layout/auth-layout/auth-layout.component';
+import { ContentLayoutComponent } from '@layout/content-layout/content-layout.component';
+import { AuthGuard } from '@core/guards';
+import { LoginAuthGuard } from '@core/guards/login-auth.guard';
+import { PermissionService } from '@core/services/permission.service';
+import { RoleUser } from '@core/enums';
 
 const routes: Routes = [
   {
-    path: 'frontstage',
-    loadChildren: () =>
-      import('./pages/frontstage/frontstage.module').then(
-        (m) => m.FrontStageModule
-      ),
-  },
-  {
-    path: 'account',
-    loadChildren: () =>
-      import('./pages/account/account.module').then((m) => m.AccountModule),
-  },
-  {
     path: '',
-    component: BackstageLayoutComponent,
-    canActivate: [RouterGuardService],
+    component: ContentLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'home/dashboard', pathMatch: 'full' },
-
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
-        path: 'home',
-        loadChildren: () =>
-          import('./pages/backstage/home/home.module').then((m) => m.HomeModule)
+        path: 'dashboard',
+        loadChildren: () => import('@modules/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
 
       {
-        path: 'examples',
-        loadChildren: () =>
-          import('./pages/backstage/examples/examples.module').then(
-            (m) => m.ExamplesModule
-          ),
+        path: 'user-role',
+        loadChildren: () => import('@modules/user-role/user-role.module').then((m) => m.UserRoleModule),
+        data: {
+          title: 'Người dùng và quyền',
+          breadcrumb: 'Người dùng và quyền',
+          permissions: {
+            allow: [RoleUser.ADMIN],
+          }
+        },
+        canActivate: [PermissionService]
       },
-      // {
-      //   path: 'system',
-      //   loadChildren: () =>
-      //     import('./pages/backstage/system/system.module').then(
-      //       (m) => m.SystemModule
-      //     ),
-      // },
-      {
-        path: 'subscribers',
-        loadChildren: () =>
-          import('./pages/backstage/subscribers/subscribers.module').then(
-            (m) => m.SubscribersModule
-          ),
-      },
-
-      {
-        path: 'email',
-        loadChildren: () =>
-          import('./pages/backstage/email/email.module').then((m) => m.EmailModule)
-      },
-
-      {
-        path: 'workflows',
-        loadChildren: () =>
-          import('./pages/backstage/workflows/workflows.module').then((m) => m.WorkflowsModule)
-      },
-
-      // Settings (1 module cha, 1 component hoặc nhiều component con)
-      {
-        path: 'settings',
-        loadChildren: () =>
-          import('./pages/backstage/settings/settings.module').then((m) => m.SettingsModule)
-      },
-
-      {
-        path: 'exception',
-        loadChildren: () =>
-          import('./pages/commons/exception/exception.module').then(
-            (m) => m.ExceptionModule
-          ),
-      },
-    ],
+    ]
   },
-  // Fallback route for undefined paths
-  { path: '**', redirectTo: 'exception/404' },
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    loadChildren: () => import('@modules/auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [LoginAuthGuard],
+  },
+
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
+
+export const AppRoutes = RouterModule.forRoot(routes, {
+  paramsInheritanceStrategy: 'always'
+});

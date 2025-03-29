@@ -1,0 +1,49 @@
+
+
+.main-content-layout{
+  padding-top: 60px;
+  .ant-layout-header{
+    height: 60px;
+    line-height: normal;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 88;
+    border-radius: 0;
+  }
+  .main-layout-header{
+    height: 100%;
+    background: linear-gradient(to right,#f48833 0,#eb2957);
+  }
+
+  .user-info{
+    border: 1px solid #fff;
+    border-radius: 100px;
+    line-height: normal;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+
+  }
+}
+
+
+.footer-container.ant-layout-footer{
+  background: #fff;
+  padding: 15px;
+  font-size: 13px;
+  border-top: 1px solid #ddd;
+}
+
+::ng-deep{
+  .ant-popover.user-info-popover{
+    .ant-popover-arrow{
+      right: 60px;
+    }
+  }
+}
+

@@ -1,36 +1,27 @@
-1、TypeScript
-2、Angular
-4、ant-design-pro、ng-alain
-5、nodejs-18.17.1、angular-16、ant-design-pro-16.2
-  https://jun-tech.github.io/ng-ant-design-pro-platform/
+# BaseAngular
 
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
 
-# Gen sourcecode
-#!/bin/bash
-echo "🚀 Generating Angular modules, components, and routes..."
+## Development server
 
-# 1. Dashboard
-ng g m home --routing --module app.module
-ng g c home/dashboard
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-# 2. Subscribers
-ng g m subscribers --routing --module app.module
-ng g c subscribers/subscriber
-ng g c subscribers/tag
-ng g c subscribers/import
+## Code scaffolding
 
-# 3. Send
-ng g m email --routing --module app.module
-ng g c email/templates
-ng g c email/campaigns
-ng g c email/sequences
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-# 4. Workflows
-ng g m workflows --routing --module app.module
-ng g c workflows/main
-ng g c workflows/workflow-builder
+## Build
 
-# 5. Settings
-ng g m settings --routing --module app.module
-ng g c settings/main  # Hoặc chỉ settings nếu bạn không chia nhỏ
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

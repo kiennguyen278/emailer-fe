@@ -1,0 +1,36 @@
+<!--<input-->
+<!--  nz-input-->
+<!--  placeholder="{{ disabled ? undefined : (placeholder | translate) }}"-->
+<!--  [(ngModel)]="value"-->
+<!--  [disabled]="disabled"-->
+<!--  (ngModelChange)="onChange($event)"-->
+<!--  [nzSize]="size"-->
+<!--  [maxlength]="maxLength"-->
+<!--  (keyup.enter)="onEnter($event)"-->
+<!--  [id]="id"-->
+<!--/>-->
+
+
+<ng-template #suffixClear>
+  <i  *ngIf="allowClear && (value !== '' && value !== null && value !== undefined) && !disabled"
+      nz-icon
+      class="clearIcon"
+      nzType="icons:clear-value"
+      (click)="clearInputValue()"
+      style="cursor: pointer"></i>
+</ng-template>
+
+
+<nz-input-group [nzSuffix]="suffixClear" [ngClass]="{'allowClear': allowClear}">
+  <input
+    nz-input
+    placeholder="{{ disabled ? undefined : (placeholder | translate) }}"
+    [(ngModel)]="value"
+    [disabled]="disabled"
+    (ngModelChange)="onChange($event)"
+    [nzSize]="size"
+    [maxlength]="maxLength"
+    (keyup.enter)="onEnter($event)"
+    [id]="id"
+  />
+</nz-input-group>

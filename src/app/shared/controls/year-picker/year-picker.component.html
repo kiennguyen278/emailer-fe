@@ -1,0 +1,11 @@
+<nz-date-picker
+  [(ngModel)]="value"
+  (ngModelChange)="onChange($event)"
+  [nzPlaceHolder]="placeholder | translate"
+  [disabled]="disabled"
+  [nzDisabledDate]="disabledDate"
+  [nzFormat]="format"
+  [nzAllowClear]="allowClear"
+  nzMode="year"
+>
+</nz-date-picker>

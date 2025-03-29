@@ -1,0 +1,47 @@
+image: alpine:latest
+
+stages:
+    - build-code
+    - deploy
+
+variables:
+    GIT_STRATEGY: clone
+
+Build Code:
+    stage: build-code
+#    before_script:
+#        - apt-get update -y
+    tags:
+        - build-code-runner
+    script:
+        - export CI=false
+        - rm -rf dist
+        - npm install
+        - npm run build
+    cache:
+        key: npm-cache
+        paths:
+            - node_modules
+            - dist
+    artifacts:
+        paths:
+            - dist
+        expire_in: 1200 seconds
+    only:
+        - master
+        - int
+        - uat
+    timeout: 20m
+
+Deploy:
+    stage: deploy
+    tags:
+        - deploy-runner
+
+    script:
+        # - ssh $VPS_USER@$VPS_SERVER "sudo mkdir -p $VPS_DEPLOY_DIR"
+        - scp -r dist/base-angular/* /www/cms-epass-fe
+    only:
+        - master
+        - int
+        - uat

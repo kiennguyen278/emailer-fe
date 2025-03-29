@@ -1,0 +1,121 @@
+<div>
+<!--  <h3 class="border-b py-3 mb-3 mt-[-14px] font-medium">-->
+<!--   {{userEdit ? 'Cập nhật tài khoản "' + userEdit?.fullName + '"' : 'Thêm mới tài khoản'}}-->
+<!--  </h3>-->
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+
+    <div nz-row [nzGutter]="10">
+
+      <div nz-col [nzSpan]="12" class="pb-2">
+        <div class="required pb-1">Mã tài khoản</div>
+        <app-form-control>
+          <app-input
+            formControlName="code"
+            [regexPatternAllow]="REGEX_USERNAME"
+            appFormatUppercase
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-2">
+        <div class="required pb-1">Tên tài khoản</div>
+        <app-form-control>
+          <app-input
+            formControlName="fullName"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-4">
+        <div class="required pb-1">Số điện thoại</div>
+        <app-form-control>
+          <app-input
+            formControlName="phoneNumber"
+            [regexPatternAllow]="numberRegex"
+            [maxLength]="10"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-4">
+        <div class="required pb-1">Email</div>
+        <app-form-control>
+          <app-input
+            formControlName="email"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-4">
+        <div class="required pb-1">Tài khoản truy cập</div>
+        <app-form-control>
+          <app-input
+            formControlName="userName"
+            [regexPatternAllow]="REGEX_USERNAME"
+            [allowClear]="true"
+          ></app-input>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12" class="pb-4">
+        <div class="required pb-1">Vai trò</div>
+        <app-form-control>
+          <app-select
+            formControlName="lstRoleCode"
+            [options]="listRoles"
+            [isMulti]="true"
+            [showSearch]="true"
+            [ngStyle]="{
+              'display': 'flex',
+              'flex': '1'
+            }"
+          ></app-select>
+        </app-form-control>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <div class="flex items-center" *ngIf="form.controls['id'].value">
+          <div class="pr-4">Trạng thái</div>
+          <app-form-control>
+            <app-switch
+              formControlName="status"
+              (switchChange)="form.controls['status'].patchValue(!$event)"
+            ></app-switch>
+          </app-form-control>
+        </div>
+
+      </div>
+
+      <div nz-col [nzSpan]="12" class="text-right">
+        <button
+          class="rounded"
+          nz-button
+          nzType="default"
+          (click)="closeModal()"
+          style="min-width: 100px;"
+          type="button"
+        ><span>Bỏ qua</span>
+        </button>
+
+        <button
+          class="ml-2 rounded"
+          nz-button
+          nzType="primary"
+          [nzLoading]="isLoading"
+          type="submit"
+          style="min-width: 100px;"
+        ><span>Lưu</span>
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+

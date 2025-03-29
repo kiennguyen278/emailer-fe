@@ -1,0 +1,28 @@
+<ng-template #template>
+  <div class="ant-notification-notice-content">
+    <div class="ant-notification-notice-with-icon flex items-center">
+      <span class="ant-notification-notice-icon">
+        <span [ngSwitch]="type">
+          <span *ngSwitchCase="'success'">
+            <i nz-icon nzType="icons:success" style="color: #47d764"></i>
+          </span>
+          <span *ngSwitchCase="'error'">
+            <i nz-icon nzType="icons:error" style="color: #ee0033"></i>
+          </span>
+          <span *ngSwitchCase="'warning'">
+            <i nz-icon nzType="icons:warning" style="color: #ffc021"></i>
+          </span>
+          <span *ngSwitchDefault>
+            <i nz-icon nzType="icons:info" style="color: #2f86eb"></i>
+          </span>
+        </span>
+      </span>
+      <div>
+        <div class="ant-notification-notice-message">{{ title }}</div>
+        <div class="ant-notification-notice-description">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

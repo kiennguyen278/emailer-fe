@@ -1,0 +1,223 @@
+.group-container {
+  display: flex;
+  flex: auto;
+  min-height: 34px;
+  align-items: center;
+  .header-col {
+    text-align: center;
+    min-width: 80px;
+    border-right: 1px solid #f0f0f0;
+    color: #4d4d4d;
+    font-weight: 500;
+    flex: 1;
+  }
+}
+
+.option-row {
+  display: flex;
+  .option-col {
+    min-width: 80px;
+    display: flex;
+    color: #111213;
+    align-items: center;
+    border-right: 1px solid #f0f0f0;
+    flex: 1;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+::ng-deep {
+
+  .ant-select-item-group {
+    background-color: #EFF2F6;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .ant-select-multiple .ant-select-selector::after
+
+  .ant-select-item-option-grouped, .ant-select-dropdown {
+    padding: 0;
+  }
+
+  @mixin text-ellipsis {
+    > span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  @mixin flexWidth($width) {
+    flex: #{$width}px 0 0;
+    width: #{$width}px;
+  }
+
+  @mixin Width($width) {
+    width: #{$width}vw;
+  }
+
+  @mixin style-select-option-width {
+    /* == css select table option service ==*/
+    .code {
+      @include flexWidth(120);
+    }
+    .name {
+      @include flexWidth(300);
+    }
+    .price0, .price1, .price2, .price3, .price4 {
+      justify-content: flex-end;
+      @include flexWidth(100);
+    }
+    /* == css select table option service ==*/
+
+    /* == css select table option medicine ==*/
+    .medicineCode{
+      justify-content: center;
+      @include flexWidth(100);
+    }
+    .concentration{
+      @include flexWidth(120);
+    }
+    .medicineName{
+      @include flexWidth(250);
+    }
+    .quantityLabelOption{
+      justify-content: center;
+      @include flexWidth(100);
+    }
+    .unitName{
+      justify-content: center;
+      @include flexWidth(50);
+    }
+    .endDate{
+      justify-content: center;
+      @include flexWidth(100);
+    }
+    .packageName{
+      @include flexWidth(120);
+    }
+    .stockQuantityOfPackage{
+      justify-content: center;
+      @include flexWidth(120);
+    }
+    .stockQuantity{
+      justify-content: center;
+      // @include flexWidth(120);
+    }
+    .endDateTransform{
+      justify-content: center;
+      // @include flexWidth(120);
+    }
+    .unitBidShow{
+      justify-content: end;
+      @include flexWidth(100);
+    }
+    .priceLabelOption{
+      justify-content: flex-end;
+      @include flexWidth(130);
+    }
+    .medicineActiveElement{
+      @include flexWidth(250);
+    }
+    .medicineActiveElementStr{
+      @include flexWidth(200);
+    }
+    .medicalRecordWarehouseCode,
+    .medicalRecordCode {
+      @include flexWidth(125);
+    }
+    .birthday{
+      @include flexWidth(110);
+    }
+    .department{
+      @include flexWidth(200)
+    }
+
+    .screenId {
+      flex: 40% 0 0;
+      width: 40% !important;
+    }
+    .screenName {
+      flex: 60% 0 0;
+      width: 60% !important;
+    }
+
+    /* == css select table option medicine ==*/
+
+  }
+
+  .selectScreen {
+    .ant-select-dropdown {
+      min-width: 300px;
+      .group-container {
+        @include style-select-option-width;
+        .header-col {
+          @include text-ellipsis;
+          text-align: center;
+        }
+      }
+      .option-row {
+        min-height: 32px;
+        @include style-select-option-width;
+        .option-col {
+          font-weight: normal;
+          @include text-ellipsis;
+        }
+
+      }
+      .full-width{
+        min-height: 75px !important;
+       }
+    }
+  }
+
+  .select123 {
+    .ant-select-dropdown {
+      min-width: 600px;
+      .group-container {
+        @include style-select-option-width;
+        .header-col {
+          @include text-ellipsis;
+          text-align: center;
+        }
+      }
+      .option-row {
+        min-height: 32px;
+        @include style-select-option-width;
+        .option-col {
+          font-weight: normal;
+          @include text-ellipsis;
+        }
+
+      }
+      .full-width{
+        min-height: 75px !important;
+       }
+    }
+
+  }
+
+  .multi-select {
+    max-height: 16vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .multi-select .ant-select-selector .ant-select-selection-search {
+    // width: -webkit-fill-available !important;
+  }
+
+  @media screen and (max-width: 1366px) {
+    .multi-select{
+      max-height: 20vh !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+
+    .multi-select .ant-select-selector .ant-select-selection-search {
+      width: -webkit-fill-available !important;
+    }
+  }
+
+}

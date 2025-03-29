@@ -1,0 +1,199 @@
+<div class="bg-[#fff] rounded-[8px] mb-[10px]">
+  <app-title-box [title]="'Thông tin tìm kiếm'"></app-title-box>
+
+  <div class="search-box px-3 py-4">
+    <form nz-form [formGroup]="form" (ngSubmit)="onSearch()">
+
+      <div nz-row [nzGutter]="10">
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div>
+            <div class="pb-1">Tên tài khoản</div>
+            <app-form-control>
+              <app-input
+                class="input-text"
+                formControlName="userName"
+              ></app-input>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div>
+            <div class="pb-1">Tên người dùng</div>
+            <app-form-control>
+              <app-input
+                class="input-text"
+                formControlName="fullName"
+              ></app-input>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div>
+            <div class="pb-1">Trạng thái</div>
+            <app-form-control>
+              <app-select
+                formControlName="status"
+                [options]="optionStatus"
+                [showSearch]="true"
+                [placeholder]="'Tất cả'"
+                (ngModelChange)="onSearch()"
+                [allowClear]="true"
+              ></app-select>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div>
+            <div class="pb-1">Số điện thoại</div>
+            <app-form-control>
+              <app-input
+                class="input-text"
+                formControlName="phoneNumber"
+              ></app-input>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div>
+            <div class="pb-1">Email</div>
+            <app-form-control>
+              <app-input
+                class="input-text"
+                formControlName="email"
+              ></app-input>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8" class="pb-2">
+          <div class="pb-1">&nbsp;</div>
+          <div class="flex justify-end items-center ">
+            <button nz-button nzType="default" class="rounded-[8px]" type="reset" (click)="onClearSearch()">
+              <span nz-icon nzType="redo" nzTheme="outline"></span>
+              Nhập lại
+            </button>
+
+            <button nz-button
+                    [nzLoading]="loading$ | async"
+                    nzType="primary" class="rounded-[8px] ml-2" type="submit">
+              <span nz-icon nzType="search" nzTheme="outline"></span>
+              Tìm kiếm
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<div class="bg-[#fff] rounded-[8px]">
+
+  <h3 class="border-b p-3 font-medium flex justify-between items-center">
+    <span>Danh sách tài khoản người dùng</span>
+
+    <button nz-button nzType="primary" class="rounded-[8px] ml-2" type="button" (click)="openDialogAddNewRole()">
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+      Thêm mới
+    </button>
+  </h3>
+
+  <div class="table-list p-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [pagination]="pagination"
+        [scrollX]="'1100px'"
+        (queryParams)="onQueryParams($event)"
+        [displayColumns]="displayColumns"
+        [showIndex]="true"
+        [loading]="loading$ | async"
+        [showPagination]="pagination.total > 0"
+      >
+        <ng-template [appCellTemplate]="'actions'" let-item>
+
+          <button nz-button nzType="text" (click)="onResetPasswordItem(item)" class="cursor-pointer px-2">
+            <i nz-icon nzType="redo" nzTheme="outline"
+              nz-tooltip nzTooltipTitle="Đặt lại mật khẩu"
+            ></i>
+          </button>
+
+          <button nz-button nzType="text" (click)="onEditItem(item)" class="cursor-pointer px-2">
+            <i
+              nz-icon nzType="edit" nzTheme="outline"
+              nz-tooltip nzTooltipTitle="Cập nhật tài khoản"
+            ></i>
+          </button>
+
+<!--          <button nz-button nzType="text" (click)="onDeleteItem(item)" class="cursor-pointer px-2">-->
+<!--            <i-->
+<!--              nz-icon nzType="delete" nzTheme="outline"-->
+<!--              nz-tooltip nzTooltipTitle="Xóa"-->
+<!--            ></i>-->
+<!--          </button>-->
+        </ng-template>
+
+
+        <ng-template [appCellTemplate]="'status'" let-item>
+          <div class="text-center">
+            <app-switch [ngModel]="item.status" (switchChange)="onSwitchStatusUser(item)"></app-switch>
+          </div>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
+</div>
+
+
+<app-confirmation
+  *ngIf="typeConfirm === 'resetPassword'"
+  [confirmation]="resetPassTpl"
+  (confirmed)="confirmResetPassword($event)"
+></app-confirmation>
+
+<ng-template #resetPassTpl>
+  <div class="text-left flex">
+    <div class="flex flex-[35px_0_0] items-center justify-center">
+      <i class="text-[20px]" [ngStyle]="{color: 'var(--primary)'}" nz-icon nzType="question-circle" nzTheme="outline"></i>
+    </div>
+    <div class="flex-[1_0_0] pl-2">
+      <div class="font-500 pb-1">Đặt lại mật khẩu</div>
+      <div>Bạn muốn đặt lại mật khẩu tài khoản này?</div>
+    </div>
+  </div>
+</ng-template>
+
+
+<app-confirmation
+  *ngIf="typeConfirm === 'switchStatusUser'"
+  [confirmation]="switchStatusTpl"
+  (confirmed)="confirmSwitchStatusUser($event)"
+></app-confirmation>
+
+<ng-template #switchStatusTpl>
+  <div class="text-left flex">
+    <div class="flex flex-[35px_0_0] items-center justify-center">
+      <i class="text-[20px]" [ngStyle]="{color: 'var(--primary)'}" nz-icon nzType="question-circle" nzTheme="outline"></i>
+    </div>
+    <div class="flex-[1_0_0] pl-2">
+      <div class="font-500 pb-1">Thay đổi trạng thái tài khoản</div>
+      <div>Bạn muốn thay đổi trạng thái tài khoản này?</div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+

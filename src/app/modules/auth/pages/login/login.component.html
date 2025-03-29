@@ -1,0 +1,72 @@
+<div class="login-page">
+  <div class="login-header">
+    <div class="container">
+      <div class="logo-image">
+        <img src="./assets/images/logo-epass-white.svg" width="106" height="57" />
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="login-main-content">
+    <div class="container">
+      <div class="login-content">
+        <div class="login-box p-[30px]">
+
+          <div class="logo-box flex justify-center pb-[20px]"><img src="./assets/images/logoEpass.png" width="106" height="57" /></div>
+
+          <form nz-form [formGroup]="form" (ngSubmit)="onLogin()">
+            <div class="form-group pb-[20px]">
+
+<!--              <div *ngIf="form.dirty">-->
+<!--                <p>The form has unsaved changes.</p>-->
+<!--              </div>-->
+
+              <app-form-control>
+                <app-input
+                        id="username"
+                        class="input-text"
+                        placeholder="Tên đăng nhập"
+                        formControlName="email"
+                        [allowClear]="true"
+                ></app-input>
+              </app-form-control>
+            </div>
+
+            <div class="form-group pb-[20px]">
+                <app-form-control>
+                  <app-input-password
+                          id="password"
+                          class="input-text"
+                          placeholder="Mật khẩu"
+                          formControlName="password"
+                          [allowClear]="true"
+                  ></app-input-password>
+                </app-form-control>
+            </div>
+
+            <div class="form-group pb-[20px]">
+              <button nz-button
+                      nzType="primary"
+                      nzBlock
+                      [nzLoading]="isLoading"
+                      class="btn-submit"
+                      type="submit">
+                Đăng nhập
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="login-footer">
+    © Bản quyền thuộc VDTC. Phát triển bởi Viettel
+  </div>
+
+</div>

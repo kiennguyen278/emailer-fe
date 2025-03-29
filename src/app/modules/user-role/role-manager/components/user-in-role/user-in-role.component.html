@@ -1,0 +1,82 @@
+<div class="bg-[#fff] rounded-[8px]">
+
+  <h3 class="border-b p-3 font-medium">
+    Người dùng thuộc vai trò {{selectedRole?.roleName || ''}}
+  </h3>
+
+  <div class="search-box px-3">
+    <form nz-form [formGroup]="form" (ngSubmit)="onSearch()">
+
+      <div class="flex py-3">
+
+        <div class="flex-[60%_0_0] pr-2">
+          <app-form-control>
+            <app-input
+              class="input-text"
+              placeholder="Nhập tài khoản/ Tên người dùng"
+              formControlName="keyword"
+            ></app-input>
+          </app-form-control>
+        </div>
+
+        <div class="flex flex-[40%_0_0] gap-2">
+
+          <button nz-button nzType="primary" nzBlock class="btn-submit rounded-[8px]" type="submit">
+            <span nz-icon nzType="search" nzTheme="outline"></span>
+            Tìm kiếm
+          </button>
+
+          <button nz-button nzType="primary"
+                  nzBlock
+                  class="btn-submit rounded-[8px]"
+                  type="button"
+                  [disabled]="selectedRole?.status === valueOptionStatus.HetHieuLuc"
+                  (click)="openDialogAddUserToRole()">
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            Thêm mới
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+  <div class="table-list px-3 pb-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [pagination]="pagination"
+        [scrollX]="'900px'"
+        (dbClickItem)="onDbClickItem($event)"
+        (queryParams)="onQueryParams($event)"
+        [displayColumns]="displayColumns"
+        [showIndex]="true"
+        [checkedKeys]="selectedKeys"
+        [loading]="loading$ | async"
+        (itemSelected)="onSelectedItem($event)"
+        (checkedKeysChange)="onSelectKeysChange($event)"
+        [showPagination]="pagination.total > 0"
+      >
+        <ng-template [appCellTemplate]="'actions'" let-item>
+
+          <button nz-button
+                  nzType="text"
+                  (click)="openModalConfirmDeleteUserInRole(item)" class="cursor-pointer">
+            <i
+              nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              nz-tooltip
+              nzTooltipTitle="Xóa"
+            ></i>
+          </button>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
+</div>
+
+

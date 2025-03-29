@@ -1,0 +1,15 @@
+<div class="flex">
+  <a [routerLink]="'/'">
+    Trang chủ
+  </a>
+  <i style="transform: rotate(90deg); font-size: 8px; display: inline-flex; margin-left: 3px; margin-right: 16px;"
+    nz-icon
+    [nzType]="'icons:icnExpand'">
+  </i>
+  <nz-breadcrumb
+    [nzSeparator]="iconTemplate"
+    [nzAutoGenerate]="true">
+  </nz-breadcrumb>
+</div>
+<ng-template #iconTemplate><span style="transform: rotate(90deg); font-size: 8px; display: inline-flex;" nz-icon [nzType]="'icons:icnExpand'"></span></ng-template>
+

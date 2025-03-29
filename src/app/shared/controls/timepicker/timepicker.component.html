@@ -1,0 +1,9 @@
+<nz-time-picker
+  [(ngModel)]="value"
+  class="w-full rounded-md"
+  [nzPlaceHolder]="placeholder | translate"
+  (ngModelChange)="onChange($event)"
+  [disabled]="disabled"
+  [nzFormat]="format"
+>
+</nz-time-picker>

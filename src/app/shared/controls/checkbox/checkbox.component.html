@@ -1,0 +1,9 @@
+<label
+  nz-checkbox
+  [(ngModel)]="value"
+  (ngModelChange)="onChange($event)"
+  (keyup.enter)="keyupEnterValue(value)"
+  [nzDisabled]="disabled"
+  [nzIndeterminate]="indeterminate"
+  ><span [ngClass]="{'label': isSetting}">{{ label }}</span></label
+>

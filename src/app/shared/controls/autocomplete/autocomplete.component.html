@@ -1,0 +1,40 @@
+<nz-input-group [nzSuffix]="suffixIcon">
+  <input
+    #input
+    placeholder="{{disabled ? '' : placeholder | translate }}"
+    nz-input
+    [(ngModel)]="value"
+    [maxlength]="maxlength"
+    (ngModelChange)="onChange($event)"
+    [nzAutocomplete]="auto"
+    (keyup.enter)="keyUpEnter.emit()"
+    (focus)="displayOptions=options"
+    [disabled]="disabled"
+
+  />
+</nz-input-group>
+<nz-autocomplete #auto>
+  <nz-auto-option
+    *ngFor="let option of displayOptions"
+    [nzValue]="option.value"
+    [nzLabel]="option.label"
+    [title]="option.label"
+  >
+    {{ option.label | translate }}
+  </nz-auto-option>
+</nz-autocomplete>
+
+<ng-template #suffixIcon>
+  <ng-container *ngIf="!value; else aaa" >
+    <i style="font-size: 12px; color: #ccc" nz-icon nzType="down"></i>
+  </ng-container>
+  <ng-template #aaa>
+    <i style="font-size: 12px; color: #ccc; cursor: pointer"
+       nz-icon
+       nzType="close"
+       nzTheme="outline"
+       (click)="onChange(''); value=''"></i>
+  </ng-template>
+
+
+</ng-template>

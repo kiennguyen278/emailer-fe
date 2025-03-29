@@ -1,0 +1,507 @@
+<div class="h-full flex flex-col justify-between">
+  <nz-table
+    nzBordered
+    [nzData]="isGroupType ? groupItems : items"
+    [nzFrontPagination]="false"
+    [nzLoading]="loading"
+    (nzQueryParams)="onQueryParams($event)"
+    (nzQueryParams)="onQueryParamsLocal($event)"
+    [nzScroll]="scroll"
+    nzTableLayout="fixed"
+    #tableRef
+    [nzVirtualItemSize]="pagination.total"
+    [nzVirtualForTrackBy]="trackByIndex"
+    [nzShowPagination]="false"
+    [nzNoResult]="'Không tìm thấy bản ghi.'"
+  >
+    <thead>
+      <tr>
+        <th *ngIf="showDrag" class="w-10"
+        nzWidth="40px"></th>
+        <th
+          *ngIf="showCheckbox"
+          (dblclick)="stopPropagation($event)"
+          (click)="stopPropagation($event)"
+          nzAlign="center"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+          [nzDisabled]="disableAllCheck"
+          class="w-10"
+          nzWidth="40px"
+        ></th>
+        <th *ngIf="showIndex" nzAlign="center" nzWidth="30px" class="font-12 td-stt">
+          STT
+        </th>
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container *ngIf="!column.sortable; else sortableTmp">
+            <th
+              class="font-12"
+              nzAlign="center"
+              [nzWidth]="column.nzWidth || null"
+            >
+              {{ column.header | translate }}
+            </th>
+          </ng-container>
+          <ng-template #sortableTmp>
+            <th
+              class="font-12"
+              nzAlign="center"
+              [nzSortFn]="true"
+              [nzColumnKey]="column.key"
+              [nzWidth]="column.nzWidth || null"
+            >
+              {{ column.header | translate }}
+            </th>
+          </ng-template>
+        </ng-container>
+      </tr>
+      <tr class="tr-header" *ngIf="isShowFilter">
+        <td *ngIf="showDrag"></td>
+        <td *ngIf="showCheckbox"></td>
+        <td *ngIf="showIndex"></td>
+        <td class="p-7" *ngFor="let column of displayedColumns">
+          <ng-container
+            *ngIf="column.filter && filter"
+            [ngSwitch]="column.filter.type"
+          >
+            <ng-container *ngSwitchCase="'select'">
+              <app-select
+                class="select-table"
+                [(ngModel)]="filter[column.key]"
+                (ngModelChange)="onChangeFilter()"
+                [options]="column.filter.options!"
+                [showSearch]="true"
+                [allowClear]="true"
+              ></app-select>
+            </ng-container>
+            <ng-container *ngSwitchCase="'datepicker'">
+              <app-datepicker
+                class="input-datepicker-table"
+                [(ngModel)]="filter[column.key]"
+                (ngModelChange)="onChangeFilterDelay()"
+              ></app-datepicker>
+            </ng-container>
+            <ng-container *ngSwitchCase="'timepicker'">
+              <app-timepicker
+                class="input-timepicker-table"
+                [(ngModel)]="filter[column.key]"
+                (ngModelChange)="onChangeFilterDelay()"
+              ></app-timepicker>
+            </ng-container>
+            <ng-container *ngSwitchCase="'inputNumber'">
+              <app-input-number
+                class="input-number-table"
+                [placeholder]="'his.common.search_placeholder' | translate"
+                [(ngModel)]="filter[column.key]"
+                (ngModelChange)="onChangeFilterDelay()"
+              ></app-input-number>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <app-input
+                class="input-table"
+                [placeholder]="'his.common.search_placeholder' | translate"
+                [(ngModel)]="filter[column.key]"
+                (ngModelChange)="onChangeFilterDelay()"
+              ></app-input>
+            </ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </thead>
+<!--    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">-->
+    <tbody
+      cdkDropList
+      (cdkDropListDropped)="onDragDrop($event)"
+      [cdkDropListDisabled]="!enableDragDrop"
+    >
+      <ng-container *ngIf="!isGroupType; else groupType">
+        <!-- Template dữ liệu đối với loại load theo scroll -->
+        <ng-container *ngIf="isLoadOnScroll; else loadByPaging">
+          <ng-template nz-virtual-scroll let-data let-index="index">
+            <ng-container
+              [ngTemplateOutlet]="rowTemplate"
+              [ngTemplateOutletContext]="{ item: data, i: index }"
+            >
+            </ng-container>
+          </ng-template>
+        </ng-container>
+
+        <!-- Template dữ liệu mặc định -->
+        <ng-template #loadByPaging>
+          <ng-container
+            *ngFor="let item of items; let i = index"
+            [ngTemplateOutlet]="rowTemplate"
+            [ngTemplateOutletContext]="{item, i}"
+          >
+          </ng-container>
+        </ng-template>
+      </ng-container>
+      <!-- Template dữ liệu đói với loại có group -->
+      <ng-template #groupType>
+        <ng-container
+          *ngIf="isShowNewRow"
+          [ngTemplateOutlet]="newRowTemplate"
+          [ngTemplateOutletContext]="{ newRowForm: newRowForm }"
+        >
+        </ng-container>
+        <ng-container *ngFor="let groupItem of groupItems; let i = index">
+          <tr
+            (click)="groupItem.isActive = !groupItem.isActive"
+            class="cursor-pointer bg-[#EFF2F6]"
+          >
+            <td
+              [attr.colspan]="
+                displayedColumns.length
+                  | rowspan: [showDrag,showCheckbox, showIndex]:[groupItem.action?.isAdd]
+              "
+            >
+              <i
+                *ngIf="groupItem.items && groupItem.items.length > 0"
+                class="mr-3"
+                [nzRotate]="groupItem.isActive ? 90 : -90"
+                nz-icon
+                nzType="icons:arrow-right"
+                nzTheme="outline"
+              ></i>
+              <span [ngClass]="{ required: groupItem.isRequired }">{{
+                groupItem.label || 'Khác'
+              }}</span>
+              <span class="font-bold">
+                ({{ groupItem.items.length || 0 }})</span
+              >
+            </td>
+            <td
+              *ngIf="groupItem.action?.isAdd"
+              class="cursor-pointer text-center"
+              [attr.colspan]="1"
+            >
+              <button
+                class="ml-2 rounded"
+                nz-button
+                nzType="primary"
+                (click)="
+                  groupItem.isShowNewRow = !groupItem.isShowNewRow;
+                  $event.stopPropagation()
+                "
+              >
+                <i
+                  nz-icon
+                  nzType="plus-circle"
+                  nzTheme="outline"
+                  class="cursor-pointer"
+                ></i>
+              </button>
+            </td>
+          </tr>
+          <ng-container
+            *ngIf="groupItem.isShowNewRow"
+            [ngTemplateOutlet]="newRowTemplate"
+            [ngTemplateOutletContext]="{ newRowForm: groupItem.newRowForm }"
+          >
+          </ng-container>
+          <ng-container *ngIf="groupItem.isActive">
+            <ng-container
+              *ngFor="let item of groupItem.items; let i = index"
+              [ngTemplateOutlet]="rowTemplate"
+              [ngTemplateOutletContext]="{item, i, groupItem}"
+            >
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+
+      <ng-template
+        #rowTemplate
+        let-item="item"
+        let-i="i"
+        let-groupItem="groupItem"
+      >
+        <tr
+          (dblclick)="onDbClickItem(item)"
+          (click)="onClickItem(item, i)"
+          [ngClass]="{
+            'bg-[#59B6FF80]': item === bgColorByItem,
+            'hightlight-row': (showHightlightRow && hightLightIndex === i)
+          }"
+          cdkDrag
+        >
+        <td *ngIf="showDrag" nzRight class="text-center">
+          <span nz-icon nzType="drag" nzTheme="outline"></span>
+        </td>
+          <td
+            *ngIf="showCheckbox"
+            (dblclick)="stopPropagation($event)"
+            (click)="stopPropagation($event)"
+            [nzChecked]="setOfCheckedKeys.has(item[key])"
+            (nzCheckedChange)="onItemChecked(item[key], $event)"
+            [nzDisabled]="item?.isDisableCheckbox"
+          ></td>
+
+          <td *ngIf="showIndex" class="text-center font-12 td-stt">
+            {{ (pagination.index - 1) * pagination.size + i + 1 }}
+          </td>
+          <td
+            class="font-12"
+            *ngFor="let column of displayedColumns"
+            [class]="column.tdClass"
+            nzEllipsis
+            [title]="
+              column.pipe !== 'tagsColor' &&
+              column.pipe !== 'boolean' &&
+              column.pipe !== 'template' &&
+              column.pipe !== 'time' &&
+              column.pipe !== 'optionLabel'
+                ? getValue(item, column.key)
+                : ''
+            "
+          >
+            <ng-container [ngSwitch]="column.pipe">
+              <ng-container *ngSwitchCase="'number'">
+                {{ getValue(item, column.key) | number }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'date'">
+                {{ getValue(item, column.key) | dateTime }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'dateDDMMYY'">
+                <span [title]="getValue(item, column.key) | dateTime: 'date'">
+                  {{ getValue(item, column.key) | dateTime: 'date' }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'time'">
+                <span [title]="getValue(item, column.key) | dateTime: 'time'">
+                 {{ getValue(item, column.key) | dateTime: 'time' }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'fullTime'">
+                {{ getValue(item, column.key) | dateTime: 'fullTime' }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'currency'">
+                {{ getValue(item, column.key) | currencyLocal }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'currencyDigit'">
+                {{ getValue(item, column.key) | currencyLocalDigits }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'boolean'">
+                <app-checkbox-view
+                  [checked]="getValue(item, column.key)"
+                ></app-checkbox-view>
+              </ng-container>
+              <ng-container *ngSwitchCase="'template'">
+                <ng-container
+                  *ngTemplateOutlet="
+                    column.templateColumn!;
+                    context: { $implicit: item, key: column.key }
+                  "
+                >
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'link'">
+                <a
+                  class="color-primary"
+                  [routerLink]="[getValue(item, column.key)]"
+                >
+                  {{ getValue(item, column.key) }}
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tagColor'">
+                <span
+                  *ngIf="getValue(item, column.key)"
+                  class="px-3 py-1 rounded-md"
+                  [ngClass]="column.contentClass"
+                >
+                  {{ getValue(item, column.key) }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'optionLabel'">
+                <span
+                  [title]="
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  "
+                >
+                  {{
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'optionLabels'">
+                <span
+                  [title]="
+                    getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  "
+                >
+                  {{
+                  getValueBoolean(item, column.key)
+                    | optionLabel: column.filter?.options
+                    | translate
+                  }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tagsColor'">
+                <span
+                  *ngIf="getValue(item, column.key)"
+                  class="px-3 py-1 rounded-md whitespace-nowrap"
+                  [title]="getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate"
+                  [ngClass]="
+                    getValue(item, column.key)
+                      | optionClass: column.filter?.options
+                  "
+                >
+                  {{
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tagsColorBoolean'">
+                <span
+                  class="px-3 py-1 rounded-md whitespace-nowrap"
+                  [title]="getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate"
+                  [ngClass]="
+                    getValueBoolean(item, column.key)
+                      | optionClass: column.filter?.options
+                  "
+                >
+                  {{
+                  getValueBoolean(item, column.key)
+                    | optionLabel: column.filter?.options
+                    | translate
+                  }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'action'">
+                <ng-container *ngIf="column.action?.isEdit">
+                  <i
+                    nz-icon
+                    nzType="edit"
+                    nzTheme="outline"
+                    class="cursor-pointer"
+                    (click)="startEdit(item)"
+                  ></i>
+                </ng-container>
+                <ng-container *ngIf="column.action?.isDelete">
+                  <i
+                    nz-icon
+                    nzType="delete"
+                    nzTheme="outline"
+                    class="cursor-pointer"
+                    (click)="onDeleteItem(item, groupItem)"
+                  ></i>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{ getValue(item, column.key) }}
+              </ng-container>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #newRowTemplate let-newRowForm="newRowForm">
+        <tr [formGroup]="newRowForm" (keyup.enter)="addNewRow(newRowForm)">
+          <td *ngIf="showCheckbox"></td>
+          <td *ngIf="showDrag"></td>
+          <td *ngIf="showIndex"></td>
+          <td *ngFor="let column of displayedColumns" class="text-center">
+            <ng-container *ngIf="column.newRow" [ngSwitch]="column.newRow.type">
+              <ng-container *ngSwitchCase="'select'">
+                <app-form-control>
+                  <app-select
+                    [formControlName]="
+                      column.newRow.key ? column.newRow.key : column.key
+                    "
+                    [options]="column.newRow.options!"
+                    [showSearch]="true"
+                    [allowClear]="true"
+                    [isApiSearch]="column.newRow.isApiSearch || false"
+                    (onApiSearch)="column.newRow.onApiSearch($event)"
+                    (byLoadmore)="
+                      column.newRow.byLoadmore
+                        ? column.newRow.byLoadmore()
+                        : null
+                    "
+                    (csChange)="
+                      updateNameField(
+                        newRowForm,
+                        column.newRow.key || column.key,
+                        $event
+                      );
+                      onNewRowSelect($event, column.key, column.newRow)
+                    "
+                    [isTable]="column.newRow.isTable"
+                    [headerLabel]="column.newRow.headers || []"
+                    [isExtendWidth]="column.newRow.isExtendWidth"
+                  ></app-select>
+                </app-form-control>
+              </ng-container>
+              <ng-container *ngSwitchCase="'datepicker'">
+                <app-datepicker [formControlName]="column.key"></app-datepicker>
+              </ng-container>
+              <ng-container *ngSwitchCase="'inputNumber'">
+                <app-input-number
+                  [placeholder]="'his.common.search_placeholder' | translate"
+                  [formControlName]="column.key"
+                ></app-input-number>
+              </ng-container>
+              <ng-container *ngSwitchCase="'input'">
+                <app-form-control>
+                  <app-input
+                    [placeholder]="'his.common.search_placeholder' | translate"
+                    [formControlName]="
+                      column.newRow.key ? column.newRow.key : column.key
+                    "
+                  ></app-input>
+                </app-form-control>
+              </ng-container>
+              <ng-container *ngSwitchCase="'action'">
+                <button
+                  class="ml-2 rounded"
+                  nz-button
+                  nzType="primary"
+                  (click)="addNewRow(newRowForm)"
+                >
+                  <i
+                    nz-icon
+                    nzType="plus-circle"
+                    nzTheme="outline"
+                    class="cursor-pointer"
+                  ></i>
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <label>{{ newRowForm.controls[column.key].value }}</label>
+              </ng-container>
+            </ng-container>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </nz-table>
+  <div *ngIf="showPagination" class="table-pagination pt-3">
+    <app-pagination
+      [index]="pagination.index"
+      [size]="pagination.size"
+      [total]="pagination.total"
+      (indexChange)="onIndexChange($event)"
+      (sizeChange)="onSizeChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
+
+<!--<span *ngIf="isShowSetting" nz-icon-->
+<!--      nzType="setting"-->
+<!--      (click)="onClickSetting()"-->
+<!--      class="cursor-pointer bg-white rounded w-9 h-9 shadow-lg fixed right-0 top-[47vh] flex items-center justify-center setting rotate"-->
+<!--&gt;</span>-->
