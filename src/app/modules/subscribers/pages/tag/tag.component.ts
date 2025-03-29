@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import { SubscribersService } from '../../state/service';
@@ -6,9 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ValidatorUtil } from '@core/utils/validator.util';
 import { FormUtil } from '@core/utils/form.util';
 import { SaveTagRequest, TagDTO } from '@modules/subscribers/models';
-
-
-
+import { ColumnConfig } from '@core/models';
 
 @Component({
   selector: 'app-tag',
@@ -21,6 +19,7 @@ export class TagComponent implements OnInit {
 
   tags: TagDTO[] = [];
   isLoading = false;
+  isLoadingSave = false;
 
   tagForm: FormGroup;
   modalRef: NzModalRef;
@@ -30,9 +29,31 @@ export class TagComponent implements OnInit {
     private modal: NzModalService,
     private message: NzMessageService,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
     this.buildForm();
   }
+
+  columns: ColumnConfig[] = [
+    {
+      key: 'id',
+      header: 'ID',
+      nzWidth: '100px',
+      tdClass: 'text-center',
+    },
+    {
+      key: 'name',
+      header: 'Tên Tag',
+      nzWidth: '200px',
+    },
+    {
+      key: 'actions',
+      header: 'Thao Tác',
+      tdClass: 'text-center',
+      pipe: 'template',
+      nzWidth: '80px',
+    },
+  ];
 
   ngOnInit(): void {
     this.loadTags();
@@ -44,6 +65,7 @@ export class TagComponent implements OnInit {
       next: (res) => {
         this.tags = res;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.message.error('Không thể tải danh sách tag');
@@ -51,7 +73,6 @@ export class TagComponent implements OnInit {
       }
     });
   }
-
 
   openModal(tag?: TagDTO) {
     if (tag?.id){
@@ -78,7 +99,7 @@ export class TagComponent implements OnInit {
   handleOk(): void {
     FormUtil.validate(this.tagForm);
 
-    this.isLoading = true;
+    this.isLoadingSave = true;
 
     const formVal: SaveTagRequest = this.tagForm.getRawValue();
     this.subscribersService.saveTag(formVal).pipe()
@@ -87,12 +108,12 @@ export class TagComponent implements OnInit {
           this.message.success(formVal?.id ? 'Cập nhật thành công' : 'Tạo mới thành công');
           this.modalRef.close();
           this.loadTags();
-          this.isLoading = false;
+          this.isLoadingSave = false;
           this.tagForm.reset();
         },
         error: () => {
           this.message.error('Thao tác thất bại');
-          this.isLoading = false;
+          this.isLoadingSave = false;
         }
       });
   }

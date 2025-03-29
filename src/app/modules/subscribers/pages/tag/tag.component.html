@@ -1,25 +1,38 @@
 <nz-card nzTitle="Quản lý Tag" [nzSize]="'small'">
   <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
-  <nz-table [nzData]="tags" [nzLoading]="isLoading" [nzBordered]="true" class="mt-3">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Tên Tag</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let tag of tags">
-      <td>{{ tag.id }}</td>
-      <td>{{ tag.name }}</td>
-      <td>
-        <a (click)="showEditModal(tag)">Sửa</a>
-        <span class="mx-2">|</span>
-        <a (click)="confirmDelete(tag)">Xoá</a>
-      </td>
-    </tr>
-    </tbody>
-  </nz-table>
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="tags"
+        [scrollX]="'900px'"
+        [loading]="isLoading"
+        [showPagination]="false"
+      >
+        <ng-template [appCellTemplate]="'actions'" let-item>
+          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+            <i nz-icon
+               nzType="edit"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Sửa tag"></i>
+          </button>
+
+          <button nz-button
+                  nzType="text"
+                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+            <i nz-icon
+               nzType="delete"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Xóa tag"></i>
+          </button>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
 </nz-card>
 
 
@@ -37,7 +50,7 @@
       <button nz-button
               nzType="primary"
               (click)="handleOk()"
-              [nzLoading]="isLoading"
+              [nzLoading]="isLoadingSave"
               type="submit"
               class="ml-3"
       >Save</button>
