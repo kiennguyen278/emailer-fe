@@ -36,20 +36,6 @@
               <div class="user-infor-popover" [ngStyle]="{'min-width': '200px'}">
                 <ul>
                   <li>
-                    <a href="javascript:void(0)" (click)="openDialogUserInfo()" class="flex items-center py-2">
-                      <i class="pr-3" nz-icon nzType="icons:icn-account-info"></i>
-                      Thông tin tài khoản
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="javascript:void(0)" (click)="openDialogChangePassword()" class="flex items-center py-2">
-                      <i class="pr-3" nz-icon nzType="swap" nzTheme="outline"></i>
-                      Đổi mật khẩu
-                    </a>
-                  </li>
-
-                  <li>
                     <a href="javascript:void(0)" (click)="signOut()" class="flex items-center py-2">
                       <i class="pr-3" nz-icon nzType="icons:logout"> </i>
                       Đăng xuất
@@ -159,22 +145,11 @@
       <!--      <nz-layout [ngStyle]="{height: 'calc(100vh - 60px)'}">-->
       <nz-layout>
         <nz-content>
-          <div class="p-[10px] pb-0">
-            <div class="bg-[#fff] p-2 rounded-[8px]">
-              <app-breadcrumb></app-breadcrumb>
-            </div>
-          </div>
-
           <div class="p-[10px]">
             <div class="">
               <router-outlet></router-outlet>
             </div>
           </div>
-
-          <!--          <div class="overflow-y-auto p-3.5 h-full">-->
-          <!--            -->
-          <!--            <router-outlet></router-outlet>-->
-          <!--          </div>-->
         </nz-content>
         <nz-footer class="footer-container">
           <div class="text-center">

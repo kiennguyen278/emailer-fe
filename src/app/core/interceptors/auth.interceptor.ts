@@ -110,10 +110,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private addTokenHeader(request: HttpRequest<any>): HttpRequest<any> {
     return request.clone({
-      headers: request.headers.set(
-        'Authorization',
-        `Bearer ${this.authService.accessToken}`
-      )
+
+      // headers: request.headers.set(
+      //   'Authorization',
+      //   `Bearer ${this.authService.accessToken}`
+      // ) // tạm thời bỏ authentication đi,
+
+
       //   .set(
       //   'apikey',
       //   'top-secret-key'

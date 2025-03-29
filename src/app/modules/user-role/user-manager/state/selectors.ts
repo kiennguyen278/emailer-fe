@@ -1,8 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { userManagerFeatureKey, UserManagerState } from './reducer';
+import { subscribersFeatureKey, SubscribersManagerState } from './reducer';
 
 export const selectUserState =
-  createFeatureSelector<UserManagerState>(userManagerFeatureKey);
+  createFeatureSelector<SubscribersManagerState>(subscribersFeatureKey);
 
 
 export const selectDataListUser = createSelector(

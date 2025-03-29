@@ -19,7 +19,7 @@ export abstract class BaseApiService {
   protected buildUrl(url: string | number = ''): string {
     return typeof url === 'string' && url.startsWith('/')
       ? `${this.apiUrl}${url}`
-      : `${this.endpoint}/${url}`;
+      : `${this.apiUrl}/${url}`;
   }
 
   handleError(error: HttpErrorResponse): Observable<never> {

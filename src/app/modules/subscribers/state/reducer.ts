@@ -1,8 +1,8 @@
 import {createReducer, on} from "@ngrx/store";
-import * as UserManagerActions from "./actions";
+import * as Actions from "./actions";
 import { ItemUser } from '@modules/user-role/user-manager/models';
 
-export const subscribersFeatureKey = 'userManager';
+export const subscribersFeatureKey = 'subscribersManager';
 
 export interface SubscribersManagerState {
   userList: {data: ItemUser[], totalItem: number, loading: boolean, error: any}
@@ -15,11 +15,11 @@ const initialState: SubscribersManagerState = {
 export const SubscribersReducer = createReducer(
   initialState,
 
-  on(UserManagerActions.getListUser, (state) => ({
+  on(Actions.getListUser, (state) => ({
     ...state,
     userList: {...state.userList, loading: true},
   })),
-  on(UserManagerActions.getListUserSuccess, (state, res) => ({
+  on(Actions.getListUserSuccess, (state, res) => ({
     ...state,
     userList: {
       ...state.userList,
@@ -29,11 +29,11 @@ export const SubscribersReducer = createReducer(
 
     }, // res.payload là khi action dùng createHTTPActions thay vì dùng createAction
   })),
-  on(UserManagerActions.getListUserFail, (state, {error}) => ({
+  on(Actions.getListUserFail, (state, {error}) => ({
     ...state,
     userList: {...initialState.userList, loading: false, error: error},
   })),
-  on(UserManagerActions.clearStateListUser, (state) => ({
+  on(Actions.clearStateListUser, (state) => ({
     ...state,
     userList: initialState.userList,
   })),

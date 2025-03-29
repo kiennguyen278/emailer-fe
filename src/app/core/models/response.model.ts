@@ -5,3 +5,9 @@ export interface ResponseModel<T = any> {
   data: T;
   totalRecord: number;
 }
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}

@@ -19,16 +19,8 @@ const routes: Routes = [
       },
 
       {
-        path: 'user-role',
-        loadChildren: () => import('@modules/user-role/user-role.module').then((m) => m.UserRoleModule),
-        data: {
-          title: 'Người dùng và quyền',
-          breadcrumb: 'Người dùng và quyền',
-          permissions: {
-            allow: [RoleUser.ADMIN],
-          }
-        },
-        canActivate: [PermissionService]
+        path: 'subscribers',
+        loadChildren: () => import('./modules/subscribers/subscribers.module').then((m) => m.SubscribersModule),
       },
     ]
   },

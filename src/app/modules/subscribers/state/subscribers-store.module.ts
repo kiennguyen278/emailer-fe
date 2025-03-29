@@ -3,7 +3,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { UserManagerEffects } from './effects';
 import { subscribersFeatureKey, SubscribersReducer } from './reducer';
-import { UserManagerServices } from './service';
+import { SubscribersService } from './service';
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import { UserManagerServices } from './service';
     EffectsModule.forFeature([UserManagerEffects])
   ],
   providers: [
-    UserManagerServices,
+    SubscribersService,
   ]
 })
-export class UserManagerStoreModule { }
+export class SubscribersStoreModule { }

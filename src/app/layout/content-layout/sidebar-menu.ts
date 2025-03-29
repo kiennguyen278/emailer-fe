@@ -16,140 +16,31 @@ export const MENUITEMS: MenuItem[] = [
     children: []
   },
   {
-    name: 'Người dùng và quyền',
+    name: 'Subscribers',
     icon: 'icons:icn-user-manage',
-    path: '/user-role',
+    path: '/subscribers',
     display: true,
     // permissionCode: PermissionOutPatient.DM0023,
     // permissionType: PermissionModule.OUTPATIENT,
     children: [
       {
-        name: 'Quản lý vai trò',
+        name: 'Danh sách subscriber',
         icon: '',
-        path: '/user-role/role-manager',
+        path: '/subscribers/subscriber',
         display: true,
         // permissionCode: PermissionOutPatient.DM0023,
         // permissionType: PermissionModule.OUTPATIENT,
         children: []
       },
       {
-        name: 'Quản lý người dùng',
+        name: 'Danh sách tag',
         icon: '',
-        path: '/user-role/user-manager',
+        path: '/subscribers/tag',
         display: true,
-        children: []
-      }
-    ]
-  },
-  {
-    name: 'Cấu hình danh mục',
-    icon: 'icons:icn-config-application',
-    path: '/categories-config',
-    display: true,
-    children: [
-      // {
-      //   name: 'Cấu hình danh mục',
-      //   icon: '',
-      //   path: '/app-config/categories-config',
-      //   display: true,
-      //   children: []
-      // },
-    ]
-  },
-  {
-    name: 'Cấu hình dịch vụ',
-    icon: 'icons:icn-settings',
-    path: '/service-configuration',
-    display: true,
-    children: [
-      {
-        name: 'Cấu hình lĩnh vực',
-        icon: '',
-        path: '/service-configuration/config-field',
-        display: true,
+        // permissionCode: PermissionOutPatient.DM0023,
+        // permissionType: PermissionModule.OUTPATIENT,
         children: []
       },
-      {
-        name: 'Cấu hình dịch vụ',
-        icon: '',
-        path: '/service-configuration/service-config',
-        display: true,
-        children: []
-      },
-      // {
-      //   name: 'Cấu hình sản phẩm',
-      //   icon: '',
-      //   path: '/service-configuration/product-configuration',
-      //   display: true,
-      //   children: []
-      // },
-    ]
-  }, 
-  {
-    name: 'Cấu hình dịch vụ VDTC',
-    icon: 'icons:icn-car',
-    path: '/main-service-configuration/main-service-configuration',
-    display: true,
-    children: [
-      // {
-      //   name: 'Cấu hình dịch vụ VDTC',
-      //   icon: '',
-      //   path: '/main-service-configuration/main-service-configuration',
-      //   display: true,
-      //   children: []
-      // },
     ]
   },
-  {
-    name: 'Cấu hình video',
-    icon: 'icons:icn-video',
-    path: '/video-configuration/video-configuration',
-    display: true,
-    children: [
-      // {
-      //   name: 'Cấu hình video',
-      //   icon: '',
-      //   path: '/video-configuration/video-configuration',
-      //   display: true,
-      //   children: []
-      // },
-    ]
-  },
-  {
-    name: 'Quản lý tin tức',
-    icon: 'icons:icn-news',
-    path: '/news-manager',
-    display: true,
-    children: [
-      // {
-      //   name: 'Quản lý nội dung',
-      //   icon: '',
-      //   path: '/news-manager/list',
-      //   display: true,
-      //   children: []
-      // },
-      // {
-      //   name: 'Tạo mới nội dung',
-      //   icon: '',
-      //   path: '/news-manager/create',
-      //   display: true,
-      //   children: []
-      // },
-    ]
-  },
-  {
-    name: 'Cấu hình banner',
-    icon: 'icons:icn-banner',
-    path: '/banner-config/banner-config',
-    display: true,
-    children: [
-      // {
-      //   name: 'Cấu hình banner',
-      //   icon: '',
-      //   path: '/banner-config/banner-config',
-      //   display: true,
-      //   children: []
-      // },
-    ]
-  }
 ];
