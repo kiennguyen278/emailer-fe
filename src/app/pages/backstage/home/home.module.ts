@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NgZorroAntdModule } from '../../../ng-zorro-antd.module';
-import { ComponentCoreModule } from 'src/app/components/component-core.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {SharedModule} from "../../../shared/shared.module";
+import {ZorroAntdModule} from "@shared/zorro-antd.module";
 
 
 @NgModule({
@@ -13,9 +13,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   ],
   imports: [
     CommonModule,
+    ZorroAntdModule,
+    SharedModule,
     HomeRoutingModule,
-    ComponentCoreModule,
-    NgZorroAntdModule
   ]
 })
 export class HomeModule { }

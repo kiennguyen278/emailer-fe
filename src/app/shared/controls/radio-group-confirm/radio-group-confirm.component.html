@@ -1,0 +1,39 @@
+<nz-radio-group
+  [(ngModel)]="value"
+  class="radio-confirm"
+>
+  <ng-container *ngFor="let option of options">
+
+    <!--<label-->
+      <!--[nzDisabled]="option?.disabled"-->
+      <!--(nzOnConfirm)="confirmChange(option.value)"-->
+      <!--(nzOnCancel)="cancelChange()"-->
+      <!--nz-popconfirm-->
+      <!--nzPopconfirmTitle="Are you sure?"-->
+      <!--nz-radio-->
+      <!--(click)="onChangeVal($event)"-->
+      <!--[nzValue]="option.value"-->
+    <!--&gt;-->
+      <!--{{ option.label | translate }}-->
+    <!--</label>-->
+
+    <label
+      class="ant-radio-wrapper"
+    >
+      <input
+        class="form-check-input"
+        type="radio"
+        [disabled]="option?.disabled"
+        (nzOnConfirm)="confirmChange(option.value)"
+        (nzOnCancel)="cancelChange()"
+        nz-popconfirm
+        nzPopconfirmTitle="Are you sure?"
+        (click)="onChangeVal($event)"
+        [value]="option.value"
+        [checked]="value == option.value"
+      />
+      {{ option.label | translate }}
+    </label>
+  </ng-container>
+</nz-radio-group>
+

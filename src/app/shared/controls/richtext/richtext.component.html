@@ -1,0 +1,24 @@
+<div class="relative">
+  <!-- <textarea
+    [rows]="rows"
+    nz-input
+    nzAutosize=""
+    placeholder="{{ placeholder }}"
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
+    [maxlength]="maxLength"
+    [disabled]="disabled"
+    style="padding-left: 12px; padding-right: 22px;"
+  ></textarea> -->
+  <quill-editor
+    class="editor tool"
+    [modules]="moduleQuill"
+    nz-input
+    nzAutosize=""
+    placeholder="{{ placeholder }}"
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
+    [maxlength]="maxLength"
+    [disabled]="disabled"
+  ></quill-editor>
+</div>

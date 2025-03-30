@@ -1,0 +1,101 @@
+<div class="h-full flex flex-col justify-between">
+  <nz-table
+    nzBordered
+    [nzData]="isGroupType ? groupItems : items"
+    [nzFrontPagination]="false"
+    [nzLoading]="loading"
+    (nzQueryParams)="onQueryParams($event)"
+    [nzScroll]="scroll"
+    nzTableLayout="fixed"
+    #tableRef
+    [nzVirtualItemSize]="pagination.total"
+    [nzVirtualForTrackBy]="trackByIndex"
+    [nzShowPagination]="false"
+    [nzNoResult]="'Không tìm thấy bản ghi.'"
+  >
+    <thead>
+      <tr>
+        <th *ngIf="showDrag" class="w-10"
+        nzWidth="40px"></th>
+        <th
+          *ngIf="showCheckbox"
+          (dblclick)="stopPropagation($event)"
+          (click)="stopPropagation($event)"
+          nzAlign="center"
+          [(nzChecked)]="checked"
+          [nzIndeterminate]="indeterminate"
+          (nzCheckedChange)="onAllChecked($event)"
+          [nzDisabled]="disableAllCheck"
+          class="w-10"
+          nzWidth="40px"
+        ></th>
+        <th *ngIf="showIndex" nzAlign="center" nzWidth="30px" class="font-12 td-stt">
+          STT
+        </th>
+        <ng-container *ngFor="let column of displayedColumns">
+          <ng-container *ngIf="!column.sortable; else sortableTmp">
+            <th
+              class="font-12"
+              nzAlign="center"
+              [nzWidth]="column.nzWidth || null"
+            >
+              {{ column.header | translate }}
+            </th>
+          </ng-container>
+          <ng-template #sortableTmp>
+            <th
+              class="font-12"
+              nzAlign="center"
+              [nzSortFn]="true"
+              [nzColumnKey]="column.key"
+              [nzWidth]="column.nzWidth || null"
+            >
+              {{ column.header | translate }}
+            </th>
+          </ng-template>
+        </ng-container>
+      </tr>
+    </thead>
+<!--    <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">-->
+    <tbody
+      cdkDropList
+      (cdkDropListDropped)="onDragDrop($event)"
+      [cdkDropListDisabled]="!enableDragDrop"
+    >
+        <!-- Template dữ liệu đối với loại load theo scroll -->
+        <ng-container *ngIf="isLoadOnScroll; else loadByPaging">
+          <ng-template nz-virtual-scroll let-data let-index="index">
+            <ng-container
+              [ngTemplateOutlet]="rowTemplate"
+              [ngTemplateOutletContext]="{ item: data, i: index }"
+            >
+            </ng-container>
+          </ng-template>
+        </ng-container>
+
+        <!-- Template dữ liệu mặc định -->
+        <ng-template #loadByPaging>
+          <ng-container
+            *ngFor="let item of items; let i = index"
+            [ngTemplateOutlet]="rowTemplate"
+            [ngTemplateOutletContext]="{item, i}"
+          >
+          </ng-container>
+        </ng-template>
+      <!-- Template dữ liệu đói với loại có group -->
+
+
+    </tbody>
+  </nz-table>
+  <div *ngIf="showPagination" class="table-pagination pt-3">
+    <app-pagination
+      [index]="pagination.index"
+      [size]="pagination.size"
+      [total]="pagination.total"
+      (indexChange)="onIndexChange($event)"
+      (sizeChange)="onSizeChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
+

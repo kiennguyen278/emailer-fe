@@ -1,0 +1,13 @@
+<nz-input-group [nzPrefix]="prefix" [nzSuffix]="suffix" class="search-input">
+  <input
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
+    type="text"
+    nz-input
+    [disabled]="disabled"
+    placeholder="{{ placeholder }}"
+    [style.width]="width"
+    [maxlength]="maxLength"
+    [minlength]="minLength"
+  />
+</nz-input-group>

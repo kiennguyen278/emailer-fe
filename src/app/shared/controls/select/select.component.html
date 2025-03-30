@@ -1,0 +1,67 @@
+<nz-select
+  [(ngModel)]="value"
+  [nzMaxTagCount]="maxTagCount"
+  [nzMaxTagPlaceholder]="tagPlaceHolder"
+  [nzPlaceHolder]="placeholder | translate"
+  (ngModelChange)="onChange($event)"
+  [nzAllowClear]="allowClear"
+  [disabled]="disabled"
+  [nzShowSearch]="showSearch"
+  [nzMode]="isMulti ? 'multiple' : 'default'"
+  [nzShowArrow]="true"
+  [class.disable-search]="!showSearch"
+  class="w-full"
+  [ngClass]="{ 'w-full': true, 'multi-select': isMulti }"
+  [style.border]="!showBorderWarning ? '' : '1px solid #d1152c'"
+  (nzOnSearch)="search($event)"
+  [nzServerSearch]="customerSearch"
+  (nzScrollToBottom)="onScrollToBottom()"
+  [nzOptionHeightPx]="optionHeight"
+  [nzLoading]="isLoading"
+  [nzDropdownMatchSelectWidth]="!isExtendWidth"
+  [nzDropdownClassName]="dropdownClassName"
+  [nzDropdownStyle]="nzDropdownStyle"
+  [nzId]="myId"
+  (nzOpenChange)="onOpenChange($event)"
+>
+  <ng-container *ngIf="!isTable; else table">
+    <nz-option
+      *ngFor="let option of filteredOptions"
+      [nzDisabled]="option.disabled"
+      [nzValue]="option.value"
+      [nzLabel]="option.label | translate"
+    ></nz-option>
+  </ng-container>
+  <ng-template #table>
+    <nz-option-group [nzLabel]="optionGroupTemp" class="option-type-table">
+      <nz-option
+        nzCustomContent
+        *ngFor="let option of filteredOptions"
+        [nzDisabled]="option.disabled"
+        [nzValue]="option.value"
+        [nzLabel]="option.label | translate"
+      >
+        <div class="option-row">
+          <div
+            *ngFor="let headerProp of headerLabel"
+            class="option-col {{ headerProp.key }}"
+            title="{{ option[headerProp.key] }}"
+          >
+            <span>{{ option[headerProp.key] }}</span>
+          </div>
+        </div>
+      </nz-option>
+    </nz-option-group>
+  </ng-template>
+</nz-select>
+<ng-template #tagPlaceHolder let-selectedList
+  >+{{ selectedList.length }}</ng-template
+>
+
+<ng-template #optionGroupTemp>
+  <div class="group-container">
+    <div *ngFor="let header of headerLabel" class="header-col {{ header.key }}">
+      {{ header.label }}
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,9 @@
+<nz-form-item class="mb-0">
+  <nz-form-control [nzErrorTip]="errorTpl">
+    <ng-content></ng-content>
+  </nz-form-control>
+</nz-form-item>
+
+<ng-template #errorTpl let-control>
+  {{ control?.errors?.message }}
+</ng-template>

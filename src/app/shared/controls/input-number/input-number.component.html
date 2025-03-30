@@ -1,0 +1,12 @@
+<nz-input-number
+  class="w-full"
+  [(ngModel)]="value"
+  [nzStep]="step"
+  [nzDisabled]="disabled"
+  [nzPlaceHolder]="placeholder | translate"
+  [nzFormatter]="formatter"
+  [nzParser]="parser"
+  (ngModelChange)="onChange($event)"
+  [nzMin]="min"
+  [nzMax]="max"
+></nz-input-number>
