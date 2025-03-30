@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +22,9 @@ import { WorkflowsModule } from './pages/backstage/workflows/workflows.module';
 import { EmailModule } from './pages/backstage/email/email.module';
 import { SubscribersModule } from './pages/backstage/subscribers/subscribers.module';
 import { HomeModule } from './pages/backstage/home/home.module';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 registerLocaleData(en);
 
@@ -44,6 +47,9 @@ registerLocaleData(en);
     EmailModule,
     SubscribersModule,
     HomeModule,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
 
   ],
   providers: [
