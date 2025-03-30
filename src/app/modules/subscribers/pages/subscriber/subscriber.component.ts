@@ -57,27 +57,32 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     {
       key: 'id',
       header: 'ID',
+      sortable: true,
       nzWidth: '50px',
       tdClass: 'text-center',
     },
     {
       key: 'firstName',
       header: 'First Name',
+      sortable: true,
       nzWidth: '150px',
     },
     {
       key: 'lastName',
       header: 'Last Name',
+      sortable: true,
       nzWidth: '150px',
     },
     {
       key: 'email',
       header: 'Email',
+      sortable: true,
       nzWidth: '200px',
     },
     {
       key: 'status',
       header: 'Trạng thái',
+      sortable: true,
       nzWidth: '100px',
       tdClass: 'text-center',
     },

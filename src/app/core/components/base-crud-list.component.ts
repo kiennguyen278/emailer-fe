@@ -87,9 +87,11 @@ export abstract class BaseCrudListComponent<T = any>
       this.params = params.filter;
     }
     if (params.sort) {
-      this.params.sorts = params.sort.value
-        ? [`${params.sort.key}-${SORT_DIRECTION[params.sort.value]}`]
-        : undefined;
+      // this.params.sorts = params.sort.value
+      //   ? [`${params.sort.key}-${SORT_DIRECTION[params.sort.value]}`]
+      //   : undefined;
+      this.params.sortBy = params.sort.key || null;
+      this.params.sortDir = params.sort.value ? SORT_DIRECTION[params.sort.value] : null;
     }
     this.pagination.index = params.pageIndex || this.currentPageNum || 1;
     this.pagination.size = params.pageSize || this.pagination.size;
