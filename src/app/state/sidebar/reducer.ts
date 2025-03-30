@@ -1,7 +1,7 @@
 import {createReducer, on} from "@ngrx/store";
 import * as SidebarActions from "./actions";
 
-export const sidebarFeatureKey = 'sidebar';
+export const globalbarFeatureKey = 'global';
 
 export interface SidebarState {
   collapsed: any;

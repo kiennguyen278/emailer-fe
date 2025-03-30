@@ -19,7 +19,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {AuthLayoutComponent} from "./layouts/auth-layout/auth-layout.component";
 import {SharedModule} from "./shared/shared.module";
 import {CoreModule} from "@core/core.module";
-import {sidebarFeatureKey, SidebarReducer} from "./state/sidebar/reducer";
+import {globalbarFeatureKey, SidebarReducer} from "./state/sidebar/reducer";
+import {metaReducers} from "./state/sidebar/meta-reducers";
 
 registerLocaleData(en);
 
@@ -38,9 +39,7 @@ registerLocaleData(en);
     SharedModule,
     CoreModule,
     SharedCoreModule.forRoot(),
-    StoreModule.forRoot({
-      [sidebarFeatureKey]: SidebarReducer
-    }),
+    StoreModule.forRoot({[globalbarFeatureKey]: SidebarReducer}, { metaReducers }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
 

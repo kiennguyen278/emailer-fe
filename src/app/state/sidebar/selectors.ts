@@ -1,8 +1,8 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {sidebarFeatureKey, SidebarState} from "./reducer";
+import {globalbarFeatureKey, SidebarState} from "./reducer";
 
 export const selectSidebarState =
-  createFeatureSelector<SidebarState>(sidebarFeatureKey);
+  createFeatureSelector<SidebarState>(globalbarFeatureKey);
 
 export const selectChangeCollapsed = createSelector(
   selectSidebarState,
