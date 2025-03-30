@@ -1,6 +1,7 @@
 <div class="h-full flex flex-col justify-between">
   <nz-table
-    nzBordered
+    [nzBordered]="false"
+    [nzOuterBordered]="true"
     [nzData]="items"
     [nzFrontPagination]="false"
     [nzLoading]="loading"

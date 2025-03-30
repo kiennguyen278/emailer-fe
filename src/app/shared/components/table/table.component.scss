@@ -1,6 +1,4 @@
-.p-7 {
-    padding: 7px !important;
-}
+
 .ant-table-body-no-over {
     overflow-y: hidden !important;
 }
@@ -12,7 +10,7 @@
     background-color: white;
 }
 .tr-header td{
-    border-right: 1px solid #f0f0f0;
+    border-right: none;
     border-bottom: 1px solid #f0f0f0;
 
 }
