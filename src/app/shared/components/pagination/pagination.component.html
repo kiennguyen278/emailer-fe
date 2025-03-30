@@ -1,5 +1,5 @@
-<div class="flex items-center justify-between relative">
-  <div class="flex items-center">
+<div class="flex items-center justify-end relative">
+  <div class="flex items-center mr-3">
 <!--    <div class="mr-2">-->
 <!--      {{ 'his.common.show_table_list' | translate }}-->
 <!--    </div>-->
@@ -7,15 +7,15 @@
       <nz-option
         *ngFor="let option of sizeOptions"
         [nzValue]="option"
-        [nzLabel]="option+'/trang'"
+        [nzLabel]="option"
       ></nz-option>
     </nz-select>
   </div>
   <div>
-    <span>
-      {{ ranges[0] }} - {{ ranges[1] }}
-      {{ 'his.common.pagination' | translate }} {{ total }}
-    </span>
+<!--    <span>-->
+<!--      {{ ranges[0] }} - {{ ranges[1] }}-->
+<!--      {{ 'his.common.pagination' | translate }} {{ total }}-->
+<!--    </span>-->
     <ng-container *ngFor="let item of pages">
       <ng-container [ngSwitch]="item.type">
         <a class="mx-2" (click)="firstPage()" *ngSwitchCase="'first'" [ngClass]="{'text-[#707071] opacity-60 pointer-events-none' : item.disabled}">

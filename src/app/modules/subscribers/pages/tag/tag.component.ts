@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import { SubscribersService } from '../../state/service';
@@ -24,7 +24,7 @@ import { NotificationService } from '@core/services/notification.service';
   templateUrl: './tag.component.html',
   styleUrls: ['./tag.component.scss']
 })
-export class TagComponent implements OnInit {
+export class TagComponent implements OnInit, OnDestroy {
 
   @ViewChild('modalEditTag') modalEditTag!: TemplateRef<any>;
 
@@ -151,8 +151,7 @@ export class TagComponent implements OnInit {
 
   confirmDelete(tag: TagDTO): void {
     this.modal.confirm({
-      nzTitle: 'Bạn có chắc muốn xoá tag này?',
-      nzContent: `Tag: ${tag.name}`,
+      nzTitle: `Bạn có chắc muốn xoá tag "${tag.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
       nzOnOk: () => this.deleteTag(tag.id)
@@ -177,11 +176,17 @@ export class TagComponent implements OnInit {
     }
     });
   }
-  
+
   buildForm(){
     this.tagForm = this.fb.group({
       name: [null, [ValidatorUtil.required('Tên tag không được để trống!')]],
       id: [null],
     })
+  }
+
+  ngOnDestroy() {
+    if (this.modalRef){
+      this.modalRef.destroy();
+    }
   }
 }

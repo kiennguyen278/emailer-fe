@@ -4,6 +4,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as Actionss from './actions';
 import { SubscribersService } from './service';
+import { SubscriberSearchDTO } from '@modules/subscribers/models';
 
 @Injectable()
 export class UserManagerEffects {
@@ -14,7 +15,7 @@ export class UserManagerEffects {
   ) {
   }
 
-  getMachineListEffect$ = createEffect(() =>
+  getListTags$ = createEffect(() =>
     this.actions$.pipe(
       ofType(Actionss.getListTags),
       switchMap(() => {
@@ -26,20 +27,16 @@ export class UserManagerEffects {
     )
   );
 
-  // getListRoles$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(RoleManagerActions.getListUser),
-  //     switchMap(({ payload }: {payload: GetListUserRequest}) => {
-  //       return this.userManagerServices.getListUser(payload).pipe(
-  //         map((res: any) =>
-  //           RoleManagerActions.getListUserSuccess(res)
-  //         ),
-  //         catchError((error) =>
-  //           of(RoleManagerActions.getListUserFail({ error }))
-  //         )
-  //       );
-  //     })
-  //   )
-  // );
+  getListSubscribers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(Actionss.getListSubscribers),
+      switchMap(({ payload }: {payload: SubscriberSearchDTO}) => {
+        return this.subscribersService.getListSubscribers(payload).pipe(
+          map((res: any) => Actionss.getListSubscribersSuccess(res.data)),
+          catchError((error) => of(Actionss.getListSubscribersFail({ error })))
+        );
+      })
+    )
+  );
 
 }

@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '@environment';
 import { ApiResponse } from '@core/models';
-import { SaveTagRequest, TagDTO } from '../models';
+import { SaveSubscriberRequest, SaveTagRequest, SubscriberResponseDTO, SubscriberSearchDTO, TagDTO } from '../models';
 import { BaseApiService } from '@core/services';
+import { omit } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class SubscribersService extends BaseApiService{
-  private readonly baseUrl = `${environment.baseUrl}/tags`;
 
   getAllTag(): Observable<TagDTO[]> {
     const url = this.buildUrl('/tags');
@@ -28,15 +28,50 @@ export class SubscribersService extends BaseApiService{
     }
   }
 
-  create(name: string): Observable<any> {
-    return this.http.post<ApiResponse<any>>(this.baseUrl, { name });
-  }
-
-  update(id: number, name: string): Observable<any> {
-    return this.http.put<ApiResponse<any>>(`${this.baseUrl}/${id}`, { name });
-  }
-
   delete(id: number): Observable<any> {
-    return this.http.delete<ApiResponse<any>>(`${this.baseUrl}/${id}`);
+    const url = this.buildUrl(`/tags/${id}`);
+    return this.http.delete<ApiResponse<any>>(url);
   }
+
+
+
+
+
+
+
+  getListSubscribers(params: SubscriberSearchDTO): Observable<any> {
+    const url = this.buildUrl('/subscribers/search');
+    const paramRequest = {...params, page: params.page - 1};
+    return this.http.get<ApiResponse<SubscriberResponseDTO>>(url,{params: {...paramRequest}} );
+  }
+
+  saveSubscribers(request: SaveSubscriberRequest): Observable<any> {
+    if (request.id){
+      const bodyRequest = omit(request, 'id');
+      const url = this.buildUrl(`/subscribers/${request.id}`);
+      return this.http.put<ApiResponse<any>>(url, bodyRequest,);
+    } else {
+      const url = this.buildUrl(`/subscribers`);
+      return this.http.post<ApiResponse<any>>(url, request);
+    }
+  }
+
+  deleteSubscriber(id: number): Observable<any> {
+    const url = this.buildUrl(`/subscribers/${id}`);
+    return this.http.delete<ApiResponse<any>>(url);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

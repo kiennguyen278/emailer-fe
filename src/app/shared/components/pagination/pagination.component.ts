@@ -19,8 +19,8 @@ import {
 export class PaginationComponent implements OnChanges {
   @Input() total = 0;
   @Input() index = 1;
-  @Input() size = 10;
-  @Input() sizeOptions = [10, 20, 30, 40, 50];
+  @Input() size = 30;
+  @Input() sizeOptions = [10, 30, 50, 100];
   @Output() indexChange = new EventEmitter<number>();
   @Output() sizeChange = new EventEmitter<number>();
   ranges = [0, 0];

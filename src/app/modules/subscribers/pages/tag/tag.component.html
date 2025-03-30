@@ -38,7 +38,7 @@
 
 
 <ng-template #modalEditTag>
-  <ng-container [formGroup]="tagForm" (ngSubmit)="handleOk()">
+  <form [formGroup]="tagForm" (ngSubmit)="handleOk()">
     <div>
       <label>Tên Tag:</label>
       <app-form-control>
@@ -49,12 +49,11 @@
       <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
       <button nz-button
               nzType="primary"
-              (click)="handleOk()"
               [nzLoading]="isLoadingSave"
               type="submit"
               class="ml-3"
       >Save</button>
     </div>
-  </ng-container>
+  </form>
 </ng-template>
 

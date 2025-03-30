@@ -21,6 +21,10 @@ const routes: Routes = [
       {
         path: 'subscribers',
         loadChildren: () => import('./modules/subscribers/subscribers.module').then((m) => m.SubscribersModule),
+        data: {
+          title: 'Danh sách Subscribers',
+          breadcrumb: 'Người dùng và quyền',
+        },
       },
     ]
   },

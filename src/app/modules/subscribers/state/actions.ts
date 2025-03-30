@@ -1,6 +1,7 @@
 import {createAction, props} from "@ngrx/store";
 import { createHTTPActions } from '@core/utils/state.util';
 import { GetListUserRequest, GetListUserResponsed } from '@modules/user-role/user-manager/models';
+import { SubscriberSearchDTO } from '@modules/subscribers/models';
 
 
 // export const [
@@ -18,5 +19,14 @@ export const [
   getListTags,
   getListTagsSuccess,
   getListTagsFail
-] = createHTTPActions<void, any, { error: any}>('[Tags List] Get List Tags', false);
+] = createHTTPActions<void, any, { error: any}>('[Subscribers List] Get List Tags', false);
 export const clearStateListTags = createAction('[Tags List] Clear State List Tags');
+
+
+
+export const [
+  getListSubscribers,
+  getListSubscribersSuccess,
+  getListSubscribersFail
+] = createHTTPActions<{payload: SubscriberSearchDTO}, any, { error: any}>('[Subscribers List] Get List Subscribers');
+export const clearStateListSubscribers = createAction('[Subscribers List] Clear State List Subscribers');
