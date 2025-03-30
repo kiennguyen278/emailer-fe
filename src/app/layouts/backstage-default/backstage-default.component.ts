@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { ReuseTabComponent } from './reuse-tab/reuse-tab.component';
 import { fromEvent } from 'rxjs';
+import {Store} from "@ngrx/store";
+import {selectChangeCollapsed} from "../../state/sidebar/selectors";
+import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
+import {changeCollapsed} from "../../state/sidebar/actions";
 
+@UntilDestroy()
 @Component({
   selector: 'app-backstage-default',
   templateUrl: './backstage-default.component.html',
@@ -17,11 +22,19 @@ export class BackstageDefaultComponent implements OnInit, AfterViewInit {
   @ViewChild('trigger', { static: true }) customTrigger: TemplateRef<void>;
   @ViewChild('reuseTab', { static: true }) reuseTab: ReuseTabComponent;
 
-  constructor(private hst: ElementRef) {
+  constructor(
+    private hst: ElementRef,
+    private store: Store,
+  ) {
 
   }
 
   ngOnInit() {
+    this.store.select(selectChangeCollapsed)
+      .pipe(untilDestroyed(this))
+      .subscribe((isCollapsed) => {
+        this.isCollapsed = isCollapsed;
+      })
 
   }
 
@@ -44,10 +57,8 @@ export class BackstageDefaultComponent implements OnInit, AfterViewInit {
   }
 
   collapsedTrigger(): void {
-    // 折叠
-    this.isCollapsed = !this.isCollapsed;
+    this.store.dispatch(changeCollapsed({collapsed: !this.isCollapsed}));
     this.doLayout();
-    // G2 bug
     const e = document.createEvent('Event');
     e.initEvent('resize', true, true);
     window.dispatchEvent(e);
