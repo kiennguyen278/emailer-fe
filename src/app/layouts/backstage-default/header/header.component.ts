@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PlatformCoreService } from 'src/app/services/platform/platform-core.service';
 import { Router } from '@angular/router';
 import {TokenStorageService} from "@core/services/token-storage.service";
 import {NotificationService} from "@core/services/notification.service";

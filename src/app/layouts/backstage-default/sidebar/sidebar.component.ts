@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { PlatformCoreService } from 'src/app/services/platform/platform-core.service';
 import { Router } from '@angular/router';
 import { MenuItem } from 'src/app/models/core/menuItem';
 import {MENU_ITEMS} from "../../../models/core/menu.config";
@@ -18,7 +17,9 @@ export class SidebarComponent implements OnInit {
 
   menuResource: Array<MenuItem> = [];
 
-  constructor(private platformCoreService: PlatformCoreService, private router: Router) { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.menuResource = MENU_ITEMS;

@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef, Output, EventEmitter } from '@angular/co
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap, take } from 'rxjs/operators';
-import { fromEvent } from 'rxjs';
 import { PlatformCoreService } from 'src/app/services/platform/platform-core.service';
 import { AppReuseStrategy } from 'src/app/services/core/app-reuse-strategy';
 
