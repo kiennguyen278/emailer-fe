@@ -1,7 +1,7 @@
 <div class="h-full flex flex-col justify-between">
   <nz-table
     nzBordered
-    [nzData]="isGroupType ? groupItems : items"
+    [nzData]="items"
     [nzFrontPagination]="false"
     [nzLoading]="loading"
     (nzQueryParams)="onQueryParams($event)"
@@ -82,6 +82,151 @@
           >
           </ng-container>
         </ng-template>
+
+        <ng-template
+          #rowTemplate
+          let-item="item"
+          let-i="i"
+        >
+          <tr
+            (dblclick)="onDbClickItem(item)"
+            (click)="onClickItem(item, i)"
+            [ngClass]="{
+            'bg-[#59B6FF80]': item === bgColorByItem,
+            'hightlight-row': (showHightlightRow && hightLightIndex === i)
+          }"
+            cdkDrag
+          >
+            <td *ngIf="showDrag" nzRight class="text-center">
+              <span nz-icon nzType="drag" nzTheme="outline"></span>
+            </td>
+            <td
+              *ngIf="showCheckbox"
+              (dblclick)="stopPropagation($event)"
+              (click)="stopPropagation($event)"
+              [nzChecked]="setOfCheckedKeys.has(item[key])"
+              (nzCheckedChange)="onItemChecked(item[key], $event)"
+              [nzDisabled]="item?.isDisableCheckbox"
+            ></td>
+
+            <td *ngIf="showIndex" class="text-center font-12 td-stt">
+              {{ (pagination.index - 1) * pagination.size + i + 1 }}
+            </td>
+            <td
+              class="font-12"
+              *ngFor="let column of displayedColumns"
+              [class]="column.tdClass"
+              nzEllipsis
+              [title]="
+              column.pipe !== 'tagsColor' &&
+              column.pipe !== 'boolean' &&
+              column.pipe !== 'template' &&
+              column.pipe !== 'time' &&
+              column.pipe !== 'optionLabel'
+                ? getValue(item, column.key)
+                : ''
+            "
+            >
+              <ng-container [ngSwitch]="column.pipe">
+                <ng-container *ngSwitchCase="'number'">
+                  {{ getValue(item, column.key) | number }}
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'template'">
+                  <ng-container
+                    *ngTemplateOutlet="
+                    column.templateColumn!;
+                    context: { $implicit: item, key: column.key }
+                  "
+                  >
+                  </ng-container>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'tagColor'">
+                <span
+                  *ngIf="getValue(item, column.key)"
+                  class="px-3 py-1 rounded-md"
+                  [ngClass]="column.contentClass"
+                >
+                  {{ getValue(item, column.key) }}
+                </span>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="'optionLabel'">
+                <span
+                  [title]="
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  "
+                >
+                  {{
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'optionLabels'">
+                <span
+                  [title]="
+                    getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  "
+                >
+                  {{
+                    getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'tagsColor'">
+                <span
+                  *ngIf="getValue(item, column.key)"
+                  class="px-3 py-1 rounded-md whitespace-nowrap"
+                  [title]="getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate"
+                  [ngClass]="
+                    getValue(item, column.key)
+                      | optionClass: column.filter?.options
+                  "
+                >
+                  {{
+                    getValue(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'tagsColorBoolean'">
+                <span
+                  class="px-3 py-1 rounded-md whitespace-nowrap"
+                  [title]="getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate"
+                  [ngClass]="
+                    getValueBoolean(item, column.key)
+                      | optionClass: column.filter?.options
+                  "
+                >
+                  {{
+                    getValueBoolean(item, column.key)
+                      | optionLabel: column.filter?.options
+                      | translate
+                  }}
+                </span>
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+                  {{ getValue(item, column.key) }}
+                </ng-container>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
       <!-- Template dữ liệu đói với loại có group -->
 
 
@@ -98,4 +243,5 @@
     </app-pagination>
   </div>
 </div>
+
 

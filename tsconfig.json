@@ -6,11 +6,6 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "strictPropertyInitialization": false,
-    "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -21,7 +16,6 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "useDefineForClassFields": false,
     "lib": [
       "ES2022",
       "dom"
@@ -31,17 +25,21 @@
       "@core/*": ["src/app/core/*"],
       "@shared/*": ["src/app/shared/*"]
     },
+    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
+    "noImplicitAny": false,
     "esModuleInterop": true,
     "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    // 空检测
-    "strictNullChecks": false,
+    "resolveJsonModule": true,
+    "ignoreDeprecations": "5.0",
+    "strictNullChecks": false
   }
 }

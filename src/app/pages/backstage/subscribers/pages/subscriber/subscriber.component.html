@@ -1,0 +1,144 @@
+<nz-card nzTitle="Quản lý Subscriber" [nzSize]="'small'">
+
+
+
+  <div class="search-form">
+    <form [formGroup]="formSearch" (ngSubmit)="onSearch()">
+      <div nz-row [nzGutter]="16">
+
+        <div nz-col [nzSpan]="8">
+          <div class="field-item mb-3">
+            <label>Keyword:</label>
+            <app-form-control>
+              <app-input formControlName="keyword"
+                         [allowClear]="true"
+                         placeholder="Tên hoặc email"></app-input>
+            </app-form-control>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="8">
+          <div class="field-item mb-3">
+            <label>Tags:</label>
+            <app-form-control>
+              <app-select formControlName="tagId"
+                          [options]="tagOptions$ | async"
+                          [allowClear]="true"
+                          [isMulti]="true"></app-select>
+            </app-form-control>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <div class="field-item mb-3">
+            <label>&nbsp;</label>
+            <div class="btn-group text-right">
+              <button nz-button type="button" nzType="primary" (click)="showCreateModal()">+ Thêm Subscriber</button>
+
+              <button nz-button
+                      nzType="primary"
+                      [nzLoading]="loading$ | async"
+                      class="ml-3"
+                      type="submit"
+              >Search</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [scrollX]="'900px'"
+        [loading]="loading$ | async"
+        [showPagination]="pagination.total > 0"
+        (queryParams)="onQueryParams($event)"
+        [pagination]="pagination"
+      >
+        <ng-template [appCellTemplate]="'actions'" let-item>
+          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+            <i nz-icon
+               nzType="edit"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Sửa tag"></i>
+          </button>
+
+          <button nz-button
+                  nzType="text"
+                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+            <i nz-icon
+               nzType="delete"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Xóa tag"></i>
+          </button>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
+</nz-card>
+
+
+
+<ng-template #modalEditSubscriber>
+  <form [formGroup]="form" (ngSubmit)="saveSubscriber()">
+    <div nz-row [nzGutter]="16">
+
+      <div nz-col [nzSpan]="12">
+        <div class="field-item mb-3">
+          <label>First Name:</label>
+          <app-form-control>
+            <app-input formControlName="firstName"></app-input>
+          </app-form-control>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <div class="field-item mb-3">
+          <label>Last Name:</label>
+          <app-form-control>
+            <app-input formControlName="lastName"></app-input>
+          </app-form-control>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <div class="field-item mb-3">
+          <label>Email:</label>
+          <app-form-control>
+            <app-input formControlName="email"></app-input>
+          </app-form-control>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="12">
+        <div class="field-item mb-3">
+          <label>Tags:</label>
+          <app-form-control>
+            <app-select formControlName="tagIds"
+            [options]="tagOptions$ | async"
+            [isMulti]="true"></app-select>
+          </app-form-control>
+        </div>
+      </div>
+
+    </div>
+    <div class="btn-group text-center">
+      <button nz-button type="button" nzType="default" (click)="closeModal()">Cancel</button>
+      <button nz-button
+              nzType="primary"
+              [nzLoading]="isLoadingSave"
+              type="submit"
+              class="ml-3"
+      >Save</button>
+    </div>
+  </form>
+</ng-template>
+

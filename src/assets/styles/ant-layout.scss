@@ -1,0 +1,50 @@
+
+.ant-layout-header {
+  padding: 0 !important;
+}
+
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table tfoot > tr > th,
+.ant-table tfoot > tr > td{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ant-table {
+  .td-stt{
+    padding-left: 0!important;
+    padding-right: 0!important;
+  }
+}
+
+// xóa khoảng trắng phía sau trong timepicker
+.ant-picker-time-panel-column::after {
+  height: 0 !important
+}
+
+
+.ant-table.ant-table-bordered > .ant-table-container > .ant-table-header > table > thead > tr:not(:last-child) > th {
+  border-bottom: 1px solid #ddd !important;
+}
+
+.ant-table.ant-table-bordered > .ant-table-container > .ant-table-header > table > thead > tr > th {
+  border-right: 1px solid #ddd !important;
+}
+
+//.ant-input {
+//  color: #000 !important;
+//}
+//
+//.ant-select {
+//  color: #000 !important;
+//}
+//
+//.ant-input-affix-wrapper {
+//  color: #000 !important;
+//}
+//
+//.ant-picker-input > input {
+//  color: #000 !important;
+//}

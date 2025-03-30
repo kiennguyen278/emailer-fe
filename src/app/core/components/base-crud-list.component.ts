@@ -1,18 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  ColumnConfig,
-  OptionModel,
-  Pagination,
-  TableQueryParams
-} from '@core/models';
 import { DefaultProjectorFn, MemoizedSelector, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, takeUntil, skip } from 'rxjs/operators';
+import { takeUntil} from 'rxjs/operators';
 import { BaseDestroyComponent } from './base-destroy.component';
 import { isNil, omitBy } from 'lodash';
 import { SORT_DIRECTION } from '@core/constants';
 import { ObjUtil } from '@core/utils/obj.util';
+import {Pagination, ColumnConfig, TableQueryParams} from "@core/models";
 
 @Component({
   template: ''

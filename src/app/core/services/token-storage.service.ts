@@ -25,14 +25,14 @@ export class TokenStorageService {
   }
 
 
-  public saveUser(user): void {
+  public saveUser(user: any): void {
     // const userParse = jwt_decode(user)
     localStorage.removeItem(USER_KEY);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
 
-  public getUser() {
+  public getUser(): any {
     const user = localStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);

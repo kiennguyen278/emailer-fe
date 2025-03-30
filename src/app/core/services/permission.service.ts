@@ -1,9 +1,9 @@
 
 import { Injectable } from '@angular/core';
-import { TokenStorageService } from '@modules/auth/service/token-storage.service';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { isEmpty } from 'lodash';
 import { NotificationService } from '@core/services/notification.service';
+import {TokenStorageService} from "@core/services/token-storage.service";
 
 @Injectable({
   providedIn: 'root'

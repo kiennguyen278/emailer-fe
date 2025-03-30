@@ -7,7 +7,7 @@ export class SessionStorageService {
   constructor() { }
 
   public get<T>(key: string): any {
-    return JSON.parse(ls.getItem(key)) as T;
+    return JSON.parse(ls.getItem(key) || '') as T;
   }
 
   public getList<T>(key: string) {

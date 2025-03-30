@@ -58,7 +58,6 @@ export class TableComponent
   @Input() scrollY: string = '';
   @Input() scrollX: string;
   @Input() checkedKeys: any[] = [];
-  @Input() isShowFilter = false;
   @Input() selectOnlyOne = false;
   @Input() disableAllCheck = false;
   @Input() checkAll = false;
@@ -66,21 +65,15 @@ export class TableComponent
   @Input() debounceTime = 500;
   @Input() clearFilter = new FormControl();
   @Input() showHightlightRow = false;
-  @Input() groupItems: GroupItem[] = [];
-  @Input() isGroupType: boolean = false;
   @Input() clearCheckedKey: boolean = false;
   @Input() setOfCheckedKeys = new Set<any>();
   @Input() isLoadOnScroll = false;
   @Input() isShowSetting = false;
   @Output() queryParams = new EventEmitter<TableQueryParams>();
-  @Output() queryParamsLocal = new EventEmitter<TableQueryParams>();
   @Output() dbClickItem = new EventEmitter<any>();
   @Output() clickItem = new EventEmitter<any>();
   @Output() checkedKeysChange = new EventEmitter<any[]>();
   @Output() itemSelected = new EventEmitter<any[]>();
-  @Output() byAddNewRow = new EventEmitter<any>();
-  @Output() byStartEdit = new EventEmitter<any>();
-  @Output() byDeleteRow = new EventEmitter<any>();
   @Output() byLoadmore = new EventEmitter();
 
   @Input() enableDragDrop = false;
@@ -331,7 +324,6 @@ export class TableComponent
 
   onChangeFilter() {
     this.queryParams.next({ filter: ObjUtil.trim(this.filter) });
-    this.queryParamsLocal.next({ filter: ObjUtil.trim(this.filter) });
   }
 
   getValue(item: any, key: string) {

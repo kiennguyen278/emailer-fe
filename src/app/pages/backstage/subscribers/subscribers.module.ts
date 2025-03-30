@@ -1,27 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzMessageModule } from 'ng-zorro-antd/message';
-
-import { TagComponent } from './tag/tag.component';
+import { SharedModule } from '@shared/shared.module';
+import {SubscriberComponent} from "./pages/subscriber/subscriber.component";
+import {TagComponent} from "./pages/tag/tag.component";
+import {SubscribersRoutingModule} from "./subscribers-routing.module";
+import {SubscribersStoreModule} from "./state/subscribers-store.module";
 
 @NgModule({
-  declarations: [TagComponent],
+  declarations: [
+    SubscriberComponent,
+    TagComponent,
+  ],
   imports: [
     CommonModule,
-    FormsModule,           // 👈 BẮT BUỘC cho [(ngModel)]
-    NzInputModule,         // 👈 BẮT BUỘC cho nz-input
-    NzModalModule,
-    NzTableModule,
-    NzButtonModule,
-    NzCardModule,
-    NzMessageModule
+    FormsModule,
+    SubscribersRoutingModule,
+    SharedModule,
+    SubscribersStoreModule,
   ]
 })
 export class SubscribersModule {}
