@@ -1,43 +1,51 @@
-<nz-card nzTitle="Quản lý Subscriber" [nzSize]="'small'">
+<nz-card nzTitle="Quản lý Subscriber" [nzSize]="'small'" [nzExtra]="extraTemplate">
 
+
+  <ng-template #extraTemplate>
+    <button nz-button type="button" nzType="primary">Import Subscriber</button>
+    <button nz-button type="button" nzType="primary"
+            class="ml-3" (click)="showCreateModal()">+ Thêm Subscriber</button>
+
+  </ng-template>
 
 
   <div class="search-form">
     <form [formGroup]="formSearch" (ngSubmit)="onSearch()">
-      <div nz-row [nzGutter]="16">
+      <div nz-row [nzGutter]="12">
 
         <div nz-col [nzSpan]="8">
-          <div class="field-item mb-3">
-            <label>Keyword:</label>
-            <app-form-control>
-              <app-input formControlName="keyword"
-                         [allowClear]="true"
-                         placeholder="Tên hoặc email"></app-input>
-            </app-form-control>
+          <div class="field-item flex items-center">
+            <label class="mr-2">Keyword:</label>
+            <div class="flex-[1_0_0]">
+              <app-form-control>
+                <app-input formControlName="keyword"
+                           [allowClear]="true"
+                           placeholder="Tên hoặc email"></app-input>
+              </app-form-control>
+            </div>
+
           </div>
         </div>
 
-        <div nz-col [nzSpan]="8">
-          <div class="field-item mb-3">
-            <label>Tags:</label>
-            <app-form-control>
-              <app-select formControlName="tagId"
-                          [options]="tagOptions$ | async"
-                          [allowClear]="true"
-                          [isMulti]="true"></app-select>
-            </app-form-control>
+        <div nz-col [nzSpan]="6">
+          <div class="field-item flex items-center">
+            <label class="mr-2">Tags:</label>
+            <div class="flex-[1_0_0]">
+              <app-form-control>
+                <app-select formControlName="tagId"
+                            [options]="tagOptions$ | async"
+                ></app-select>
+              </app-form-control>
+            </div>
+
           </div>
         </div>
         <div nz-col [nzSpan]="8">
-          <div class="field-item mb-3">
-            <label>&nbsp;</label>
-            <div class="btn-group text-right">
-              <button nz-button type="button" nzType="primary" (click)="showCreateModal()">+ Thêm Subscriber</button>
-
+          <div class="field-item">
+            <div class="btn-group">
               <button nz-button
                       nzType="primary"
                       [nzLoading]="loading$ | async"
-                      class="ml-3"
                       type="submit"
               >Search</button>
             </div>

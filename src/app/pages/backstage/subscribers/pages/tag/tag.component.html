@@ -1,5 +1,8 @@
-<nz-card nzTitle="Quản lý Tag" [nzSize]="'small'">
-  <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
+<nz-card nzTitle="Quản lý Tag" [nzSize]="'small'" [nzExtra]="extraTemplate">
+
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
+  </ng-template>
 
   <div class="table-list pt-3">
     <div class="basis-0 grow shrink">
