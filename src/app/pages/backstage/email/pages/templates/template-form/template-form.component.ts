@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EmailTemplateDTO, EmailTemplateService} from '../../data/email-template.service';
+import {EmailTemplateDTO, EmailTemplateService} from '../../../data/email-template.service';
 import {QuillEditorComponent} from "ngx-quill";
 import {FormControl} from "@angular/forms";
 
@@ -8,7 +8,6 @@ import {FormControl} from "@angular/forms";
 @Component({
   selector: 'app-template-form',
   templateUrl: './template-form.component.html',
-  styleUrls: ['./template-form.component.less']
 })
 export class TemplateFormComponent implements OnInit {
   @ViewChild('quillEditor') quillEditorComponent!: QuillEditorComponent;
@@ -42,7 +41,6 @@ export class TemplateFormComponent implements OnInit {
   };
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private templateService: EmailTemplateService
   ) {}

@@ -1,0 +1,46 @@
+<nz-card nzTitle="Danh sách Email Template" [nzSize]="'small'" [nzExtra]="extraTemplate">
+
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Email Template</button>
+  </ng-template>
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [scrollX]="'900px'"
+        [loading]="isLoading$ | async"
+        [showPagination]="false"
+      >
+        <ng-template [appCellTemplate]="'createdAt'" let-item>
+          {{item.createdAt | date: DATE_TIME_FORMAT}}
+        </ng-template>
+
+
+        <ng-template [appCellTemplate]="'actions'" let-item>
+          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+            <i nz-icon
+               nzType="edit"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Sửa Email Template"></i>
+          </button>
+
+          <button nz-button
+                  nzType="text"
+                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+            <i nz-icon
+               nzType="delete"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Xóa Email Template"></i>
+          </button>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
+</nz-card>
+
+

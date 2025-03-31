@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QuillModule } from 'ngx-quill';
+import {QuillModule} from 'ngx-quill';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { EmailRoutingModule } from './email-routing.module';
-import { TemplatesComponent } from './templates/templates.component';
-import { CampaignsComponent } from './campaigns/campaigns.component';
-import { SequencesComponent } from './sequences/sequences.component';
-import {TemplateFormComponent} from "./templates/template-form/template-form.component";
+import { TemplatesComponent } from './pages/templates/templates.component';
+import {TemplateFormComponent} from "./pages/templates/template-form/template-form.component";
+import {CampaignsComponent} from "./pages/campaigns/campaigns.component";
+import {SequencesComponent} from "./pages/sequences/sequences.component";
+import {SharedModule} from "@shared/shared.module";
+import {EmailStoreModule} from "./state/email-store.module";
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import {TemplateFormComponent} from "./templates/template-form/template-form.com
     CommonModule,
     QuillModule,
     ReactiveFormsModule,
-    EmailRoutingModule
+    EmailRoutingModule,
+    EmailStoreModule,
+    SharedModule
   ]
 })
 export class EmailModule { }

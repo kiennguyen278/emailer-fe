@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TemplatesComponent } from './templates/templates.component';
-import { CampaignsComponent } from './campaigns/campaigns.component';
-import { SequencesComponent } from './sequences/sequences.component';
-import {TemplateFormComponent} from "./templates/template-form/template-form.component";
+import { TemplatesComponent } from './pages/templates/templates.component';
+import {TemplateFormComponent} from "./pages/templates/template-form/template-form.component";
+import {CampaignsComponent} from "./pages/campaigns/campaigns.component";
+import {SequencesComponent} from "./pages/sequences/sequences.component";
 
 const routes: Routes = [
   {
@@ -11,10 +11,10 @@ const routes: Routes = [
     component: TemplatesComponent,
     data: { title: 'Templates', reuse: true }
   },
-  {
-    path: 'templates/create',
-    component: TemplateFormComponent,
-  },
+  // {
+  //   path: 'templates/create',
+  //   component: TemplateFormComponent,
+  // },
   {
     path: 'templates/edit/:id',
     component: TemplateFormComponent,

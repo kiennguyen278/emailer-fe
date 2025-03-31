@@ -128,7 +128,7 @@ export class PaginationComponent implements OnChanges {
       return [firstPageItem, prevItem, ...listOfPage, nextItem, lastPageItem];
     };
     const generatePage = (start: number, end: number): Array<Partial<any>> => {
-      const list = [];
+      const list: any[] = [];
       for (let i = start; i <= end; i++) {
         list.push({
           index: i,
@@ -141,7 +141,7 @@ export class PaginationComponent implements OnChanges {
       return concatWithPrevNext(generatePage(1, lastIndex));
     } else {
       const generateRangeItem = (selected: number, last: number) => {
-        let listOfRange = [];
+        let listOfRange: any[] = [];
         if (selected < 5) {
           const maxLeft = selected === 4 ? 6 : 5;
           listOfRange = generatePage(1, maxLeft);
