@@ -6,9 +6,12 @@ import {ValidatorUtil} from "@core/utils/validator.util";
 import {ModuleQuill} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
-import {EmailTemplateDTO} from "../../../models";
+import {EmailTemplateDTO, SaveEmailTemplateRequest} from "../../../models";
+import {EmailService} from "../../../state/service";
+import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
+import {NotificationService} from "@core/services/notification.service";
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-template-form',
   templateUrl: './template-form.component.html',
@@ -22,35 +25,73 @@ export class TemplateFormComponent implements OnInit {
     private fb: FormBuilder,
     private modalRef: NzModalRef,
     private cdr: ChangeDetectorRef,
+    private emailService: EmailService,
+    private notification: NotificationService,
   ) {
     this.buildForm();
   }
 
+  get mailTemplate(): EmailTemplateDTO {
+    return this.modalData.emailTemplate;
+  }
+
   contentPreviewHTML= ''; // Dùng cho Quill
-  previewMode = true;
+  showPreview = false;
   moduleQuill = ModuleQuill;
   isLoadingSave = false
 
   form: FormGroup;
   typeContentOption: OptionModel[] = [
-    {label: "HTML", value: "html"},
-    {label: "Text", value: "text"},
+    {label: "HTML", value: "HTML"},
+    {label: "TEXT", value: "TEXT"},
   ];
 
 
 
   ngOnInit(): void {
 
-    console.log('modalData', this.modalData.emailTemplate)
+    this.getDetailTemplate();
   }
+
+
+  getDetailTemplate() {
+    if (this.mailTemplate){
+      this.emailService.getDetailTemplateById(this.mailTemplate.id)
+        .pipe(untilDestroyed(this))
+        .subscribe((item) => {
+          this.form.patchValue(item.data);
+        })
+    }
+  }
+
 
   saveTemplate() {
     FormUtil.validate(this.form);
 
     const formVal = this.form.getRawValue();
     console.log('formVal', formVal)
+    this.isLoadingSave = true;
 
+    const request: SaveEmailTemplateRequest = this.mailTemplate?.id ? {id: this.mailTemplate.id, ...formVal} : formVal;
 
+    this.emailService.saveMailTemplate(request).pipe()
+      .subscribe({
+        next: () => {
+          this.notification.open({
+            type: 'success',
+            content: this.mailTemplate.id ? 'Cập nhật tag thành công' : 'Thêm tag mới thành công'
+          })
+          this.isLoadingSave = false;
+          this.modalRef.destroy(true);
+        },
+        error: () => {
+          this.notification.open({
+            type: 'error',
+            content: 'Thao tác thất bại'
+          });
+          this.isLoadingSave = false;
+        }
+      });
 
   }
 
@@ -64,8 +105,8 @@ export class TemplateFormComponent implements OnInit {
     })
   }
 
-  onChangeTypeContent(type: 'html' | 'text'){
-    if(type == 'html'){
+  onChangeTypeContent(type: 'HTML' | 'TEXT'){
+    if(type == 'HTML'){
       this.form.controls['textBody'].reset();
       this.form.controls['textBody'].clearValidators();
       this.form.controls['htmlBody'].addValidators([ValidatorUtil.required('Content không được để trống!')]);
@@ -80,12 +121,12 @@ export class TemplateFormComponent implements OnInit {
   }
 
   closeModal(){
-    this.modalRef.destroy(true);
+    this.modalRef.destroy();
   }
 
   onChangeContent(content: string) {
     let result = content;
-    if (this.form.controls['type'].value === 'html') {
+    if (this.form.controls['type'].value === 'HTML') {
       result = content && content.replace(/{{\s*subscriber\.first_name\s*}}/g, '{{ contact.first_name }}');
     }
     this.contentPreviewHTML = result || '';

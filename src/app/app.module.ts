@@ -31,18 +31,17 @@ registerLocaleData(en);
   ],
   imports: [
     BrowserModule,
+    CoreModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     BackstageLayoutModule,
     SharedModule,
-    CoreModule,
     SharedCoreModule.forRoot(),
     StoreModule.forRoot({[globalbarFeatureKey]: SidebarReducer}, { metaReducers }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

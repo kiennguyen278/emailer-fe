@@ -33,6 +33,8 @@ const COMPONENTS_CORE = [
 ];
 
 @NgModule({
+  declarations: COMPONENTS_CORE,
+  exports: COMPONENTS_CORE,
   imports: [
     CommonModule,
     // ControlsModule,
@@ -47,8 +49,6 @@ const COMPONENTS_CORE = [
     PipesModule,
     TranslateModule
   ],
-  declarations: COMPONENTS_CORE,
-  exports: COMPONENTS_CORE,
 })
 export class ComponentsModule {
   // static forRoot(): ModuleWithProviders<ComponentsModule> {

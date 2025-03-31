@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { omit } from 'lodash';
 import {BaseApiService} from "@core/services/base-api.service";
 import {ApiResponse} from "@core/models/response.model";
-import {EmailTemplateDTO} from "../models";
+import {EmailTemplateDTO, SaveEmailTemplateRequest} from "../models";
 
 @Injectable({ providedIn: 'root' })
 export class EmailService extends BaseApiService{
@@ -22,16 +22,16 @@ export class EmailService extends BaseApiService{
     return this.http.get<ApiResponse<EmailTemplateDTO>>(url);
   }
 
-  // saveTag(request: SaveTagRequest): Observable<any> {
-  //   if (request.id){
-  //     const url = this.buildUrl(`/tags/${request.id}`);
-  //     return this.http.put<ApiResponse<any>>(url, null, {params: {newName: request.name}});
-  //   } else {
-  //     const url = this.buildUrl(`/tags`);
-  //     return this.http.post<ApiResponse<any>>(url, null, {params: {name: request.name}});
-  //   }
-  // }
-  //
+  saveMailTemplate(request: SaveEmailTemplateRequest): Observable<any> {
+    if (request.id){
+      const url = this.buildUrl(`/email-templates/${request.id}`);
+      return this.http.put<ApiResponse<any>>(url, request);
+    } else {
+      const url = this.buildUrl(`/email-templates`);
+      return this.http.post<ApiResponse<any>>(url, request);
+    }
+  }
+
   // delete(id: number): Observable<any> {
   //   const url = this.buildUrl(`/tags/${id}`);
   //   return this.http.delete<ApiResponse<any>>(url);

@@ -1,3 +1,5 @@
+import {ValidatorUtil} from "@core/utils/validator.util";
+
 export interface EmailTemplateDTO {
   id: number;
   name: string;
@@ -7,4 +9,14 @@ export interface EmailTemplateDTO {
   status: 'active' | 'inactive';
   createdAt: string;
   updatedAt: string;
+}
+
+
+export interface SaveEmailTemplateRequest {
+  id: number | null | undefined,
+  name: string,
+  type: string,
+  subject: string,
+  htmlBody: string,
+  textBody: string,
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OptionModel } from "@core/models/option.model";
-import { NotificationComponent } from "@shared/components/notification/notification.component";
+import {NotificationComponent} from "../../shared/components/notification/notification.component";
 export interface NotificationModel {
   type: 'success' | 'info' | 'warning' | 'error';
   title?: string;
@@ -23,6 +23,7 @@ export class NotificationService {
   component: NotificationComponent;
 
   open(config: NotificationModel) {
+    console.log('this.component', this.component)
     const title =
       config.title || titles.find((x) => x.value === config.type)?.label!;
     this.component.type = config.type;

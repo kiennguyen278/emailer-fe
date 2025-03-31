@@ -23,7 +23,6 @@ import { BASE_API_URL } from "@core/constants/injection-token.constants";
 import { HttpHeaderInterceptor } from '@core/interceptors/http-header.interceptor';
 import { AuthInterceptor } from '@core/interceptors/auth.interceptor';
 import { TrimInterceptor } from '@core/interceptors/trim.interceptor';
-import {AuthService} from "@core/services/auth.service";
 
 registerLocaleData(vi);
 registerLocaleData(en);
