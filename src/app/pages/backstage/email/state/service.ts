@@ -16,6 +16,12 @@ export class EmailService extends BaseApiService{
     );
   }
 
+
+  getDetailTemplateById(id: number): Observable<any> {
+    const url = this.buildUrl(`/email-templates/${id}`);
+    return this.http.get<ApiResponse<EmailTemplateDTO>>(url);
+  }
+
   // saveTag(request: SaveTagRequest): Observable<any> {
   //   if (request.id){
   //     const url = this.buildUrl(`/tags/${request.id}`);

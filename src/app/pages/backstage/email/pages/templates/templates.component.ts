@@ -16,6 +16,7 @@ import {
 } from "../../state/selectors";
 import {getListEmailTemplate} from "../../state/actions";
 import {DATE_TIME_FORMAT} from "@core/constants";
+import {TemplateFormComponent} from "./template-form/template-form.component";
 
 @UntilDestroy()
 @Component({
@@ -107,29 +108,40 @@ export class TemplatesComponent implements OnInit {
     this.store.dispatch(getListEmailTemplate());
   }
 
-  openModal(tag?: TagDTO) {
+  openModal(item?: EmailTemplateDTO) {
 
-    // this.modalRef = this.modal.create({
-    //   nzTitle: tag?.id ? `Cập nhật tag "${tag.name}"` : 'Thêm mới tag',
-    //   nzContent: this.modalEditTag,
-    //   nzFooter: null
-    // });
+    this.modalRef = this.modal.create({
+      nzTitle: item?.id ? `Cập nhật email template "${item.name}"` : 'Thêm mới email template',
+      nzContent: TemplateFormComponent,
+      nzData: {
+        emailTemplate: item || null
+      },
+      nzFooter: null,
+      nzWidth: '860px',
+      nzMaskClosable: false
+    });
+
+    this.modalRef.afterClose.subscribe(isReload => {
+      if(isReload){
+        this.loadItems();
+      }
+    });
   }
 
   showCreateModal(): void {
     this.openModal();
   }
 
-  showEditModal(tag: TagDTO): void {
-    this.openModal(tag);
+  showEditModal(item: EmailTemplateDTO): void {
+    this.openModal(item);
   }
 
-  confirmDelete(tag: TagDTO): void {
+  confirmDelete(item: EmailTemplateDTO): void {
     this.modal.confirm({
-      nzTitle: `Bạn có chắc muốn xoá tag "${tag.name}"?`,
+      nzTitle: `Bạn có chắc muốn xoá tag "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
-      nzOnOk: () => this.deleteTag(tag.id)
+      nzOnOk: () => this.deleteTag(item.id)
     });
   }
 
