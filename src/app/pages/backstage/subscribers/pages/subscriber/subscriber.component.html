@@ -13,6 +13,34 @@
     <form [formGroup]="formSearch" (ngSubmit)="onSearch()">
       <div nz-row [nzGutter]="12">
 
+        <div nz-col [nzSpan]="3">
+          <div class="field-item flex items-center">
+            <label class="mr-2">Status:</label>
+            <div class="flex-[1_0_0]">
+              <app-form-control>
+                <app-select formControlName="status"
+                            [options]="subscriberStatusOptions$ | async"
+                ></app-select>
+              </app-form-control>
+            </div>
+
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="3">
+          <div class="field-item flex items-center">
+            <label class="mr-2">Tags:</label>
+            <div class="flex-[1_0_0]">
+              <app-form-control>
+                <app-select formControlName="tagId"
+                            [options]="tagOptions$ | async"
+                ></app-select>
+              </app-form-control>
+            </div>
+
+          </div>
+        </div>
+
         <div nz-col [nzSpan]="8">
           <div class="field-item flex items-center">
             <label class="mr-2">Keyword:</label>
@@ -27,19 +55,6 @@
           </div>
         </div>
 
-        <div nz-col [nzSpan]="6">
-          <div class="field-item flex items-center">
-            <label class="mr-2">Tags:</label>
-            <div class="flex-[1_0_0]">
-              <app-form-control>
-                <app-select formControlName="tagId"
-                            [options]="tagOptions$ | async"
-                ></app-select>
-              </app-form-control>
-            </div>
-
-          </div>
-        </div>
         <div nz-col [nzSpan]="8">
           <div class="field-item">
             <div class="btn-group">
@@ -92,8 +107,6 @@
     </div>
   </div>
 </nz-card>
-
-
 
 <ng-template #modalEditSubscriber>
   <form [formGroup]="form" (ngSubmit)="saveSubscriber()">

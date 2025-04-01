@@ -5,7 +5,7 @@ import { ValidatorUtil } from '@core/utils/validator.util';
 import { Store } from '@ngrx/store';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationService } from '@core/services/notification.service';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ActivatedRoute } from '@angular/router';
 import { isNil, omitBy } from 'lodash';
@@ -33,6 +33,16 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   @ViewChild('modalEditSubscriber') modalEditSubscriber!: TemplateRef<any>;
 
   tagOptions$: Observable<OptionModel<number>[]> = this.store.select(selectOptionsTagsList); // làm option select ở addnew/edit Subscriber
+
+  subscriberStatusOptions$ = of([
+    { label: 'Active', value: 'ACTIVE' },
+    { label: 'Inactive', value: 'INACTIVE' },
+    { label: 'Unsubscribed', value: 'UNSUBSCRIBED' },
+    { label: 'Bounce', value: 'HARD_BOUNCE' },
+    { label: 'Complaint', value: 'COMPLAINT' }
+  ]);
+
+
 
   constructor(
     store: Store,
@@ -63,22 +73,26 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       tdClass: 'text-center',
     },
     {
+      key: 'email',
+      header: 'Email',
+      sortable: true,
+      tdClass: 'text-center',
+      nzWidth: '200px',
+    },
+
+    {
       key: 'firstName',
       header: 'First Name',
       sortable: true,
+      tdClass: 'text-center',
       nzWidth: '150px',
     },
     {
       key: 'lastName',
       header: 'Last Name',
       sortable: true,
+      tdClass: 'text-center',
       nzWidth: '150px',
-    },
-    {
-      key: 'email',
-      header: 'Email',
-      sortable: true,
-      nzWidth: '200px',
     },
     {
       key: 'status',
@@ -105,9 +119,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   ngOnInit() {
     this.store.dispatch(getListTags());
     super.ngOnInit();
-
   }
-
 
   openModal(item?: SubscriberDTO) {
     if (item?.id){
@@ -202,10 +214,11 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       email: [null, [ValidatorUtil.required('Email không được để trống!'), ValidatorUtil.email('Email không đúng định dạng!')]],
       firstName: [null, [ValidatorUtil.required('First Name không được để trống!')]],
       lastName: [null],
-      tagIds: [null, [ValidatorUtil.required('Tag không được để trống!')]],
+      tagIds: [null],
     });
 
     this.formSearch = this.fb.group({
+      status: ['ACTIVE'], // giá trị mặc định
       keyword: [null],
       tagId: [null],
     })

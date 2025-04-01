@@ -31,12 +31,6 @@ export class SubscribersService extends BaseApiService{
     return this.http.delete<ApiResponse<any>>(url);
   }
 
-
-
-
-
-
-
   getListSubscribers(params: SubscriberSearchDTO): Observable<any> {
     const url = this.buildUrl('/subscribers/search');
     const paramRequest = {...params, page: params.page - 1};
