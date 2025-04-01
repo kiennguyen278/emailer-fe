@@ -9,46 +9,24 @@ import {delay} from "rxjs/operators";
 })
 export class DashboardComponent {
 
-  loading = true;
-  loading2 = true;
+  subscriberGrowthItems = [
+    { label: 'Hôm nay', count: 0, trend: 'STABLE' },
+    { label: '7 ngày', count: 0, trend: 'STABLE' },
+    { label: '30 ngày', count: 3, trend: 'UP' },
+    { label: 'Tổng cộng', count: 3, trend: 'STABLE' }
+  ];
 
-  chartLoading = {
-    saleTrendDelay: 0
+  emailPerformance = {
+    totalSent: 18,
+    openRate: 38.89,
+    clickRate: 27.78
   };
-
-  visitData: any = {};
-
-  saleTrendData: any = {};
-
-  totalSalePrecent = 0;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
 
-    this.http.post('charts/visitdata', null).pipe(delay(2000)).subscribe(res => {
-      this.visitData = res['data'];
-      this.loading = false;
-    });
-
-    this.http.post<number>('charts/totalSalePrecent', null).subscribe(res => {
-      this.totalSalePrecent = res;
-    });
-
-    this.http.post('charts/saleTrend', null).pipe(delay(2000)).subscribe(res => {
-      this.saleTrendData = res['data'];
-      this.loading2 = false;
-    });
 
   }
 
-  saleTabChange(event: any) {
-    let index = event.nzSelectedIndex;
-    let tab = event.tab;
-    this.chartLoading.saleTrendDelay = index;
-    // g2的bug
-    const e = document.createEvent('Event');
-    e.initEvent('resize', true, true);
-    window.dispatchEvent(e);
-  }
 }

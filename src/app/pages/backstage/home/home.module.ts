@@ -5,6 +5,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {SharedModule} from "../../../shared/shared.module";
 import {ZorroAntdModule} from "@shared/zorro-antd.module";
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import {ZorroAntdModule} from "@shared/zorro-antd.module";
     ZorroAntdModule,
     SharedModule,
     HomeRoutingModule,
+    NgxEchartsModule
   ]
 })
 export class HomeModule { }
