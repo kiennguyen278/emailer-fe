@@ -23,7 +23,6 @@ export class NotificationService {
   component: NotificationComponent;
 
   open(config: NotificationModel) {
-    console.log('this.component', this.component)
     const title =
       config.title || titles.find((x) => x.value === config.type)?.label!;
     this.component.type = config.type;

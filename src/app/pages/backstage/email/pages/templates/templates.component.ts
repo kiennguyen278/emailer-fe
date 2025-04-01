@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {TagDTO} from "../../../subscribers/models";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
@@ -23,11 +23,10 @@ import {TemplateFormComponent} from "./template-form/template-form.component";
   selector: 'app-templates',
   templateUrl: './templates.component.html',
 })
-export class TemplatesComponent implements OnInit {
+export class TemplatesComponent implements OnInit, OnDestroy {
 
   items: EmailTemplateDTO[] = [];
 
-  tagForm: FormGroup;
   modalRef: NzModalRef;
 
   isLoading$: Observable<boolean> = this.store.select(selectLoadingGetEmailTemplateList);
@@ -38,9 +37,7 @@ export class TemplatesComponent implements OnInit {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private notification: NotificationService,
-  ) {
-    this.buildForm();
-  }
+  ) {}
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
 
@@ -138,7 +135,7 @@ export class TemplatesComponent implements OnInit {
 
   confirmDelete(item: EmailTemplateDTO): void {
     this.modal.confirm({
-      nzTitle: `Bạn có chắc muốn xoá tag "${item.name}"?`,
+      nzTitle: `Bạn có chắc muốn xoá email template "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
       nzOnOk: () => this.deleteTag(item.id)
@@ -162,13 +159,6 @@ export class TemplatesComponent implements OnInit {
     //     });
     //   }
     // });
-  }
-
-  buildForm(){
-    this.tagForm = this.fb.group({
-      name: [null, [ValidatorUtil.required('Tên tag không được để trống!')]],
-      id: [null],
-    })
   }
 
   ngOnDestroy() {

@@ -79,7 +79,7 @@ export class TemplateFormComponent implements OnInit {
         next: () => {
           this.notification.open({
             type: 'success',
-            content: this.mailTemplate.id ? 'Cập nhật tag thành công' : 'Thêm tag mới thành công'
+            content: this.mailTemplate.id ? 'Cập nhật email template thành công' : 'Thêm email template mới thành công'
           })
           this.isLoadingSave = false;
           this.modalRef.destroy(true);
