@@ -141,7 +141,7 @@
           <!-- A. Chất lượng danh sách -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
             <div class="summary-box">
-              <div class="summary-title">Chất lượng danh sách</div>
+              <div class="summary-title">Chất lượng danh sách Subscriber</div>
 
               <div echarts [options]="listQualityChartOptions" class="chart-pie-container"></div>
               <div class="list-analysis-text">
@@ -152,7 +152,25 @@
             </div>
           </div>
 
-          <!-- B. Hiệu suất nội dung -->
+          <!-- B2. Top khách hàng tiềm năng -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+            <div class="summary-box">
+              <div class="summary-title">Top khách hàng tiềm năng</div>
+              <ul class="performance-list">
+                <li *ngFor="let sub of advancedStats.topSubscribers">
+                  <strong>{{ sub.name || sub.email }}</strong><br />
+                  Mở: {{ sub.openCount }} – Click: {{ sub.clickCount }}<br />
+                  🔥 <span class="text-bold text-orange-600">Điểm tương tác: {{ sub.score }}</span>
+                </li>
+              </ul>
+              <p class="time-note">
+                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> ngày gần nhất
+              </p>
+            </div>
+          </div>
+
+
+          <!-- C. Hiệu suất nội dung -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
             <div class="summary-box">
               <div class="summary-title">Hiệu suất nội dung</div>
@@ -170,18 +188,6 @@
             </div>
           </div>
 
-
-          <!-- C. Thời điểm vàng -->
-          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-            <div class="summary-box">
-              <div class="summary-title">Thời điểm vàng</div>
-              <p class="best-time">
-                📅 <strong>{{ advancedStats.bestDay }}</strong> &nbsp;&nbsp;
-                🕘 <strong>{{ advancedStats.bestHour }}</strong><br>
-                Đây là thời điểm mở/click cao nhất trong {{ advancedRange }} ngày qua.
-              </p>
-            </div>
-          </div>
         </div>
       </nz-tab>
 

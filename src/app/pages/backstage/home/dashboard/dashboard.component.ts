@@ -25,8 +25,7 @@ export class DashboardComponent {
     complaintRate: 3,
     activeRate: 90,
     topEmails: [],
-    bestDay: '',
-    bestHour: ''
+    topSubscribers: []
   };
 
   advancedRange = 30; // mặc định là 30 ngày
@@ -200,8 +199,32 @@ export class DashboardComponent {
           { subject: 'Chào mừng bạn mới', openRate: 58, clickRate: 22 },
           { subject: 'Ưu đãi đặc biệt 7 ngày', openRate: 52, clickRate: 19 }
         ],
-        bestDay: 'Thứ 3',
-        bestHour: '9h sáng'
+
+        topSubscribers: [
+          {
+            name: 'Nguyễn Văn A',
+            email: 'a@gmail.com',
+            openCount: 15,
+            clickCount: 7,
+            score: 29
+          },
+          {
+            name: 'Lê Thị B',
+            email: 'b@yahoo.com',
+            openCount: 10,
+            clickCount: 8,
+            score: 26
+          },
+
+          {
+            name: 'Lê Thị C',
+            email: 'c@yahoo.com',
+            openCount: 9,
+            clickCount: 11,
+            score: 31
+          }
+        ]
+
       };
     } else if (days === 90) {
       this.advancedStats = {
@@ -213,8 +236,30 @@ export class DashboardComponent {
           { subject: 'Tổng hợp quý I', openRate: 48, clickRate: 18 },
           { subject: 'Chào năm mới 2025', openRate: 60, clickRate: 25 }
         ],
-        bestDay: 'Thứ 5',
-        bestHour: '10h sáng'
+        topSubscribers: [
+          {
+            name: 'Nguyễn Văn A',
+            email: 'a@gmail.com',
+            openCount: 15,
+            clickCount: 7,
+            score: 29
+          },
+          {
+            name: 'Lê Thị B',
+            email: 'b@yahoo.com',
+            openCount: 10,
+            clickCount: 8,
+            score: 26
+          },
+
+          {
+            name: 'Lê Thị C',
+            email: 'c@yahoo.com',
+            openCount: 9,
+            clickCount: 11,
+            score: 31
+          }
+        ]
       };
     } else {
       this.advancedStats = {
@@ -226,8 +271,30 @@ export class DashboardComponent {
           { subject: 'Ưu đãi tháng 3', openRate: 44, clickRate: 29 },
           { subject: 'Tin tức sản phẩm', openRate: 39, clickRate: 17 }
         ],
-        bestDay: 'Thứ 4',
-        bestHour: '8h sáng'
+        topSubscribers: [
+          {
+            name: 'Nguyễn Văn A',
+            email: 'a@gmail.com',
+            openCount: 15,
+            clickCount: 7,
+            score: 29
+          },
+          {
+            name: 'Lê Thị B',
+            email: 'b@yahoo.com',
+            openCount: 10,
+            clickCount: 8,
+            score: 26
+          },
+
+          {
+            name: 'Lê Thị C',
+            email: 'c@yahoo.com',
+            openCount: 9,
+            clickCount: 11,
+            score: 31
+          }
+        ]
       };
     }
 
