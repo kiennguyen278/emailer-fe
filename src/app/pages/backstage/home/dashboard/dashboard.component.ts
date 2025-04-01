@@ -18,6 +18,8 @@ export class DashboardComponent {
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   selectedRange: number = 30;
 
+  analysisTexts: string[] = [];
+
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
@@ -96,7 +98,52 @@ export class DashboardComponent {
       const last = data[data.length - 1];
       this.lastOpenTrend = last.openTrend;
       this.lastClickTrend = last.clickTrend;
+      this.analysisTexts = this.getTrendAnalysisText(last);
+
+      console.log('lastClickTrend =', this.lastClickTrend); // phải là "DOWN" đúng chữ in hoa
     });
+  }
+
+  getTrendAnalysisText(last: any): string[] {
+    const result: string[] = [];
+
+    // Phân tích open rate
+    if (last.openTrend === 'UP') {
+      result.push(`Tỷ lệ mở tăng lên ${last.openRate}%. Chủ đề email có vẻ đang thu hút tốt hơn.`);
+    } else if (last.openTrend === 'DOWN') {
+      result.push(`Tỷ lệ mở giảm còn ${last.openRate}%. Cần xem lại tiêu đề hoặc thời điểm gửi.`);
+    } else {
+      result.push(`Tỷ lệ mở ổn định ở mức ${last.openRate}%.`);
+    }
+
+    // Phân tích click rate
+    if (last.clickTrend === 'UP') {
+      result.push(`Tỷ lệ click tăng lên ${last.clickRate}%. Nội dung có thể đang hấp dẫn hơn.`);
+    } else if (last.clickTrend === 'DOWN') {
+      result.push(`Tỷ lệ click giảm còn ${last.clickRate}%. Cần cải thiện lời kêu gọi hành động.`);
+    } else {
+      result.push(`Tỷ lệ click không thay đổi (${last.clickRate}%).`);
+    }
+    return result;
+  }
+
+  getTrendEmoji(trend: string): string {
+    switch (trend) {
+      case 'UP': return '🔼';
+      case 'DOWN': return '🔽';
+      default: return '➖';
+    }
+  }
+
+  getTrendColorClass(trend: string): string {
+    switch (trend) {
+      case 'UP':
+        return 'trend-up';
+      case 'DOWN':
+        return 'trend-down';
+      default:
+        return 'trend-stable';
+    }
   }
 
 }
