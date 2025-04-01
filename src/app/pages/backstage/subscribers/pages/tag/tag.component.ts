@@ -47,6 +47,7 @@ export class TagComponent implements OnInit, OnDestroy {
     {
       key: 'name',
       header: 'Tên Tag',
+      tdClass: 'text-center',
       nzWidth: '50px',
     },
     {
