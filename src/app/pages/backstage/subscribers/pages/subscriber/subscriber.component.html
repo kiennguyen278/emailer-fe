@@ -1,13 +1,45 @@
+<nz-card nzTitle="Tổng quan Subscriber" [nzSize]="'small'" class="mb-4">
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tổng số</div>
+        <div class="summary-value text-blue-600">{{ summary.total }}</div>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Open rate</div>
+        <div class="summary-value text-green-600">{{ summary.openRate }}%</div>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Click rate</div>
+        <div class="summary-value text-green-600">{{ summary.clickRate }}%</div>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Unsubscribed</div>
+        <div class="summary-value text-red-500">{{ summary.unsubscribed }}</div>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Complain rate</div>
+        <div class="summary-value text-red-500">{{ summary.complainRate }}%</div>
+      </div>
+    </div>
+  </div>
+</nz-card>
+
+
 <nz-card nzTitle="Quản lý Subscriber" [nzSize]="'small'" [nzExtra]="extraTemplate">
-
-
   <ng-template #extraTemplate>
-    <button nz-button type="button" nzType="primary">Import Subscriber</button>
+    <button nz-button type="button" nzType="primary"  (click)="showImportModal()">Import Subscriber</button>
     <button nz-button type="button" nzType="primary"
             class="ml-3" (click)="showCreateModal()">+ Thêm Subscriber</button>
-
   </ng-template>
-
 
   <div class="search-form">
     <form [formGroup]="formSearch" (ngSubmit)="onSearch()">
@@ -162,4 +194,39 @@
     </div>
   </form>
 </ng-template>
+
+<ng-template #modalImportSubscriber>
+  <form [formGroup]="formImport" (ngSubmit)="importSubscribers()">
+    <div class="mb-4">
+      <a href="/assets/sample-subscriber.csv" download>📄 Tải file CSV mẫu</a>
+    </div>
+
+    <div class="field-item mb-4">
+      <label>Chọn file CSV:</label>
+      <app-form-control>
+        <input type="file" accept=".csv"
+               (change)="onFileSelected($event)" />
+      </app-form-control>
+    </div>
+
+    <div class="field-item mb-4">
+      <label>Gắn vào Tag:</label>
+      <app-form-control>
+        <app-select formControlName="tagId"
+                    [options]="tagOptions$ | async"></app-select>
+      </app-form-control>
+    </div>
+
+    <div class="btn-group text-center mt-3">
+      <button nz-button type="button" nzType="default" (click)="closeImportModal()">Cancel</button>
+      <button nz-button
+              nzType="primary"
+              [nzLoading]="isLoadingImport"
+              type="submit"
+              class="ml-3"
+      >Import</button>
+    </div>
+  </form>
+</ng-template>
+
 

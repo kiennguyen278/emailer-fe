@@ -32,6 +32,12 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   @ViewChild('modalEditSubscriber') modalEditSubscriber!: TemplateRef<any>;
 
+  @ViewChild('modalImportSubscriber') modalImportSubscriber!: TemplateRef<any>;
+
+  formImport!: FormGroup;
+  isLoadingImport = false;
+  selectedFile: File | null = null;
+
   tagOptions$: Observable<OptionModel<number>[]> = this.store.select(selectOptionsTagsList); // làm option select ở addnew/edit Subscriber
 
   subscriberStatusOptions$ = of([
@@ -42,20 +48,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     { label: 'Complaint', value: 'COMPLAINT' }
   ]);
 
-
-
-  constructor(
-    store: Store,
-    activatedRoute: ActivatedRoute,
-    cdr: ChangeDetectorRef,
-    private subscribersService: SubscribersService,
-    private notification: NotificationService,
-    private modal: NzModalService,
-    private fb: FormBuilder,
-  ) {
-    super(store, activatedRoute, cdr);
-    this.buildForm();
-  }
 
   form: FormGroup;
   formSearch: FormGroup;
@@ -102,6 +94,20 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   selectTotal = selectTotalItemsGetSubscriberList;
 
 
+  constructor(
+    store: Store,
+    activatedRoute: ActivatedRoute,
+    cdr: ChangeDetectorRef,
+    private subscribersService: SubscribersService,
+    private notification: NotificationService,
+    private modal: NzModalService,
+    private fb: FormBuilder,
+  ) {
+    super(store, activatedRoute, cdr);
+    this.buildForm();
+  }
+
+
   ngOnInit() {
     this.store.dispatch(getListTags());
     super.ngOnInit();
@@ -120,6 +126,44 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     });
   }
 
+  showImportModal() {
+    this.modal.create({
+      nzTitle: 'Import Subscribers từ CSV',
+      nzContent: this.modalImportSubscriber,
+      nzFooter: null,
+      nzWidth: 600
+    });
+  }
+
+  closeImportModal() {
+    this.modal.closeAll();
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file && file.type === 'text/csv') {
+      this.selectedFile = file;
+    } else {
+      this.selectedFile = null;
+      // Hiển thị thông báo nếu cần
+    }
+  }
+
+  importSubscribers() {
+    if (!this.selectedFile || !this.formImport.valid) {
+      return;
+    }
+
+    this.isLoadingImport = true;
+
+    // TODO: Gửi file và tagId lên server
+    const tagId = this.formImport.value.tagId;
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+    formData.append('tagId', tagId);
+  }
+
   showCreateModal(): void {
     this.openModal();
   }
@@ -127,6 +171,14 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   showEditModal(item: SubscriberDTO): void {
     this.openModal(item);
   }
+
+  summary = {
+    total: 1540,
+    openRate: 38.6,
+    clickRate: 12.4,
+    unsubscribed: 123,
+    complainRate: 1.2
+  };
 
 
   saveSubscriber(): void {
