@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import * as echarts from 'echarts';
 
+import { FormsModule } from '@angular/forms';
+
 import {HomeRoutingModule} from './home-routing.module';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {SharedModule} from '../../../shared/shared.module';
@@ -15,6 +17,7 @@ import {ZorroAntdModule} from '../../../shared/zorro-antd.module';
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
+    FormsModule,
     ZorroAntdModule,
     SharedModule,
     HomeRoutingModule,

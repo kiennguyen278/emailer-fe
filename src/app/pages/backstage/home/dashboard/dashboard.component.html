@@ -17,8 +17,8 @@
 
   <!-- 2. Hiệu suất gửi email -->
   <nz-card nzTitle="Hiệu suất gửi Email" [nzSize]="'small'" class="mb-4">
-    <div nz-row [nzGutter]="16">
 
+    <div nz-row [nzGutter]="16">
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
           <div class="summary-title">Tổng gửi</div>
@@ -41,11 +41,94 @@
       </div>
 
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
-        <div class="summary-box date-selector-box">
-          <div class="summary-title">Khoảng thời gian</div>
+        <div class="card-header-with-filter">
+          <span></span>
+
           <nz-radio-group
-            [(ngModel)]="selectedRange"
-            (ngModelChange)="onRangeChange($event)"
+            [(ngModel)]="performanceRange"
+            (ngModelChange)="onPerformanceRangeChange($event)"
+            size="small"
+          >
+            <label nz-radio-button nzValue="7">7 ngày</label>
+            <label nz-radio-button nzValue="30">30 ngày</label>
+            <label nz-radio-button nzValue="90">90 ngày</label>
+          </nz-radio-group>
+
+        </div>
+
+        <div class="email-analysis-text">
+          📊 <strong>Phân tích:</strong> {{ emailPerformanceAnalysis }}
+          <p class="time-note">
+            📆 Dữ liệu trong vòng <strong>{{ performanceRange }}</strong> ngày gần nhất.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </nz-card>
+
+  <!-- 3+4. Tương tác & Phân tích nâng cao trong cùng tab -->
+  <nz-card nzTitle="Phân tích xu hướng" [nzSize]="'small'" class="mb-4">
+    <nz-tabset [nzTabBarGutter]="32" [nzSize]="'small'">
+
+      <!-- Tab 1: Biểu đồ xu hướng -->
+      <nz-tab nzTitle="Biểu đồ xu hướng tương tác">
+        <div class="card-header-with-filter">
+          <span></span>
+          <nz-radio-group
+            [(ngModel)]="trendRange"
+            (ngModelChange)="onTrendRangeChange($event)"
+            size="small"
+          >
+            <label nz-radio-button nzValue="7">7 ngày</label>
+            <label nz-radio-button nzValue="30">30 ngày</label>
+            <label nz-radio-button nzValue="90">12 tuần</label>
+          </nz-radio-group>
+        </div>
+
+        <div nz-row [nzGutter]="16">
+          <!-- Biểu đồ -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="18">
+            <div echarts [options]="engagementChartOptions" class="chart-container"></div>
+          </div>
+          <!-- Phân tích xu hướng -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="6">
+            <div class="summary-box analysis-box">
+              <div class="summary-title"> 📊 Phân tích xu hướng</div>
+              <div class="analysis-text">
+                <p>
+                  <strong>Open rate:</strong>
+                  <span [ngClass]="getTrendColorClass(lastOpenTrend)">
+                  {{ getTrendEmoji(lastOpenTrend) }}
+                </span>
+                  {{ analysisTexts[0] }}
+                </p>
+                <p>
+                  <strong>Click rate:</strong>
+                  <span [ngClass]="getTrendColorClass(lastClickTrend)">
+                    {{ getTrendEmoji(lastClickTrend) }}
+                  </span>
+                  {{ analysisTexts[1] }}
+                </p>
+
+                <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ trendRange }} </strong> ngày gần nhất</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+
+      <!-- Tab 2: Phân tích nâng cao -->
+      <nz-tab nzTitle="Phân tích nâng cao">
+        <div class="card-header-with-filter">
+          <span></span>
+          <nz-radio-group
+            [(ngModel)]="advancedRange"
+            (ngModelChange)="onAdvancedRangeChange($event)"
             size="small"
           >
             <label nz-radio-button nzValue="7">7 ngày</label>
@@ -53,101 +136,57 @@
             <label nz-radio-button nzValue="90">90 ngày</label>
           </nz-radio-group>
         </div>
-      </div>
 
+        <div nz-row [nzGutter]="16">
+          <!-- A. Chất lượng danh sách -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+            <div class="summary-box">
+              <div class="summary-title">Chất lượng danh sách</div>
 
-    </div>
+              <div echarts [options]="listQualityChartOptions" class="chart-pie-container"></div>
+              <div class="list-analysis-text">
+                📊 <strong>Phân tích:</strong> {{ listQualityAnalysis }}
+                <p class="time-note">📆 Phân tích trong vòng <strong>{{ advancedRange }} </strong> ngày gần nhất</p>
+              </div>
 
-  </nz-card>
-
-  <!-- 3. Biểu đồ xu hướng tương tác -->
-  <nz-card nzTitle="Biểu đồ xu hướng tương tác" [nzSize]="'small'" class="mb-4">
-    <div nz-row [nzGutter]="16">
-      <!-- Cột 1-3: Biểu đồ -->
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="18">
-        <div echarts [options]="engagementChartOptions" class="chart-container"></div>
-      </div>
-
-      <!-- Cột 4: Phân tích -->
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="6">
-        <div class="summary-box analysis-box">
-          <div class="summary-title">Phân tích</div>
-
-          <div class="analysis-text">
-            <p>
-              <strong>Open rate:</strong>
-              <span [ngClass]="getTrendColorClass(lastOpenTrend)">
-              {{ getTrendEmoji(lastOpenTrend) }}
-            </span>
-              {{ analysisTexts[0] }}
-            </p>
-            <p>
-              <strong>Click rate:</strong>
-              <span [ngClass]="getTrendColorClass(lastClickTrend)">
-              {{ getTrendEmoji(lastClickTrend) }}
-            </span>
-              {{ analysisTexts[1] }}
-            </p>
+            </div>
           </div>
 
+          <!-- B. Hiệu suất nội dung -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+            <div class="summary-box">
+              <div class="summary-title">Hiệu suất nội dung</div>
+              <ul class="performance-list">
+                <li *ngFor="let email of advancedStats.topEmails">
+                  <strong>{{ email.subject }}</strong><br>
+                  Mở: {{ email.openRate }}% – Click: {{ email.clickRate }}%<br>
+                  <span [ngClass]="getContentPerformanceClass(email)">
+                    {{ getContentPerformanceAnalysis(email) }}
+                  </span>
+                </li>
+              </ul>
+
+              <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ advancedRange }} </strong> ngày gần nhất</p>
+            </div>
+          </div>
+
+
+          <!-- C. Thời điểm vàng -->
+          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+            <div class="summary-box">
+              <div class="summary-title">Thời điểm vàng</div>
+              <p class="best-time">
+                📅 <strong>{{ advancedStats.bestDay }}</strong> &nbsp;&nbsp;
+                🕘 <strong>{{ advancedStats.bestHour }}</strong><br>
+                Đây là thời điểm mở/click cao nhất trong {{ advancedRange }} ngày qua.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </nz-tab>
+
+    </nz-tabset>
   </nz-card>
 
-  <!-- 4. Phân tích nâng cao -->
-  <nz-card [nzSize]="'small'" class="mb-4">
-    <div class="card-header-with-filter">
-      <span>Phân tích nâng cao</span>
-      <nz-radio-group
-        [(ngModel)]="advancedRange"
-        (ngModelChange)="onAdvancedRangeChange($event)"
-        size="small"
-      >
-        <label nz-radio-button nzValue="7">7 ngày</label>
-        <label nz-radio-button nzValue="30">30 ngày</label>
-        <label nz-radio-button nzValue="90">90 ngày</label>
-      </nz-radio-group>
-    </div>
-
-    <div nz-row [nzGutter]="16">
-      <!-- A. Chất lượng danh sách -->
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-        <div class="summary-box">
-          <div class="summary-title">Chất lượng danh sách</div>
-          <ul class="quality-list">
-            <li><strong>Bounce rate:</strong> {{ advancedStats.bounceRate }}%</li>
-            <li><strong>Unsubscribe rate:</strong> {{ advancedStats.unsubscribeRate }}%</li>
-            <li><strong>Spam complaints:</strong> {{ advancedStats.complaintRate }}%</li>
-            <li><strong>Active subscribers:</strong> {{ advancedStats.activeRate }}%</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- B. Hiệu suất nội dung -->
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-        <div class="summary-box">
-          <div class="summary-title">Hiệu suất nội dung</div>
-          <ul class="performance-list">
-            <li *ngFor="let email of advancedStats.topEmails">
-              <strong>{{ email.subject }}</strong>: mở {{ email.openRate }}%, click {{ email.clickRate }}%
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- C. Thời điểm vàng -->
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-        <div class="summary-box">
-          <div class="summary-title">Thời điểm vàng</div>
-          <p class="best-time">
-            📅 <strong>{{ advancedStats.bestDay }}</strong> &nbsp;&nbsp;
-            🕘 <strong>{{ advancedStats.bestHour }}</strong><br>
-            Đây là thời điểm mở/click cao nhất trong {{ advancedRange }} ngày qua.
-          </p>
-        </div>
-      </div>
-    </div>
-  </nz-card>
 
 </div>
