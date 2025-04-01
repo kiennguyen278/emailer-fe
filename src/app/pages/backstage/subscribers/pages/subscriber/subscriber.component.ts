@@ -66,13 +66,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   columns: ColumnConfig[] = [
     {
-      key: 'id',
-      header: 'ID',
-      sortable: true,
-      nzWidth: '50px',
-      tdClass: 'text-center',
-    },
-    {
       key: 'email',
       header: 'Email',
       sortable: true,
@@ -82,14 +75,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
     {
       key: 'firstName',
-      header: 'First Name',
-      sortable: true,
-      tdClass: 'text-center',
-      nzWidth: '150px',
-    },
-    {
-      key: 'lastName',
-      header: 'Last Name',
+      header: 'Name',
       sortable: true,
       tdClass: 'text-center',
       nzWidth: '150px',
