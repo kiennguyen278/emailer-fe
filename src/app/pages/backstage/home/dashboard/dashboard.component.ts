@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DashboardService } from '../data/dashboard.service';
+import {Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,20 +16,19 @@ export class DashboardComponent {
 
   subscriberGrowthItems: any[] = [];
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
-  engagementChartLabels: string[] = [];
-  engagementChartData: any[] = [];
-
+  selectedRange: number = 30;
 
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
     this.loadSubscriberGrowth();
-    this.loadEmailPerformance();
     this.loadEmailTrend();
+    this.loadEmailPerformance(this.selectedRange);
   }
 
   loadSubscriberGrowth() {
-    this.dashboardService.getSubscriberGrowth().subscribe(data => {
+    this.dashboardService.getSubscriberGrowth().subscribe((res) => {
+      const data = res.data;
       this.subscriberGrowthItems = [
         { label: 'Hôm nay', count: data.today.count, trend: data.today.trend },
         { label: '7 ngày', count: data.last7Days.count, trend: data.last7Days.trend },
@@ -38,8 +38,15 @@ export class DashboardComponent {
     });
   }
 
-  loadEmailPerformance() {
-    this.dashboardService.getEmailPerformance().subscribe(data => {
+
+  onRangeChange(days: number) {
+    this.selectedRange = days;
+    this.loadEmailPerformance(days);
+  }
+
+  loadEmailPerformance(days: number) {
+    this.dashboardService.getEmailPerformance().subscribe((res) => {
+      const data = res.data.current;
       this.emailPerformance = {
         totalSent: data.totalSent,
         openRate: data.openRate,
@@ -48,9 +55,10 @@ export class DashboardComponent {
     });
   }
 
-
   loadEmailTrend() {
-    this.dashboardService.getEmailTrend().subscribe(data => {
+    this.dashboardService.getEmailTrend().subscribe((response) => {
+      const data = response.data; // ✅ lấy mảng ra trước
+
       const labels = data.map(item => 'Tuần ' + item.period);
       const openRates = data.map(item => item.openRate);
       const clickRates = data.map(item => item.clickRate);
@@ -84,16 +92,11 @@ export class DashboardComponent {
         ]
       };
 
-      // Lưu lại trend cho phần hiển thị icon/text nếu cần
+      // ✅ Lấy xu hướng từ tuần cuối để hiển thị mũi tên
       const last = data[data.length - 1];
       this.lastOpenTrend = last.openTrend;
       this.lastClickTrend = last.clickTrend;
-
-      // Gỡ lỗi nếu cần
-      console.log('Chart data:', this.engagementChartOptions);
     });
   }
-
-
 
 }

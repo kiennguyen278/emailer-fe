@@ -34,3 +34,6 @@ ng g c workflows/workflow-builder
 ng g m settings --routing --module app.module
 ng g c settings/main  # Hoặc chỉ settings nếu bạn không chia nhỏ
 
+
+
+rm -rf node_modules package-lock.json dist .angular
