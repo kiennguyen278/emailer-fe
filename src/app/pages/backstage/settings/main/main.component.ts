@@ -62,16 +62,6 @@ export class MainComponent implements OnInit {
     this.message.success('Đã lưu thông tin doanh nghiệp');
   }
 
-  changePassword(): void {
-    const { newPassword, confirmPassword } = this.passwordForm.value;
-    if (this.passwordForm.invalid || newPassword !== confirmPassword) {
-      this.message.error('Mật khẩu không hợp lệ hoặc không khớp');
-      return;
-    }
-    console.log('Change password:', this.passwordForm.value);
-    this.message.success('Đã đổi mật khẩu thành công');
-  }
-
   testSmtpConnection(): void {
     console.log('Test SMTP with:', this.smtpForm.value);
     this.message.info('Đang kiểm tra kết nối SMTP...');
@@ -108,6 +98,30 @@ export class MainComponent implements OnInit {
 
     // Optional: Gọi API để lưu trạng thái ON/OFF
     // this.http.post('/api/settings/smtp-toggle', { useCustom: value }).subscribe(...)
+  }
+
+
+  changePassword(): void {
+    const { oldPassword, newPassword, confirmPassword } = this.passwordForm.value;
+
+    if (this.passwordForm.invalid) {
+      this.message.warning('Vui lòng điền đầy đủ thông tin');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      this.message.error('Mật khẩu mới và xác nhận không khớp');
+      return;
+    }
+
+    // Gọi API đổi mật khẩu (giả lập)
+    console.log('Sending password change:', { oldPassword, newPassword });
+
+    // Ví dụ giả lập thành công
+    setTimeout(() => {
+      this.message.success('Đổi mật khẩu thành công');
+      this.passwordForm.reset();
+    }, 1000);
   }
 
 }

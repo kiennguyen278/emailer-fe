@@ -38,67 +38,55 @@
     <!-- TAB 2: SMTP -->
     <nz-tab nzTitle="Cấu hình SMTP">
       <nz-card [nzSize]="'default'">
-        <form [formGroup]="smtpForm" nz-form [nzLayout]="'vertical'">
-          <nz-form-item>
-            <nz-form-label>Dùng Custom SMTP</nz-form-label>
-            <nz-form-control>
-              <nz-switch [(ngModel)]="useCustomSmtp" name="useCustomSmtp" (ngModelChange)="onToggleCustomSmtp($event)"></nz-switch>
-              <div class="text-xs text-gray-500 mt-1">Tắt để sử dụng SMTP mặc định của hệ thống</div>
-            </nz-form-control>
-          </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Dùng Custom SMTP</nz-form-label>
+          <nz-form-control>
+            <nz-switch
+              [(ngModel)]="useCustomSmtp"
+              name="useCustomSmtp"
+              (ngModelChange)="onToggleCustomSmtp($event)">
+            </nz-switch>
+            <div class="text-xs text-gray-500 mt-1">Tắt để sử dụng SMTP mặc định của hệ thống</div>
+          </nz-form-control>
+        </nz-form-item>
 
-          <div *ngIf="useCustomSmtp">
-            <nz-row [nzGutter]="16">
-              <nz-col [nzSpan]="12">
-                <nz-form-item>
-                  <nz-form-label>Provider</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="provider" />
-                  </nz-form-control>
-                </nz-form-item>
-              </nz-col>
-              <nz-col [nzSpan]="12">
-                <nz-form-item>
-                  <nz-form-label>SMTP Server</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="smtpServer" />
-                  </nz-form-control>
-                </nz-form-item>
-              </nz-col>
-              <nz-col [nzSpan]="12">
-                <nz-form-item>
-                  <nz-form-label>SMTP Port</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="smtpPort" type="number" />
-                  </nz-form-control>
-                </nz-form-item>
-              </nz-col>
-              <nz-col [nzSpan]="12">
-                <nz-form-item>
-                  <nz-form-label>Username</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="username" />
-                  </nz-form-control>
-                </nz-form-item>
-              </nz-col>
-              <nz-col [nzSpan]="24">
-                <nz-form-item>
-                  <nz-form-label>Password</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input type="password" formControlName="password" />
-                  </nz-form-control>
-                </nz-form-item>
-              </nz-col>
-            </nz-row>
-
-            <div class="flex justify-end gap-3 mt-4">
-              <button nz-button nzType="default" (click)="testSmtpConnection()">Test SMTP Connection</button>
-              <button nz-button nzType="primary" (click)="saveSmtpSettings()">Lưu cấu hình</button>
-            </div>
-          </div>
+        <form *ngIf="useCustomSmtp" [formGroup]="smtpForm" nz-form [nzLayout]="'vertical'">
+          $1
         </form>
       </nz-card>
 
+
+    </nz-tab>
+    <!-- TAB 3: Đổi mật khẩu -->
+    <nz-tab nzTitle="Đổi mật khẩu">
+      <nz-card [nzSize]="'default'">
+        <form [formGroup]="passwordForm" nz-form [nzLayout]="'vertical'">
+          <nz-form-item>
+            <nz-form-label>Mật khẩu cũ</nz-form-label>
+            <nz-form-control>
+              <input nz-input type="password" formControlName="oldPassword" placeholder="Nhập mật khẩu cũ" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Mật khẩu mới</nz-form-label>
+            <nz-form-control>
+              <input nz-input type="password" formControlName="newPassword" placeholder="Nhập mật khẩu mới" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Nhập lại mật khẩu</nz-form-label>
+            <nz-form-control>
+              <input nz-input type="password" formControlName="confirmPassword" placeholder="Nhập lại mật khẩu mới" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <div class="text-right mt-3">
+            <button nz-button nzType="primary" (click)="changePassword()">Đổi mật khẩu</button>
+          </div>
+        </form>
+      </nz-card>
     </nz-tab>
   </nz-tabset>
 </div>
