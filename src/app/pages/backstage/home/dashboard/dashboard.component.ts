@@ -18,32 +18,25 @@ export class DashboardComponent {
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   selectedRange: number = 30;
 
-  emailPerformanceAnalysis: string = '';
-
   advancedRange = 30;
   advancedStats = {
-    bounceRate: 5,
-    unsubscribeRate: 7,
-    complaintRate: 3,
-    activeRate: 90,
+    bounceRate: 0,
+    unsubscribeRate: 0,
+    complaintRate: 0,
+    activeRate: 92,
     topEmails: [],
     bestDay: '',
     bestHour: ''
   };
 
-  performanceRange: number = 30; // mặc định là 30 ngày
-
   analysisTexts: string[] = [];
-
-  listQualityChartOptions: any;
-  listQualityAnalysis: string = '';
 
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
     this.loadSubscriberGrowth();
     this.loadEmailTrend();
-    this.loadEmailPerformance(this.performanceRange);
+    this.loadEmailPerformance(this.selectedRange);
     this.loadAdvancedStats(this.advancedRange);
   }
 
@@ -59,12 +52,6 @@ export class DashboardComponent {
     });
   }
 
-  onPerformanceRangeChange(days: number): void {
-    this.performanceRange = days;
-    this.loadEmailPerformance(days);
-  }
-
-
 
   onRangeChange(days: number) {
     this.selectedRange = days;
@@ -79,18 +66,8 @@ export class DashboardComponent {
         openRate: data.openRate,
         clickRate: data.clickRate
       };
-
-      // ✅ Phân tích tự động
-      if (data.openRate >= 40 && data.clickRate >= 10) {
-        this.emailPerformanceAnalysis = 'Chiến dịch hoạt động hiệu quả với tỷ lệ phản hồi cao.';
-      } else if (data.openRate >= 20) {
-        this.emailPerformanceAnalysis = 'Tỷ lệ mở khá, nhưng cần cải thiện lời kêu gọi hành động.';
-      } else {
-        this.emailPerformanceAnalysis = 'Tỷ lệ mở thấp. Nên kiểm tra lại tiêu đề, thời gian gửi và nội dung.';
-      }
     });
   }
-
 
   loadEmailTrend() {
     this.dashboardService.getEmailTrend().subscribe((response) => {
@@ -228,82 +205,6 @@ export class DashboardComponent {
         bestHour: '8h sáng'
       };
     }
-
-    this.listQualityAnalysis = this.analyzeListQuality(this.advancedStats);
-    this.updatePieChartOptions();
   }
-
-  updatePieChartOptions() {
-    const s = this.advancedStats;
-    this.listQualityChartOptions = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{b}: {d}%'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      },
-      series: [
-        {
-          name: 'Chất lượng danh sách',
-          type: 'pie',
-          radius: '70%',
-          data: [
-            { value: s.bounceRate, name: 'Bounce' },
-            { value: s.unsubscribeRate, name: 'Unsubscribe' },
-            { value: s.complaintRate, name: 'Spam' },
-            { value: s.activeRate, name: 'Active' }
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    };
-  }
-
-  analyzeListQuality(stats: any): string {
-    const totalBadRate = stats.bounceRate + stats.unsubscribeRate + stats.complaintRate;
-
-    if (totalBadRate < 5) {
-      return '✅ Danh sách rất tốt, tỷ lệ lỗi rất thấp.';
-    } else if (totalBadRate < 15) {
-      return '⚠️ Danh sách ổn định, cần tiếp tục lọc người nhận không tương tác.';
-    } else {
-      return '🚨 Danh sách có nhiều lỗi, nên kiểm tra lại nguồn dữ liệu và lọc lại subscriber.';
-    }
-  }
-
-  getContentPerformanceAnalysis(email: any): string {
-    const open = email.openRate;
-    const click = email.clickRate;
-
-    if (open >= 40 && click >= 10) {
-      return '✅ Nội dung hiệu quả, tỷ lệ phản hồi tốt.';
-    } else if (open >= 20 && click >= 5) {
-      return '⚠️ Hiệu suất trung bình, có thể cải thiện.';
-    } else {
-      return '🚨 Nội dung yếu, nên điều chỉnh tiêu đề hoặc CTA.';
-    }
-  }
-
-  getContentPerformanceClass(email: any): string {
-    const open = email.openRate;
-    const click = email.clickRate;
-
-    if (open >= 40 && click >= 10) {
-      return 'trend-up';
-    } else if (open >= 20 && click >= 5) {
-      return 'trend-stable';
-    } else {
-      return 'trend-down';
-    }
-  }
-
 
 }
