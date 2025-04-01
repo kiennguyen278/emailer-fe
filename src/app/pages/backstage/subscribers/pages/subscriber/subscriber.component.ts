@@ -313,7 +313,9 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   };
 
   showViewModal(subscriber: any) {
-    this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
+    console.log('Subscriber được xem chi tiết:', subscriber); // để debug
+
+    //this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
     this.isViewModalVisible = true;
   }
 
