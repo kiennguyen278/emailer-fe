@@ -282,4 +282,44 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
+  isViewModalVisible = false;
+
+  selectedSubscriber = {
+    status: 'ACTIVE',
+    email: 'alice@example.com',
+    firstName: 'Alice',
+    lastName: 'Nguyen',
+    tags: ['Welcome', 'Onboarding'],
+    stats: {
+      emailsReceived: 45,
+      opens: 32,
+      clicks: 14
+    },
+    emailHistory: [
+      { subject: 'Welcome to our platform!', sentAt: '2025-03-20', status: 'Opened' },
+      { subject: 'Discover new features', sentAt: '2025-03-22', status: 'Clicked' },
+      { subject: 'Weekly Digest', sentAt: '2025-03-28', status: 'Sent' }
+    ],
+    workflows: [
+      { name: 'Onboarding Flow', startedAt: '2025-03-20', status: 'In Progress' },
+      { name: 'Nurture Series', startedAt: '2025-03-25', status: 'Completed' }
+    ],
+    sequences: [
+      { title: 'Getting Started Guide', step: 'Step 2 of 5', lastSent: '2025-03-24' }
+    ],
+    campaigns: [
+      { name: 'Spring Promo', sentDate: '2025-03-15', openRate: 52.3 }
+    ]
+  };
+
+  showViewModal(subscriber: any) {
+    this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
+    this.isViewModalVisible = true;
+  }
+
+  closeViewModal() {
+    this.isViewModalVisible = false;
+  }
+
+
 }
