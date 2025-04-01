@@ -1,41 +1,45 @@
-<nz-card nzTitle="Quản lý Tag" [nzSize]="'small'" [nzExtra]="extraTemplate">
+<div class="tags-wrapper space-y-6 overflow-auto max-h-screen p-6 bg-white rounded shadow">
 
-  <ng-template #extraTemplate>
-    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
-  </ng-template>
+  <nz-card nzTitle="Quản lý Tag" [nzSize]="'small'" [nzExtra]="extraTemplate">
 
-  <div class="table-list pt-3">
-    <div class="basis-0 grow shrink">
-      <app-table
-        [columns]="columns"
-        [items]="tags"
-        [loading]="isLoading$ | async"
-        [showPagination]="false"
-      >
-        <ng-template [appCellTemplate]="'actions'" let-item>
-          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
-            <i nz-icon
-               nzType="edit"
-               nzTheme="outline"
-               nz-tooltip
-               nzTooltipTitle="Sửa tag"></i>
-          </button>
+    <ng-template #extraTemplate>
+      <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
+    </ng-template>
 
-          <button nz-button
-                  nzType="text"
-                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
-            <i nz-icon
-               nzType="delete"
-               nzTheme="outline"
-               nz-tooltip
-               nzTooltipTitle="Xóa tag"></i>
-          </button>
-        </ng-template>
+    <div class="table-list pt-3">
+      <div class="basis-0 grow shrink">
+        <app-table
+          [columns]="columns"
+          [items]="tags"
+          [loading]="isLoading$ | async"
+          [showPagination]="false"
+        >
+          <ng-template [appCellTemplate]="'actions'" let-item>
+            <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+              <i nz-icon
+                 nzType="edit"
+                 nzTheme="outline"
+                 nz-tooltip
+                 nzTooltipTitle="Sửa tag"></i>
+            </button>
 
-      </app-table>
+            <button nz-button
+                    nzType="text"
+                    (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+              <i nz-icon
+                 nzType="delete"
+                 nzTheme="outline"
+                 nz-tooltip
+                 nzTooltipTitle="Xóa tag"></i>
+            </button>
+          </ng-template>
+
+        </app-table>
+      </div>
     </div>
-  </div>
-</nz-card>
+  </nz-card>
+
+</div>
 
 
 
