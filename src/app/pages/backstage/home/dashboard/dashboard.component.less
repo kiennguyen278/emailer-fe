@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .summary-box {
   border: 1px solid #f0f0f0;
   padding: 12px;
@@ -101,6 +106,41 @@
   .trend-stable {
     color: #bfbfbf !important;
   }
+
+
+
+
+  .card-header-with-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .quality-list, .performance-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 6px;
+      font-size: 14px;
+      line-height: 1.4;
+
+      strong {
+        color: #141414;
+      }
+    }
+  }
+
+  .best-time {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
 
 
 }

@@ -18,6 +18,17 @@ export class DashboardComponent {
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   selectedRange: number = 30;
 
+  advancedRange = 30;
+  advancedStats = {
+    bounceRate: 0,
+    unsubscribeRate: 0,
+    complaintRate: 0,
+    activeRate: 92,
+    topEmails: [],
+    bestDay: '',
+    bestHour: ''
+  };
+
   analysisTexts: string[] = [];
 
   constructor(private dashboardService: DashboardService) {}
@@ -26,6 +37,7 @@ export class DashboardComponent {
     this.loadSubscriberGrowth();
     this.loadEmailTrend();
     this.loadEmailPerformance(this.selectedRange);
+    this.loadAdvancedStats(this.advancedRange);
   }
 
   loadSubscriberGrowth() {
@@ -143,6 +155,55 @@ export class DashboardComponent {
         return 'trend-down';
       default:
         return 'trend-stable';
+    }
+  }
+
+  onAdvancedRangeChange(days: number) {
+    this.advancedRange = days;
+    this.loadAdvancedStats(days);
+  }
+
+  loadAdvancedStats(days: number) {
+    // Tạm mock cứng dữ liệu cho từng mốc thời gian
+    if (days === 7) {
+      this.advancedStats = {
+        bounceRate: 0.3,
+        unsubscribeRate: 0.8,
+        complaintRate: 0.1,
+        activeRate: 88,
+        topEmails: [
+          { subject: 'Chào mừng bạn mới', openRate: 58, clickRate: 22 },
+          { subject: 'Ưu đãi đặc biệt 7 ngày', openRate: 52, clickRate: 19 }
+        ],
+        bestDay: 'Thứ 3',
+        bestHour: '9h sáng'
+      };
+    } else if (days === 90) {
+      this.advancedStats = {
+        bounceRate: 1.1,
+        unsubscribeRate: 1.5,
+        complaintRate: 0.5,
+        activeRate: 76,
+        topEmails: [
+          { subject: 'Tổng hợp quý I', openRate: 48, clickRate: 18 },
+          { subject: 'Chào năm mới 2025', openRate: 60, clickRate: 25 }
+        ],
+        bestDay: 'Thứ 5',
+        bestHour: '10h sáng'
+      };
+    } else {
+      this.advancedStats = {
+        bounceRate: 0.7,
+        unsubscribeRate: 1.0,
+        complaintRate: 0.3,
+        activeRate: 84,
+        topEmails: [
+          { subject: 'Ưu đãi tháng 3', openRate: 44, clickRate: 29 },
+          { subject: 'Tin tức sản phẩm', openRate: 39, clickRate: 17 }
+        ],
+        bestDay: 'Thứ 4',
+        bestHour: '8h sáng'
+      };
     }
   }
 

@@ -95,4 +95,59 @@
     </div>
   </nz-card>
 
+  <!-- 4. Phân tích nâng cao -->
+  <nz-card [nzSize]="'small'" class="mb-4">
+    <div class="card-header-with-filter">
+      <span>Phân tích nâng cao</span>
+      <nz-radio-group
+        [(ngModel)]="advancedRange"
+        (ngModelChange)="onAdvancedRangeChange($event)"
+        size="small"
+      >
+        <label nz-radio-button nzValue="7">7 ngày</label>
+        <label nz-radio-button nzValue="30">30 ngày</label>
+        <label nz-radio-button nzValue="90">90 ngày</label>
+      </nz-radio-group>
+    </div>
+
+    <div nz-row [nzGutter]="16">
+      <!-- A. Chất lượng danh sách -->
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+        <div class="summary-box">
+          <div class="summary-title">Chất lượng danh sách</div>
+          <ul class="quality-list">
+            <li><strong>Bounce rate:</strong> {{ advancedStats.bounceRate }}%</li>
+            <li><strong>Unsubscribe rate:</strong> {{ advancedStats.unsubscribeRate }}%</li>
+            <li><strong>Spam complaints:</strong> {{ advancedStats.complaintRate }}%</li>
+            <li><strong>Active subscribers:</strong> {{ advancedStats.activeRate }}%</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- B. Hiệu suất nội dung -->
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+        <div class="summary-box">
+          <div class="summary-title">Hiệu suất nội dung</div>
+          <ul class="performance-list">
+            <li *ngFor="let email of advancedStats.topEmails">
+              <strong>{{ email.subject }}</strong>: mở {{ email.openRate }}%, click {{ email.clickRate }}%
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- C. Thời điểm vàng -->
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+        <div class="summary-box">
+          <div class="summary-title">Thời điểm vàng</div>
+          <p class="best-time">
+            📅 <strong>{{ advancedStats.bestDay }}</strong> &nbsp;&nbsp;
+            🕘 <strong>{{ advancedStats.bestHour }}</strong><br>
+            Đây là thời điểm mở/click cao nhất trong {{ advancedRange }} ngày qua.
+          </p>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+
 </div>
