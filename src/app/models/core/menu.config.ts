@@ -28,13 +28,6 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'tag',
         isOpen: false,
         children: []
-      },
-      {
-        module: '/subscribers/import',
-        label: 'Import Subscriber',
-        icon: 'upload',
-        isOpen: false,
-        children: []
       }
     ]
   },
