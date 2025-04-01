@@ -38,11 +38,11 @@ export class AuthInterceptor implements HttpInterceptor {
       // since an error is thrown, the function will terminate here
       this.notification.open({
         type: 'error',
-        content: 'Có lỗi xảy ra, vui lòng liên hệ CSKH 1900980 để được hỗ trợ'
+        content: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
       });
       return throwError(
         new HttpErrorResponse({
-          error: 'Có lỗi xảy ra, vui lòng liên hệ CSKH 1900980 để được hỗ trợ'
+          error: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
         })
       );
     }
@@ -61,7 +61,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if ([0, 500].includes(error.status) || !navigator.onLine) {
           this.notification.open({
             type: 'error',
-            content: 'Có lỗi xảy ra, vui lòng liên hệ CSKH 1900980 để được hỗ trợ'
+            content: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
           });
         }
 
