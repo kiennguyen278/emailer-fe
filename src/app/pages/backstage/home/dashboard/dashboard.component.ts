@@ -97,14 +97,19 @@ export class DashboardComponent {
     });
   }
 
+
+  onTrendRangeChange(range: string) {
+    this.trendRange = range;
+    this.loadEmailTrend(range);
+  }
+
+
   loadEmailTrend( range: string) {
     this.trendRange = range;
     this.dashboardService.getEmailTrend(range).subscribe((res) => {
 
       if (res.success) {
-
         const data = res.data;
-
         const labels = data.map(item => 'Tuần ' + item.period);
         const openRates = data.map(item => item.openRate);
         const clickRates = data.map(item => item.clickRate);
@@ -191,11 +196,6 @@ export class DashboardComponent {
 
   onAdvancedRangeChange(range: string) {
     this.advancedRange = range;
-    this.loadAdvancedStats(range);
-  }
-
-  onTrendRangeChange(range: string) {
-    this.trendRange = range;
     this.loadAdvancedStats(range);
   }
 
