@@ -1,5 +1,5 @@
 <div class="settings-wrapper space-y-6 overflow-auto max-h-screen p-6 bg-white rounded shadow">
-  <nz-tabset>
+  <nz-tabset  [(nzSelectedIndex)]="activeTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
 
     <!-- TAB 1: Thông tin doanh nghiệp -->
     <nz-tab nzTitle="Doanh nghiệp">

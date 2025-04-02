@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import {SettingsService} from "../data/settings.service";
+import { BusinessSetting, SmtpSetting, PasswordChange } from '../data/setting.model';
 
 @Component({
   selector: 'app-main',
@@ -8,120 +10,120 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: ['./main.component.less']
 })
 export class MainComponent implements OnInit {
+
+  // Tab
+  activeTabIndex = 0;
+
+  // Business Info
   businessForm!: FormGroup;
-  passwordForm!: FormGroup;
+  emailVerificationStatus = { isVerified: false };
+
+  // SMTP
   smtpForm!: FormGroup;
-  useCustomSmtp = true; // hoặc false tùy API
-  emailVerificationStatus = {
-    isVerified: false,
-    dkimStatus: 'PENDING',
-    spfStatus: 'PENDING',
-    dmarcStatus: 'PENDING'
-  };
+  useCustomSmtp = false;
 
-  constructor(private fb: FormBuilder, private message: NzMessageService) {}
+  // Password
+  passwordForm!: FormGroup;
 
+  constructor(private fb: FormBuilder, private message: NzMessageService, private settingsService: SettingsService) {}
 
   ngOnInit(): void {
-    this.businessForm = this.fb.group({
-      bizName: ['ACME Corp.', Validators.required],
-      bizEmail: ['contact@acme.com', [Validators.required, Validators.email]]
-    });
+    this.activeTabIndex = 0; // Default: Business Info
 
+    this.initBusinessForm();
+    this.initSmtpForm();
+    this.initPasswordForm();
+
+    this.loadBusinessInfo();
+    this.loadSmtpSetting();
+  }
+
+  // TAB EVENT
+  onTabChange(index: number): void {
+    this.activeTabIndex = index;
+    // Nếu cần xử lý khi chuyển tab, xử lý tại đây
+  }
+
+  // -------------------- BUSINESS INFO --------------------
+  initBusinessForm() {
+    this.businessForm = this.fb.group({
+      bizName: ['', Validators.required],
+      bizEmail: ['', [Validators.required, Validators.email]]
+    });
+  }
+
+  loadBusinessInfo() {
+    this.settingsService.getBusinessInfo().subscribe({
+      next: (data: BusinessSetting) => {
+        this.businessForm.patchValue(data);
+        this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+      }
+    });
+  }
+
+  saveBusinessInfo() {
+    if (this.businessForm.invalid) return;
+    this.settingsService.updateBusinessInfo(this.businessForm.value).subscribe({
+      next: () => this.message.success('✅ Thông tin doanh nghiệp đã được lưu!'),
+      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu thông tin')
+    });
+  }
+
+  // -------------------- SMTP --------------------
+  initSmtpForm() {
+    this.smtpForm = this.fb.group({
+      provider: ['', Validators.required],
+      smtpServer: ['', Validators.required],
+      smtpPort: [587, [Validators.required, Validators.min(1)]],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      type: ['CUSTOM']
+    });
+  }
+
+  loadSmtpSetting() {
+    this.settingsService.getSmtpSetting().subscribe({
+      next: (smtp: SmtpSetting) => {
+        if (smtp) {
+          this.useCustomSmtp = true;
+          this.smtpForm.patchValue(smtp);
+        }
+      }
+    });
+  }
+
+  onToggleCustomSmtp(useCustom: boolean) {
+    this.useCustomSmtp = useCustom;
+  }
+
+  saveSmtpSetting() {
+    if (!this.useCustomSmtp || this.smtpForm.invalid) return;
+    this.settingsService.saveSmtpSetting(this.smtpForm.value).subscribe({
+      next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
+      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
+    });
+  }
+
+  // -------------------- PASSWORD --------------------
+  initPasswordForm() {
     this.passwordForm = this.fb.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     });
-
-    this.smtpForm = this.fb.group({
-      provider: ['Amazon SES'],
-      smtpServer: ['email-smtp.us-east-1.amazonaws.com'],
-      smtpPort: [587],
-      username: ['AKIAXXXXXXX'],
-      password: ['']
-    });
-
-    // Giả lập gọi API lấy trạng thái xác minh email
-    setTimeout(() => {
-      this.emailVerificationStatus = {
-        isVerified: true,
-        dkimStatus: 'VERIFIED',
-        spfStatus: 'VERIFIED',
-        dmarcStatus: 'PENDING'
-      };
-    }, 500);
   }
 
-  saveBusinessInfo(): void {
-    if (this.businessForm.invalid) {
-      this.message.warning('Vui lòng nhập đầy đủ thông tin doanh nghiệp');
-      return;
-    }
-    console.log('Business Info:', this.businessForm.value);
-    this.message.success('Đã lưu thông tin doanh nghiệp');
-  }
-
-  testSmtpConnection(): void {
-    console.log('Test SMTP with:', this.smtpForm.value);
-    this.message.info('Đang kiểm tra kết nối SMTP...');
-    setTimeout(() => {
-      this.message.success('Kết nối SMTP thành công!');
-    }, 1000);
-  }
-
-  saveSmtpSettings(): void {
-    if (this.smtpForm.invalid) {
-      this.message.warning('Vui lòng nhập đầy đủ thông tin SMTP');
-      return;
-    }
-    console.log('Save SMTP config:', this.smtpForm.value);
-    this.message.success('Đã lưu cấu hình SMTP');
-  }
-
-  onToggleCustomSmtp(value: boolean): void {
-    this.useCustomSmtp = value;
-    console.log('useCustomSmtp:', value);
-    if (value) {
-      // Khi bật: gán giá trị mặc định vào form nếu muốn
-      this.smtpForm.patchValue({
-        provider: 'Amazon SES',
-        smtpServer: 'email-smtp.us-east-1.amazonaws.com',
-        smtpPort: 587,
-        username: '',
-        password: ''
-      });
-    } else {
-      // Khi tắt: reset form hoặc disable form fields
-      this.smtpForm.reset();
-    }
-
-    // Optional: Gọi API để lưu trạng thái ON/OFF
-    // this.http.post('/api/settings/smtp-toggle', { useCustom: value }).subscribe(...)
-  }
-
-
-  changePassword(): void {
-    const { oldPassword, newPassword, confirmPassword } = this.passwordForm.value;
-
-    if (this.passwordForm.invalid) {
-      this.message.warning('Vui lòng điền đầy đủ thông tin');
-      return;
-    }
-
+  changePassword() {
+    if (this.passwordForm.invalid) return;
+    const { newPassword, confirmPassword } = this.passwordForm.value;
     if (newPassword !== confirmPassword) {
-      this.message.error('Mật khẩu mới và xác nhận không khớp');
+      this.message.error('❌ Mật khẩu nhập lại không khớp!');
       return;
     }
-
-    // Gọi API đổi mật khẩu (giả lập)
-    console.log('Sending password change:', { oldPassword, newPassword });
-
-    // Ví dụ giả lập thành công
-    setTimeout(() => {
-      this.message.success('Đổi mật khẩu thành công');
-      this.passwordForm.reset();
-    }, 1000);
+    this.settingsService.changePassword(this.passwordForm.value).subscribe({
+      next: () => this.message.success('✅ Mật khẩu đã được đổi!'),
+      error: err => this.message.error('❌ ' + err?.error?.message || 'Đổi mật khẩu thất bại')
+    });
   }
 
 }
