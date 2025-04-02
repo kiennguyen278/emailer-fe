@@ -3,17 +3,38 @@
   <!-- 1. Tăng trưởng Subscriber -->
   <nz-card nzTitle="Tăng trưởng Subscriber" [nzSize]="'small'" class="mb-4">
     <div nz-row [nzGutter]="16">
-      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" *ngFor="let item of subscriberGrowthItems">
+      <div
+        nz-col
+        [nzXs]="24"
+        [nzSm]="12"
+        [nzMd]="6"
+        *ngFor="let item of subscriberGrowthItems"
+      >
         <div class="summary-box">
           <div class="summary-title">{{ item.label }}</div>
-          <div class="summary-value">{{ item.count }}</div>
-          <div class="summary-trend" [ngClass]="item.trend.toLowerCase()">
-            Trend: {{ item.trend }}
+          <div class="summary-value">
+            {{ item.count }}
+            <ng-container *ngIf="item.label !== 'Total'">
+              <i
+                nz-icon
+                [nzType]="getTrendIcon(item.trend)"
+                [ngClass]="getRateTrendClass(item.count, item.compare)"
+              ></i>
+            </ng-container>
           </div>
+
+          <ng-container *ngIf="item.label !== 'Total'">
+            <div
+              class="summary-trend"
+              [ngClass]="getRateTrendClass(item.count, item.compare)"
+            >
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
   </nz-card>
+
 
   <!-- 2. Hiệu suất gửi email -->
   <nz-card nzTitle="Hiệu suất gửi Email" [nzSize]="'small'" class="mb-4">

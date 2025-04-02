@@ -11,7 +11,6 @@ import {
   EmailEngagement,
   DashboardSubscriberQuality
 } from './dashboard.models';
-import {DateUtil} from "@core/utils/date.util";
 import {HttpParams} from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })

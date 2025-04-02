@@ -53,7 +53,7 @@ export class DashboardComponent {
           { label: 'Hôm nay', count: data.today.count, trend: data.today.trend },
           { label: '7 ngày', count: data.last7Days.count, trend: data.last7Days.trend },
           { label: '30 ngày', count: data.last30Days.count, trend: data.last30Days.trend },
-          { label: 'Tổng cộng', count: data.total.count, trend: data.total.trend }
+          { label: 'Total', count: data.total.count, trend: data.total.trend }
         ];
       }
     });
@@ -249,10 +249,26 @@ export class DashboardComponent {
           type: 'pie',
           radius: '70%',
           data: [
-            { value: s.bounceRate, name: 'Bounce' },
-            { value: s.unsubscribeRate, name: 'Unsubscribe' },
-            { value: s.complaintRate, name: 'Spam' },
-            { value: s.activeRate, name: 'Active' }
+            {
+              value: s.bounceRate,
+              name: 'Bounce',
+              itemStyle: { color: '#f5222d' } // đỏ
+            },
+            {
+              value: s.unsubscribeRate,
+              name: 'Unsubscribe',
+              itemStyle: { color: '#faad14' } // vàng cam
+            },
+            {
+              value: s.complaintRate,
+              name: 'Spam',
+              itemStyle: { color: '#722ed1' } // tím
+            },
+            {
+              value: s.activeRate,
+              name: 'Active',
+              itemStyle: { color: '#1890ff' } // ✅ xanh dương
+            }
           ],
           emphasis: {
             itemStyle: {
@@ -320,6 +336,14 @@ export class DashboardComponent {
     if (diff > 0) return 'trend-up';
     if (diff < 0) return 'trend-down';
     return 'trend-stable';
+  }
+
+  getTrendIcon(trend: string): string {
+    switch (trend) {
+      case 'UP': return 'arrow-up';
+      case 'DOWN': return 'arrow-down';
+      default: return 'minus';
+    }
   }
 
 }
