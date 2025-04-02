@@ -1,1 +1,50 @@
-<p>campaigns works!</p>
+<nz-card nzTitle="Danh sách Email Campaign" [nzSize]="'small'" [nzExtra]="extraTemplate">
+
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Email Campaign</button>
+  </ng-template>
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [scrollX]="'900px'"
+        [loading]="isLoading$ | async"
+        [showPagination]="false"
+      >
+        <ng-template [appCellTemplate]="'createdAt'" let-item>
+          {{item.createdAt | date: DATE_TIME_FORMAT}}
+        </ng-template>
+
+        <ng-template [appCellTemplate]="'scheduledTime'" let-item>
+          {{item.scheduledTime | date: DATE_TIME_FORMAT}}
+        </ng-template>
+
+
+        <ng-template [appCellTemplate]="'actions'" let-item>
+          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+            <i nz-icon
+               nzType="edit"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Sửa Email Campaign"></i>
+          </button>
+
+          <button nz-button
+                  nzType="text"
+                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+            <i nz-icon
+               nzType="delete"
+               nzTheme="outline"
+               nz-tooltip
+               nzTooltipTitle="Xóa Email Campaign"></i>
+          </button>
+        </ng-template>
+
+      </app-table>
+    </div>
+  </div>
+</nz-card>
+
+

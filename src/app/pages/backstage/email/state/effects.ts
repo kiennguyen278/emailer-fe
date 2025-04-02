@@ -27,4 +27,17 @@ export class EmailEffects {
   );
 
 
+  getListEmailCampaign$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(Actionss.getListEmailCampaign),
+      switchMap(() => {
+        return this.service.getAllEmailCampaign().pipe(
+          map((data) => Actionss.getListEmailCampaignSuccess(data)),
+          catchError(({ error }) => of(Actionss.getListEmailCampaignFail(error.error)))
+        )
+      }),
+    )
+  );
+
+
 }

@@ -10,3 +10,11 @@ export const [
 export const clearStateListEmailTemplate = createAction('[Email Template List] Clear State List');
 
 
+
+
+export const [
+  getListEmailCampaign,
+  getListEmailCampaignSuccess,
+  getListEmailCampaignFail
+] = createHTTPActions<void, any, { error: any}>('[Email Campaign List] Get List', false);
+export const clearStateListEmailCampaign = createAction('[Email Campaign List] Clear State List');
