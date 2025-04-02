@@ -118,25 +118,15 @@
         <ng-template [appCellTemplate]="'actions'" let-item>
 
           <button nz-button nzType="text" (click)="showViewModal(item)">
-            <i nz-icon nzType="eye" nzTooltipTitle="Xem chi tiết"></i>
+            <i nz-icon nzType="eye" nz-tooltip nzTooltipTitle="Xem chi tiết"></i>
           </button>
 
           <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
-            <i nz-icon
-               nzType="edit"
-               nzTheme="outline"
-               nz-tooltip
-               nzTooltipTitle="Sửa tag"></i>
+            <i nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Sửa"></i>
           </button>
 
-          <button nz-button
-                  nzType="text"
-                  (click)="confirmDelete(item)" class="cursor-pointer ml-2">
-            <i nz-icon
-               nzType="delete"
-               nzTheme="outline"
-               nz-tooltip
-               nzTooltipTitle="Xóa tag"></i>
+          <button nz-button nzType="text" (click)="confirmDelete(item)" class="cursor-pointer ml-2">
+            <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa"></i>
           </button>
         </ng-template>
 

@@ -116,7 +116,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     this.store.dispatch(getListEmailCampaign());
   }
 
-  openModal(item?: EmailTemplateDTO) {
+  openModal(item?: EmailCampaignDTO) {
 
     this.modalRef = this.modal.create({
       nzTitle: item?.id ? `Cập nhật email campaign "${item.name}"` : 'Thêm mới email campaign',
@@ -140,11 +140,16 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     this.openModal();
   }
 
-  showEditModal(item: EmailTemplateDTO): void {
+  showEditModal(item: EmailCampaignDTO): void {
     this.openModal(item);
   }
 
-  confirmDelete(item: EmailTemplateDTO): void {
+  showViewModal(item: EmailCampaignDTO): void {
+
+  }
+
+
+  confirmDelete(item: EmailCampaignDTO): void {
     this.modal.confirm({
       nzTitle: `Bạn có chắc muốn xoá email campaign "${item.name}"?`,
       nzOkText: 'Xoá',
@@ -154,7 +159,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   }
 
   deleteEmailTemplate(id: number) {
-    this.emailService.deleteMailTemplate(id).subscribe({
+    this.emailService.deleteMailCampaign(id).subscribe({
       next: () => {
         this.notification.open({
           type: 'success',

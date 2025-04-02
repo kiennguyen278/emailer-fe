@@ -47,6 +47,12 @@ export class EmailService extends BaseApiService{
   }
 
 
+  deleteMailCampaign(id: number): Observable<any> {
+    const url = this.buildUrl(`/campaigns/${id}`);
+    return this.http.delete<ApiResponse<any>>(url);
+  }
+
+
 
 
   //
