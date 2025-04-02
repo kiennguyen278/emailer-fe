@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
+import {DateUtil} from "@core/utils/date.util";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,11 +15,11 @@ export class DashboardComponent {
 
   subscriberGrowthItems: any[] = [];
 
-  performanceRange: number = 30; // mặc định là 30 ngày
+  performanceRange: string = '30d'; // mặc định là 30 ngày
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   emailPerformanceAnalysis: string = '';
 
-  trendRange = 30; // mặc định là 30 ngày
+  trendRange = '30d'; // mặc định là 30 ngày
 
   advancedStats = {
     bounceRate: 5,
@@ -28,7 +29,7 @@ export class DashboardComponent {
     topEmails: [],
     topSubscribers: []
   };
-  advancedRange = 30; // mặc định là 30 ngày
+  advancedRange = '30d'; // mặc định là 30 ngày
 
   analysisTexts: string[] = [];
 
@@ -58,13 +59,12 @@ export class DashboardComponent {
     });
   }
 
-  onPerformanceRangeChange(days: number): void {
-    this.performanceRange = days;
-    this.loadEmailPerformance(days);
+  onPerformanceRangeChange(range: string): void {
+    this.performanceRange = range;
+    this.loadEmailPerformance(range);
   }
-
-  loadEmailPerformance(days: number) {
-    this.dashboardService.getEmailPerformance().subscribe((res) => {
+  loadEmailPerformance(range: string) {
+    this.dashboardService.getEmailPerformance(range).subscribe((res) => {
       this.emailPerformanceAnalysis = "Chưa có kết quả phân tích";
       if (res.success) {
         const data = res.data.current;
@@ -87,9 +87,9 @@ export class DashboardComponent {
     });
   }
 
-  loadEmailTrend( days: number) {
-    this.trendRange = days;
-    this.dashboardService.getEmailTrend().subscribe((res) => {
+  loadEmailTrend( range: string) {
+    this.trendRange = range;
+    this.dashboardService.getEmailTrend(range).subscribe((res) => {
 
       if (res.success) {
 
@@ -179,18 +179,19 @@ export class DashboardComponent {
     }
   }
 
-  onAdvancedRangeChange(days: number) {
-    this.advancedRange = days;
-    this.loadAdvancedStats(days);
+  onAdvancedRangeChange(range: string) {
+    this.advancedRange = range;
+    this.loadAdvancedStats(range);
   }
 
-  onTrendRangeChange(days: number) {
-    this.trendRange = days;
-    this.loadAdvancedStats(days);
+  onTrendRangeChange(range: string) {
+    this.trendRange = range;
+    this.loadAdvancedStats(range);
   }
 
-  loadAdvancedStats(days: number) {
+  loadAdvancedStats(range: string) {
     // Tạm mock cứng dữ liệu cho từng mốc thời gian
+    const days = DateUtil.convertToDays(range);
     if (days === 7) {
       this.advancedStats = {
         bounceRate: 0.3,

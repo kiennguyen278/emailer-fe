@@ -56,3 +56,46 @@ export interface EmailTrendItem {
   diffOpenRate: number;
   diffClickRate: number;
 }
+
+
+export interface DashboardSubscriberQuality {
+  totalSubscribers: number;
+  activeSubscribers: number;
+  inactiveSubscribers: number;
+  unsubscribedSubscribers: number;
+  bouncedSubscribers: number;
+  complainedSubscribers: number;
+}
+
+
+export interface PotentialSubscriber {
+  userId: number;
+  subscriberId: number;
+  name: string;
+  email: string;
+  openCount: number;
+  clickCount: number;
+  engagementScore: number;
+}
+
+
+export interface EmailEngagement {
+  userId: number;
+
+  // in sequence
+  sequenceId: number | null;
+  sequenceName: string | null;
+  sequenceStepId: number | null;
+
+  // in campaign
+  campaignId: number | null;
+  campaignName: string | null;
+
+  subject: string;
+
+  openCount: number;
+  clickCount: number;
+  engagementScore: number;
+}
+
+
