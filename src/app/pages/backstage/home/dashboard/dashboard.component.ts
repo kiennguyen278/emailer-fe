@@ -16,10 +16,10 @@ export class DashboardComponent {
 
   performanceRange: string = '30d'; // mặc định là 30 ngày
   emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
+  previousEmailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   emailPerformanceAnalysis: string = '';
 
   trendRange = '30d'; // mặc định là 30 ngày
-
 
   advancedRange = '30d'; // mặc định là 30 ngày
   listQualityChartOptions: any;
@@ -33,7 +33,6 @@ export class DashboardComponent {
     topEmails: [],
     topSubscribers: []
   };
-
 
   analysisTexts: string[] = [];
 
@@ -68,17 +67,27 @@ export class DashboardComponent {
     this.dashboardService.getEmailPerformance(range).subscribe((res) => {
       this.emailPerformanceAnalysis = "Chưa có kết quả phân tích";
       if (res.success) {
-        const data = res.data.current;
+
+        const data = res.data;
+        const current = data.current;
+        const previous = data.previous;
+
         this.emailPerformance = {
-          totalSent: data.totalSent,
-          openRate: data.openRate,
-          clickRate: data.clickRate
+          totalSent: current.totalSent,
+          openRate: current.openRate,
+          clickRate: current.clickRate
+        };
+
+        this.previousEmailPerformance = {
+          totalSent: previous.totalSent,
+          openRate: previous.openRate,
+          clickRate: previous.clickRate
         };
 
         // ✅ Phân tích tự động
-        if (data.openRate >= 40 && data.clickRate >= 10) {
+        if (data.current.openRate >= 40 && data.current.clickRate >= 10) {
           this.emailPerformanceAnalysis = 'Chiến dịch hoạt động hiệu quả với tỷ lệ phản hồi cao.';
-        } else if (data.openRate >= 20) {
+        } else if (data.current.openRate >= 20) {
           this.emailPerformanceAnalysis = 'Tỷ lệ mở khá, nhưng cần cải thiện lời kêu gọi hành động.';
         } else {
           this.emailPerformanceAnalysis = 'Tỷ lệ mở thấp. Nên kiểm tra lại tiêu đề, thời gian gửi và nội dung.';
@@ -298,6 +307,19 @@ export class DashboardComponent {
     } else {
       return 'trend-down';
     }
+  }
+
+  getRateTrendIcon(current: number, previous: number): string {
+    const diff = current - previous;
+    if (diff > 0) return 'arrow-up';
+    if (diff < 0) return 'arrow-down';
+    return 'minus';
+  }
+  getRateTrendClass(current: number, previous: number): string {
+    const diff = current - previous;
+    if (diff > 0) return 'trend-up';
+    if (diff < 0) return 'trend-down';
+    return 'trend-stable';
   }
 
 }

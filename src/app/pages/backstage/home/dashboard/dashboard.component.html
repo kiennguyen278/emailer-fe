@@ -22,21 +22,38 @@
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
           <div class="summary-title">Tổng gửi</div>
-          <div class="summary-value">{{ emailPerformance.totalSent }}</div>
+          <div class="summary-value">
+            {{ emailPerformance.totalSent }}
+            <span [ngClass]="getRateTrendClass(emailPerformance.totalSent, previousEmailPerformance.totalSent)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.totalSent, previousEmailPerformance.totalSent)" [ngClass]="getRateTrendClass(emailPerformance.totalSent, previousEmailPerformance.totalSent)"></i>
+            </span>
+          </div>
         </div>
       </div>
 
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
           <div class="summary-title">Tỷ lệ mở</div>
-          <div class="summary-value">{{ emailPerformance.openRate }}%</div>
+          <div class="summary-value">
+            {{ emailPerformance.openRate }}%
+            <span [ngClass]="getRateTrendClass(emailPerformance.openRate, previousEmailPerformance.openRate)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.openRate, previousEmailPerformance.openRate)" [ngClass]="getRateTrendClass(emailPerformance.openRate, previousEmailPerformance.openRate)"></i>
+            </span>
+          </div>
         </div>
       </div>
 
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
+
           <div class="summary-title">Tỷ lệ click</div>
-          <div class="summary-value">{{ emailPerformance.clickRate }}%</div>
+          <div class="summary-value">
+            {{ emailPerformance.clickRate }}%
+            <span [ngClass]="getRateTrendClass(emailPerformance.clickRate, previousEmailPerformance.clickRate)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.clickRate, previousEmailPerformance.clickRate)" [ngClass]="getRateTrendClass(emailPerformance.clickRate, previousEmailPerformance.clickRate)"></i>
+            </span>
+          </div>
+
         </div>
       </div>
 
