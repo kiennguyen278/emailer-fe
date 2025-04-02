@@ -8,13 +8,13 @@ export interface SmtpSetting {
 }
 
 export interface UserDTO {
-  userId: number | null;
-  status: 'ACTIVE' | 'INACTIVE' | null;
-  oldPassword: string | null;
-  newPassword: string | null;
+  userId?: number;
+  status?: 'ACTIVE' | 'INACTIVE';
+  oldPassword?: string;
+  newPassword?: string;
 
-  businessName: string | null;
-  businessEmail: string | null;
-  businessDomain: string | null;
-  isVerified: boolean | null;
+  businessName?: string;
+  businessEmail?: string;
+  businessDomain?: string;
+  isVerified?: boolean;
 }
