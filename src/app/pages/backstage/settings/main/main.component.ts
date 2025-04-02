@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
 import {SettingsService} from "../data/settings.service";
-import { BusinessSetting, SmtpSetting, PasswordChange } from '../data/setting.model';
 
 @Component({
   selector: 'app-main',
@@ -52,11 +51,22 @@ export class MainComponent implements OnInit {
     });
   }
 
-  loadBusinessInfo() {
+  loadBusinessInfo(): void {
     this.settingsService.getBusinessInfo().subscribe({
-      next: (data: BusinessSetting) => {
-        this.businessForm.patchValue(data);
-        this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+      next: (res) => {
+        if (res.success && res.data) {
+          const data = res.data;
+          this.businessForm.patchValue({
+            businessName: data.businessName,
+            businessEmail: data.businessEmail
+          });
+          this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+        } else {
+          console.warn('Không có dữ liệu thông tin doanh nghiệp');
+        }
+      },
+      error: (err) => {
+        console.error('Lỗi khi lấy thông tin doanh nghiệp:', err);
       }
     });
   }
@@ -81,13 +91,20 @@ export class MainComponent implements OnInit {
     });
   }
 
-  loadSmtpSetting() {
+  loadSmtpSetting(): void {
     this.settingsService.getSmtpSetting().subscribe({
-      next: (smtp: SmtpSetting) => {
-        if (smtp) {
+      next: (res) => {
+        if (res.success && res.data) {
           this.useCustomSmtp = true;
-          this.smtpForm.patchValue(smtp);
+          this.smtpForm.patchValue(res.data);
+        } else {
+          this.useCustomSmtp = false;
+          console.warn('Không tìm thấy cấu hình SMTP');
         }
+      },
+      error: (err) => {
+        this.useCustomSmtp = false;
+        console.error('Lỗi khi load SMTP:', err);
       }
     });
   }

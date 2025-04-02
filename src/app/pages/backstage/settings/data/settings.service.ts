@@ -1,35 +1,33 @@
 import {Injectable} from '@angular/core';
-import { BusinessSetting, SmtpSetting, PasswordChange } from '../data/setting.model';
 import {Observable} from 'rxjs';
+import {SmtpSetting, UserDTO} from './setting.model';
+import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class SettingsService extends BaseApiService {
-  private baseUrl = this.buildUrl('/settings');
-
-  getSmtpSetting(): Observable<SmtpSetting> {
-    return this.http.get<SmtpSetting>(`${this.baseUrl}/smtp`);
-  }
-
-  saveSmtpSetting(data: SmtpSetting): Observable<SmtpSetting> {
-    return this.http.put<SmtpSetting>(`${this.baseUrl}/smtp`, data);
-  }
-
+  private api = this.buildUrl('/settings');
 
   // Business Info
-  getBusinessInfo(): Observable<BusinessSetting> {
-    return this.http.get<BusinessSetting>(`${this.baseUrl}/business`);
+  getBusinessInfo(): Observable<ApiResponse<UserDTO>> {
+    return this.http.get<ApiResponse<UserDTO>>(`${this.api}/business`);
   }
 
-  updateBusinessInfo(data: BusinessSetting): Observable<any> {
-    return this.http.put(`${this.baseUrl}/business`, data);
+  updateBusinessInfo(data: UserDTO): Observable<ApiResponse<string>> {
+    return this.http.put<ApiResponse<string>>(`${this.api}/business`, data);
   }
 
+  // SMTP
+  getSmtpSetting(): Observable<ApiResponse<SmtpSetting>> {
+    return this.http.get<ApiResponse<SmtpSetting>>(`${this.api}/smtp`);
+  }
+
+  saveSmtpSetting(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
+    return this.http.put<ApiResponse<SmtpSetting>>(`${this.api}/smtp`, data);
+  }
 
   // Password
-  changePassword(data: PasswordChange): Observable<any> {
-    return this.http.post(`${this.baseUrl}/change-password`, data);
+  changePassword(data: UserDTO): Observable<ApiResponse<string>> {
+    return this.http.put<ApiResponse<string>>(`${this.api}/change-password`, data);
   }
 }

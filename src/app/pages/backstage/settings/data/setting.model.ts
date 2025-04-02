@@ -1,10 +1,3 @@
-export interface BusinessSetting {
-  businessName: string;
-  businessEmail: string;
-  businessDomain: string;
-  isVerified?: boolean; // trạng thái xác minh email
-}
-
 export interface SmtpSetting {
   provider: string;
   smtpServer: string;
@@ -14,8 +7,14 @@ export interface SmtpSetting {
   type: 'CUSTOM' | 'SYSTEM';
 }
 
-export interface PasswordChange {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+export interface UserDTO {
+  userId: number | null;
+  status: 'ACTIVE' | 'INACTIVE' | null;
+  oldPassword: string | null;
+  newPassword: string | null;
+
+  businessName: string | null;
+  businessEmail: string | null;
+  businessDomain: string | null;
+  isVerified: boolean | null;
 }
