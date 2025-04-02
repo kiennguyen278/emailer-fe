@@ -280,6 +280,15 @@ export class DashboardComponent {
     }
   }
 
+  /**
+   * Vì sao dùng ngưỡng 30 và 15?
+   * ≥ 30: tương đương khoảng 6 click (×3) hoặc 15 open, hoặc kết hợp → rất tốt
+   *
+   * 15–29: mức trung bình → mở ổn, click còn thấp
+   *
+   * < 15: hầu như không mở hoặc không click → cần cải thiện
+   * @param email
+   */
   getContentPerformanceClass(email: any): string {
     const score = email.engagementScore ?? email.score ?? 0;
     if (score >= 30) {
