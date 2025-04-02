@@ -19,7 +19,7 @@ export class MainComponent implements OnInit {
 
   // SMTP
   smtpForm!: FormGroup;
-  useCustomSmtp = false;
+  useCustomSmtp = true;
 
   // Password
   passwordForm!: FormGroup;
@@ -109,8 +109,22 @@ export class MainComponent implements OnInit {
     });
   }
 
-  onToggleCustomSmtp(useCustom: boolean) {
-    this.useCustomSmtp = useCustom;
+  onToggleCustomSmtp(enabled: boolean): void {
+    this.useCustomSmtp = enabled;
+    setTimeout(() => {
+      if (enabled) {
+        this.smtpForm.enable(); // đảm bảo enable sau khi form hiển thị
+      } else {
+        this.smtpForm.reset();
+        this.smtpForm.disable();
+      }
+    });
+  }
+
+
+  onTestSmtp(): void {
+    const data = this.smtpForm.value;
+    // TODO: gọi API kiểm tra kết nối SMTP
   }
 
   saveSmtpSetting() {
@@ -141,6 +155,10 @@ export class MainComponent implements OnInit {
       next: () => this.message.success('✅ Mật khẩu đã được đổi!'),
       error: err => this.message.error('❌ ' + err?.error?.message || 'Đổi mật khẩu thất bại')
     });
+  }
+
+  isSmtpFormVisible(): boolean {
+    return !!this.useCustomSmtp;
   }
 
 }
