@@ -31,6 +31,7 @@ import {getListSubscribers, getListTags} from "../../state/actions";
 export class SubscriberComponent extends BaseCrudListComponent implements OnInit, OnDestroy {
 
   @ViewChild('modalEditSubscriber') modalEditSubscriber!: TemplateRef<any>;
+  @ViewChild('modalViewSubscriber') modalViewSubscriber!: TemplateRef<any>;
 
   @ViewChild('modalImportSubscriber') modalImportSubscriber!: TemplateRef<any>;
 
@@ -314,6 +315,13 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   showViewModal(subscriber: any) {
     console.log('Subscriber được xem chi tiết:', subscriber); // để debug
+
+    this.modal.create({
+      nzTitle: 'Chi tiết Subscriber',
+      nzContent: this.modalViewSubscriber,
+      nzWidth: 1024,
+      nzFooter: null
+    });
 
     //this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
     this.isViewModalVisible = true;

@@ -20,3 +20,20 @@ export interface SaveEmailTemplateRequest {
   htmlBody: string,
   textBody: string,
 }
+
+
+
+
+export interface EmailCampaignDTO {
+  id: number,
+  userId: number,
+  name: string,
+  description: string,
+  status: string,
+  subject: string,
+  htmlBody: string,
+  textBody: string,
+  scheduledTime: string,
+  createdAt: string,
+  updatedAt: string
+}

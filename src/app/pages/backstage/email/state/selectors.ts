@@ -19,3 +19,18 @@ export const selectErrorGetEmailTemplateList = createSelector(
 );
 
 
+
+
+export const selectDataGetEmailCampaignList = createSelector(
+  selectEmailState,
+  (state) => state.emailCampaignList.data || []
+);
+export const selectLoadingGetEmailCampaignList = createSelector(
+  selectEmailState,
+  (state) => state.emailCampaignList.loading
+);
+export const selectErrorGetEmailCampaignList = createSelector(
+  selectEmailState,
+  (state) => state.emailCampaignList.error
+);
+

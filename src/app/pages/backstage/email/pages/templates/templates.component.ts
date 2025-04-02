@@ -35,7 +35,6 @@ export class TemplatesComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private modal: NzModalService,
-    private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private notification: NotificationService,
     private emailService: EmailService,
