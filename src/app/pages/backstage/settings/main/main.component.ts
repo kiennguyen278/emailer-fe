@@ -61,6 +61,11 @@ export class MainComponent implements OnInit {
             businessEmail: data.businessEmail
           });
           this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+
+          if (this.emailVerificationStatus.isVerified) {
+            this.businessForm.disable(); // ✅ Quan trọng: disable input tại đây
+          }
+
         } else {
           console.warn('Không có dữ liệu thông tin doanh nghiệp');
         }
@@ -72,7 +77,12 @@ export class MainComponent implements OnInit {
   }
 
   saveBusinessInfo() {
-    if (this.businessForm.invalid) return;
+    if (this.passwordForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.passwordForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+
     this.settingsService.updateBusinessInfo(this.businessForm.value).subscribe({
       next: () => this.message.success('✅ Thông tin doanh nghiệp đã được lưu!'),
       error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu thông tin')
@@ -87,7 +97,6 @@ export class MainComponent implements OnInit {
       smtpPort: [587, [Validators.required, Validators.min(1)]],
       username: ['', Validators.required],
       password: ['', Validators.required],
-      type: ['CUSTOM']
     });
   }
 
@@ -128,7 +137,13 @@ export class MainComponent implements OnInit {
   }
 
   saveSmtpSetting() {
-    if (!this.useCustomSmtp || this.smtpForm.invalid) return;
+    if (!this.useCustomSmtp) return;
+    if (this.passwordForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.passwordForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+
     this.settingsService.saveSmtpSetting(this.smtpForm.value).subscribe({
       next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
       error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
@@ -139,13 +154,18 @@ export class MainComponent implements OnInit {
   initPasswordForm() {
     this.passwordForm = this.fb.group({
       oldPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
   }
 
   changePassword() {
-    if (this.passwordForm.invalid) return;
+    if (this.passwordForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.passwordForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+
     const { newPassword, confirmPassword } = this.passwordForm.value;
     if (newPassword !== confirmPassword) {
       this.message.error('❌ Mật khẩu nhập lại không khớp!');

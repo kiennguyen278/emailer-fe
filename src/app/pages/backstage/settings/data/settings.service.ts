@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {SmtpSetting, UserDTO} from './setting.model';
+import {SmtpSetting, BusinessInfo,PasswordChange} from './setting.model';
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
 
@@ -9,11 +9,11 @@ export class SettingsService extends BaseApiService {
   private api = this.buildUrl('/settings');
 
   // Business Info
-  getBusinessInfo(): Observable<ApiResponse<UserDTO>> {
-    return this.http.get<ApiResponse<UserDTO>>(`${this.api}/business`);
+  getBusinessInfo(): Observable<ApiResponse<BusinessInfo>> {
+    return this.http.get<ApiResponse<BusinessInfo>>(`${this.api}/business`);
   }
 
-  updateBusinessInfo(data: UserDTO): Observable<ApiResponse<string>> {
+  updateBusinessInfo(data: BusinessInfo): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>(`${this.api}/business`, data);
   }
 
@@ -27,7 +27,7 @@ export class SettingsService extends BaseApiService {
   }
 
   // Password
-  changePassword(data: UserDTO): Observable<ApiResponse<string>> {
+  changePassword(data: PasswordChange): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>(`${this.api}/change-password`, data);
   }
 }

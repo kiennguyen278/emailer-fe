@@ -4,17 +4,17 @@ export interface SmtpSetting {
   smtpPort: number;
   username: string;
   password: string;
-  type: 'CUSTOM' | 'SYSTEM';
 }
 
-export interface UserDTO {
-  userId?: number;
-  status?: 'ACTIVE' | 'INACTIVE';
-  oldPassword?: string;
-  newPassword?: string;
+export interface BusinessInfo {
+  businessName: string;
+  businessEmail: string;
+  businessDomain: string;
+  isVerified?: boolean; // trạng thái xác minh email
+}
 
-  businessName?: string;
-  businessEmail?: string;
-  businessDomain?: string;
-  isVerified?: boolean;
+export interface PasswordChange {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
