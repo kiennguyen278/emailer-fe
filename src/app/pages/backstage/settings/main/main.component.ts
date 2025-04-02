@@ -47,8 +47,8 @@ export class MainComponent implements OnInit {
   // -------------------- BUSINESS INFO --------------------
   initBusinessForm() {
     this.businessForm = this.fb.group({
-      bizName: ['', Validators.required],
-      bizEmail: ['', [Validators.required, Validators.email]]
+      businessName: ['', Validators.required],
+      businessEmail: ['', [Validators.required, Validators.email]]
     });
   }
 

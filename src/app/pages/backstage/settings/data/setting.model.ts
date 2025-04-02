@@ -1,6 +1,7 @@
 export interface BusinessSetting {
-  bizName: string;
-  bizEmail: string;
+  businessName: string;
+  businessEmail: string;
+  businessDomain: string;
   isVerified?: boolean; // trạng thái xác minh email
 }
 
