@@ -17,6 +17,7 @@ import {
 import {getListEmailTemplate} from "../../state/actions";
 import {DATE_TIME_FORMAT} from "@core/constants";
 import {TemplateFormComponent} from "./template-form/template-form.component";
+import {EmailService} from "../../state/service";
 
 @UntilDestroy()
 @Component({
@@ -37,6 +38,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private notification: NotificationService,
+    private emailService: EmailService,
   ) {}
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
@@ -59,16 +61,17 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       nzWidth: '200px',
     },
     {
-      key: 'subject',
-      header: 'Subject',
-      nzWidth: '200px',
-    },
-    {
       key: 'createdAt',
       header: 'Ngày tạo',
       nzWidth: '100px',
       tdClass: 'text-center',
       pipe: 'template',
+    },
+    {
+      key: 'status',
+      header: 'Trạng thái',
+      nzWidth: '100px',
+      tdClass: 'text-center',
     },
     {
       key: 'actions',
@@ -138,27 +141,26 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       nzTitle: `Bạn có chắc muốn xoá email template "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
-      nzOnOk: () => this.deleteTag(item.id)
+      nzOnOk: () => this.deleteEmailTemplate(item.id)
     });
   }
 
-  deleteTag(id: number): void {
-    // this.subscribersService.delete(id).subscribe({
-    //   next: () => {
-    //     this.notification.open({
-    //       type: 'success',
-    //       content: 'Đã xoá tag'
-    //     });
-    //
-    //     this.loadTags();
-    //   },
-    //   error: () => {
-    //     this.notification.open({
-    //       type: 'error',
-    //       content: 'Xoá tag thất bại'
-    //     });
-    //   }
-    // });
+  deleteEmailTemplate(id: number) {
+    this.emailService.deleteMailTemplate(id).subscribe({
+      next: () => {
+        this.notification.open({
+          type: 'success',
+          content: 'Đã xoá email template'
+        });
+        this.loadItems();
+      },
+      error: () => {
+        this.notification.open({
+          type: 'error',
+          content: 'Xoá email template thất bại'
+        });
+      }
+    });
   }
 
   ngOnDestroy() {

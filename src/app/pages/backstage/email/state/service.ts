@@ -32,10 +32,10 @@ export class EmailService extends BaseApiService{
     }
   }
 
-  // delete(id: number): Observable<any> {
-  //   const url = this.buildUrl(`/tags/${id}`);
-  //   return this.http.delete<ApiResponse<any>>(url);
-  // }
+  deleteMailTemplate(id: number): Observable<any> {
+    const url = this.buildUrl(`/email-templates/${id}`);
+    return this.http.delete<ApiResponse<any>>(url);
+  }
   //
   //
   //
