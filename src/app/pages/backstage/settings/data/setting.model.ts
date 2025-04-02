@@ -11,6 +11,7 @@ export interface BusinessInfo {
   businessEmail: string;
   businessDomain: string;
   isVerified?: boolean; // trạng thái xác minh email
+  useCustomSmtp?: boolean;
 }
 
 export interface PasswordChange {

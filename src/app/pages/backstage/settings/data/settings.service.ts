@@ -30,4 +30,15 @@ export class SettingsService extends BaseApiService {
   changePassword(data: PasswordChange): Observable<ApiResponse<string>> {
     return this.http.put<ApiResponse<string>>(`${this.api}/change-password`, data);
   }
+
+  updateCustomSmtpStatus(useCustomSmtp: boolean): Observable<ApiResponse<string>> {
+    const params = { useCustomSmtp: String(useCustomSmtp) }; // ⚠️ convert to string
+    return this.http.put<ApiResponse<string>>(
+      `${this.api}/updateCustomSMTP`,
+      null,
+      { params }
+    );
+  }
+
+
 }

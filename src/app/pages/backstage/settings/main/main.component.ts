@@ -19,7 +19,7 @@ export class MainComponent implements OnInit {
 
   // SMTP
   smtpForm!: FormGroup;
-  useCustomSmtp = true;
+  useCustomSmtp: boolean | undefined = true;
 
   // Password
   passwordForm!: FormGroup;
@@ -61,6 +61,8 @@ export class MainComponent implements OnInit {
             businessEmail: data.businessEmail
           });
           this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+
+          this.useCustomSmtp = data.useCustomSmtp;
 
           if (this.emailVerificationStatus.isVerified) {
             this.businessForm.disable(); // ✅ Quan trọng: disable input tại đây
@@ -120,16 +122,22 @@ export class MainComponent implements OnInit {
 
   onToggleCustomSmtp(enabled: boolean): void {
     this.useCustomSmtp = enabled;
-    setTimeout(() => {
-      if (enabled) {
-        this.smtpForm.enable(); // đảm bảo enable sau khi form hiển thị
-      } else {
-        this.smtpForm.reset();
-        this.smtpForm.disable();
+    this.settingsService.updateCustomSmtpStatus(enabled).subscribe({
+      next: res => {
+        this.message.success(res.message || 'Cập nhật trạng thái SMTP thành công!');
+      },
+      error: err => {
+        this.message.error('Lỗi khi cập nhật trạng thái SMTP!');
       }
     });
-  }
 
+    if (!enabled) {
+      this.smtpForm.reset();
+      this.smtpForm.disable();
+    } else {
+      setTimeout(() => this.smtpForm.enable());
+    }
+  }
 
   onTestSmtp(): void {
     const data = this.smtpForm.value;
