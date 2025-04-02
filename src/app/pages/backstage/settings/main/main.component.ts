@@ -106,15 +106,12 @@ export class MainComponent implements OnInit {
     this.settingsService.getSmtpSetting().subscribe({
       next: (res) => {
         if (res.success && res.data) {
-          this.useCustomSmtp = true;
           this.smtpForm.patchValue(res.data);
         } else {
-          this.useCustomSmtp = false;
           console.warn('Không tìm thấy cấu hình SMTP');
         }
       },
       error: (err) => {
-        this.useCustomSmtp = false;
         console.error('Lỗi khi load SMTP:', err);
       }
     });
@@ -140,15 +137,28 @@ export class MainComponent implements OnInit {
   }
 
   onTestSmtp(): void {
-    const data = this.smtpForm.value;
-    // TODO: gọi API kiểm tra kết nối SMTP
+    if (this.smtpForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.smtpForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+
+    this.settingsService.testSmtpConnection(this.smtpForm.value).subscribe({
+      next: (res) => {
+        this.message.success(res.message || '✅ Kết nối đến SMTP thành công!');
+      },
+      error: err => {
+        this.message.error(err?.error?.message || '❌ Lỗi khi kiểm tra kết nối SMTP');
+      }
+    });
   }
+
 
   saveSmtpSetting() {
     if (!this.useCustomSmtp) return;
-    if (this.passwordForm.invalid) {
+    if (this.smtpForm.invalid) {
       this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
-      this.passwordForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      this.smtpForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
       return;
     }
 

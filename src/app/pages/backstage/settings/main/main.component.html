@@ -64,17 +64,23 @@
         </nz-form-item>
 
         <form *ngIf="isSmtpFormVisible()" [formGroup]="smtpForm" nz-form [nzLayout]="'vertical'">
+
+          <nz-form-label>Tên nhà cung cấp (Provider)</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="provider" placeholder="VD: Gmail, Sendinblue, Outlook..." />
+          </nz-form-control>
+
           <nz-form-item>
             <nz-form-label>SMTP Host</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="host" placeholder="smtp.example.com" />
+              <input nz-input formControlName="smtpServer" placeholder="smtp.example.com" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
             <nz-form-label>SMTP Port</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="port" type="number" placeholder="587" />
+              <input nz-input formControlName="smtpPort" type="number" placeholder="587" />
             </nz-form-control>
           </nz-form-item>
 

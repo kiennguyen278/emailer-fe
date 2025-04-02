@@ -23,8 +23,13 @@ export class SettingsService extends BaseApiService {
   }
 
   saveSmtpSetting(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
-    return this.http.put<ApiResponse<SmtpSetting>>(`${this.api}/smtp`, data);
+    return this.http.put<ApiResponse<SmtpSetting>>(`${this.api}/saveSmtp`, data);
   }
+
+  testSmtpConnection(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
+    return this.http.put<ApiResponse<SmtpSetting>>(`${this.api}/smtp/testSmtpConnection`, data);
+  }
+
 
   // Password
   changePassword(data: PasswordChange): Observable<ApiResponse<string>> {
