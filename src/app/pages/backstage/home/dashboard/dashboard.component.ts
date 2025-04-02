@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
-import {DateUtil} from "@core/utils/date.util";
 
 @Component({
   selector: 'app-dashboard',
@@ -21,20 +20,22 @@ export class DashboardComponent {
 
   trendRange = '30d'; // mặc định là 30 ngày
 
+
+  advancedRange = '30d'; // mặc định là 30 ngày
+  listQualityChartOptions: any;
+  listQualityAnalysis: string = '';
+  isAdvancedLoading = false;
   advancedStats = {
-    bounceRate: 5,
-    unsubscribeRate: 7,
-    complaintRate: 3,
-    activeRate: 90,
+    bounceRate: 0,
+    unsubscribeRate: 0,
+    complaintRate: 0,
+    activeRate: 0,
     topEmails: [],
     topSubscribers: []
   };
-  advancedRange = '30d'; // mặc định là 30 ngày
+
 
   analysisTexts: string[] = [];
-
-  listQualityChartOptions: any;
-  listQualityAnalysis: string = '';
 
   constructor(private dashboardService: DashboardService) {}
 
@@ -189,120 +190,37 @@ export class DashboardComponent {
     this.loadAdvancedStats(range);
   }
 
-  loadAdvancedStats(range: string) {
-    // Tạm mock cứng dữ liệu cho từng mốc thời gian
-    const days = DateUtil.convertToDays(range);
-    if (days === 7) {
-      this.advancedStats = {
-        bounceRate: 0.3,
-        unsubscribeRate: 0.8,
-        complaintRate: 0.1,
-        activeRate: 88,
-        topEmails: [
-          { subject: 'Chào mừng bạn mới', openRate: 58, clickRate: 22 },
-          { subject: 'Ưu đãi đặc biệt 7 ngày', openRate: 52, clickRate: 19 }
-        ],
+  loadAdvancedStats(period: string) {
 
-        topSubscribers: [
-          {
-            name: 'Nguyễn Văn A',
-            email: 'a@gmail.com',
-            openCount: 15,
-            clickCount: 7,
-            score: 29
-          },
-          {
-            name: 'Lê Thị B',
-            email: 'b@yahoo.com',
-            openCount: 10,
-            clickCount: 8,
-            score: 26
-          },
+    this.isAdvancedLoading = true;
+    // 1. Subscriber Quality
+    this.dashboardService.getSubscriberQuality(period).subscribe(res => {
+      if (res.success) {
+        const s = res.data;
+        this.advancedStats.bounceRate = s.bouncedSubscribers;
+        this.advancedStats.unsubscribeRate = s.unsubscribedSubscribers;
+        this.advancedStats.complaintRate = s.complainedSubscribers;
 
-          {
-            name: 'Lê Thị C',
-            email: 'c@yahoo.com',
-            openCount: 9,
-            clickCount: 11,
-            score: 31
-          }
-        ]
+        this.advancedStats.activeRate = Math.max(0, 100 - (s.bouncedSubscribers + s.unsubscribedSubscribers + s.complainedSubscribers)
+        );
 
-      };
-    } else if (days === 90) {
-      this.advancedStats = {
-        bounceRate: 1.1,
-        unsubscribeRate: 1.5,
-        complaintRate: 0.5,
-        activeRate: 76,
-        topEmails: [
-          { subject: 'Tổng hợp quý I', openRate: 48, clickRate: 18 },
-          { subject: 'Chào năm mới 2025', openRate: 60, clickRate: 25 }
-        ],
-        topSubscribers: [
-          {
-            name: 'Nguyễn Văn A',
-            email: 'a@gmail.com',
-            openCount: 15,
-            clickCount: 7,
-            score: 29
-          },
-          {
-            name: 'Lê Thị B',
-            email: 'b@yahoo.com',
-            openCount: 10,
-            clickCount: 8,
-            score: 26
-          },
+        this.listQualityAnalysis = this.analyzeListQuality(this.advancedStats);
+        this.updatePieChartOptions();
+      }
+    });
 
-          {
-            name: 'Lê Thị C',
-            email: 'c@yahoo.com',
-            openCount: 9,
-            clickCount: 11,
-            score: 31
-          }
-        ]
-      };
-    } else {
-      this.advancedStats = {
-        bounceRate: 0.7,
-        unsubscribeRate: 1.0,
-        complaintRate: 0.3,
-        activeRate: 84,
-        topEmails: [
-          { subject: 'Ưu đãi tháng 3', openRate: 44, clickRate: 29 },
-          { subject: 'Tin tức sản phẩm', openRate: 39, clickRate: 17 }
-        ],
-        topSubscribers: [
-          {
-            name: 'Nguyễn Văn A',
-            email: 'a@gmail.com',
-            openCount: 15,
-            clickCount: 7,
-            score: 29
-          },
-          {
-            name: 'Lê Thị B',
-            email: 'b@yahoo.com',
-            openCount: 10,
-            clickCount: 8,
-            score: 26
-          },
-
-          {
-            name: 'Lê Thị C',
-            email: 'c@yahoo.com',
-            openCount: 9,
-            clickCount: 11,
-            score: 31
-          }
-        ]
-      };
-    }
-
-    this.listQualityAnalysis = this.analyzeListQuality(this.advancedStats);
-    this.updatePieChartOptions();
+    // 2. Top email theo tương tác
+    this.dashboardService.getEmailEngagementReport(period).subscribe(res => {
+      if (res.success) {
+        // @ts-ignore
+        this.advancedStats.topEmails = res.data.map(e => ({
+          subject: e.subject,
+          openCount: e.openCount,
+          clickCount: e.clickCount,
+          engagementScore: e.engagementScore
+        }));
+      }
+    });
   }
 
   updatePieChartOptions() {
@@ -352,12 +270,10 @@ export class DashboardComponent {
   }
 
   getContentPerformanceAnalysis(email: any): string {
-    const open = email.openRate;
-    const click = email.clickRate;
-
-    if (open >= 40 && click >= 10) {
+    const score = email.engagementScore ?? email.score ?? 0;
+    if (score >= 30) {
       return '✅ Nội dung hiệu quả, tỷ lệ phản hồi tốt.';
-    } else if (open >= 20 && click >= 5) {
+    } else if (score >= 15) {
       return '⚠️ Hiệu suất trung bình, có thể cải thiện.';
     } else {
       return '🚨 Nội dung yếu, nên điều chỉnh tiêu đề hoặc CTA.';
@@ -365,12 +281,10 @@ export class DashboardComponent {
   }
 
   getContentPerformanceClass(email: any): string {
-    const open = email.openRate;
-    const click = email.clickRate;
-
-    if (open >= 40 && click >= 10) {
+    const score = email.engagementScore ?? email.score ?? 0;
+    if (score >= 30) {
       return 'trend-up';
-    } else if (open >= 20 && click >= 5) {
+    } else if (score >= 15) {
       return 'trend-stable';
     } else {
       return 'trend-down';

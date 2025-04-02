@@ -50,7 +50,7 @@ export class DashboardService extends BaseApiService {
     const params = new HttpParams()
       .set('period', period);
     return this.http.get<ApiResponse<PotentialSubscriber[]>>(
-      `${this.BASE_URL}//top-potential-subscribers`, { params }
+      `${this.BASE_URL}/top-potential-subscribers`, { params }
     );
   }
 

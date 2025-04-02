@@ -138,6 +138,7 @@
         </div>
 
         <div nz-row [nzGutter]="16">
+
           <!-- A. Chất lượng danh sách -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
             <div class="summary-box">
@@ -146,13 +147,14 @@
               <div echarts [options]="listQualityChartOptions" class="chart-pie-container"></div>
               <div class="list-analysis-text">
                 📊 <strong>Phân tích:</strong> {{ listQualityAnalysis }}
-                <p class="time-note">📆 Phân tích trong vòng <strong>{{ advancedRange }} </strong> ngày gần nhất</p>
+                <p class="time-note">
+                  📆 Phân tích trong vòng <strong>{{ advancedRange }}</strong> gần nhất
+                </p>
               </div>
-
             </div>
           </div>
 
-          <!-- B2. Top khách hàng tiềm năng -->
+          <!-- B. Top khách hàng tiềm năng -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
             <div class="summary-box">
               <div class="summary-title">Top khách hàng tiềm năng</div>
@@ -164,11 +166,10 @@
                 </li>
               </ul>
               <p class="time-note">
-                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> ngày gần nhất
+                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> gần nhất
               </p>
             </div>
           </div>
-
 
           <!-- C. Hiệu suất nội dung -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
@@ -176,18 +177,18 @@
               <div class="summary-title">Hiệu suất nội dung</div>
               <ul class="performance-list">
                 <li *ngFor="let email of advancedStats.topEmails">
-                  <strong>{{ email.subject }}</strong><br>
-                  Mở: {{ email.openRate }}% – Click: {{ email.clickRate }}%<br>
+                  <strong>{{ email.subject }}</strong><br />
+                  Mở: {{ email.openCount }}% – Click: {{ email.clickCount }}%<br />
                   <span [ngClass]="getContentPerformanceClass(email)">
-                    {{ getContentPerformanceAnalysis(email) }}
-                  </span>
+              {{ getContentPerformanceAnalysis(email) }}
+            </span>
                 </li>
               </ul>
-
-              <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ advancedRange }} </strong> ngày gần nhất</p>
+              <p class="time-note">
+                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> gần nhất
+              </p>
             </div>
           </div>
-
         </div>
       </nz-tab>
 
