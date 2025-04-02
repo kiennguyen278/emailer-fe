@@ -236,16 +236,7 @@
 
 
 
-<ng-template #modalViewSubscriber let-modal>
-  <nz-modal [(nzVisible)]="isViewModalVisible"
-            [nzTitle]="'Chi tiết Subscriber'"
-            [nzFooter]="null"
-            [nzWidth]="800"
-            [nzMaskClosable]="true"
-            [nzClosable]="true"
-            [nzCentered]="true"
-            (nzOnCancel)="closeViewModal()">
-
+<ng-template #modalViewSubscriber>
     <div *ngIf="selectedSubscriber">
       <nz-tabset>
 
@@ -354,9 +345,7 @@
 
       </nz-tabset>
     </div>
-  </nz-modal>
 </ng-template>
 
-<ng-container *ngTemplateOutlet="modalViewSubscriber"></ng-container>
 
 
