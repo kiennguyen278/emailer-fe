@@ -13,11 +13,12 @@ export class DashboardComponent {
   lastClickTrend = 'STABLE';
 
   subscriberGrowthItems: any[] = [];
-  emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
-  selectedRange: number = 30;
 
+  performanceRange: number = 30; // mặc định là 30 ngày
+  emailPerformance = { totalSent: 0, openRate: 0, clickRate: 0 };
   emailPerformanceAnalysis: string = '';
 
+  trendRange = 30; // mặc định là 30 ngày
 
   advancedStats = {
     bounceRate: 5,
@@ -27,10 +28,7 @@ export class DashboardComponent {
     topEmails: [],
     topSubscribers: []
   };
-
   advancedRange = 30; // mặc định là 30 ngày
-  trendRange = 30; // mặc định là 30 ngày
-  performanceRange: number = 30; // mặc định là 30 ngày
 
   analysisTexts: string[] = [];
 
@@ -40,9 +38,6 @@ export class DashboardComponent {
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
-
-    console.log('Default performanceRange selected:', this.performanceRange); // kiểm tra log
-
     this.loadSubscriberGrowth();
     this.loadEmailTrend(this.trendRange);
     this.loadEmailPerformance(this.performanceRange);
@@ -51,13 +46,15 @@ export class DashboardComponent {
 
   loadSubscriberGrowth() {
     this.dashboardService.getSubscriberGrowth().subscribe((res) => {
-      const data = res.data;
-      this.subscriberGrowthItems = [
-        { label: 'Hôm nay', count: data.today.count, trend: data.today.trend },
-        { label: '7 ngày', count: data.last7Days.count, trend: data.last7Days.trend },
-        { label: '30 ngày', count: data.last30Days.count, trend: data.last30Days.trend },
-        { label: 'Tổng cộng', count: data.total.count, trend: data.total.trend }
-      ];
+      if (res.success) {
+        const data = res.data;
+        this.subscriberGrowthItems = [
+          { label: 'Hôm nay', count: data.today.count, trend: data.today.trend },
+          { label: '7 ngày', count: data.last7Days.count, trend: data.last7Days.trend },
+          { label: '30 ngày', count: data.last30Days.count, trend: data.last30Days.trend },
+          { label: 'Tổng cộng', count: data.total.count, trend: data.total.trend }
+        ];
+      }
     });
   }
 
@@ -68,76 +65,81 @@ export class DashboardComponent {
 
   loadEmailPerformance(days: number) {
     this.dashboardService.getEmailPerformance().subscribe((res) => {
-      const data = res.data.current;
-      this.emailPerformance = {
-        totalSent: data.totalSent,
-        openRate: data.openRate,
-        clickRate: data.clickRate
-      };
+      this.emailPerformanceAnalysis = "Chưa có kết quả phân tích";
+      if (res.success) {
+        const data = res.data.current;
+        this.emailPerformance = {
+          totalSent: data.totalSent,
+          openRate: data.openRate,
+          clickRate: data.clickRate
+        };
 
-      // ✅ Phân tích tự động
-      if (data.openRate >= 40 && data.clickRate >= 10) {
-        this.emailPerformanceAnalysis = 'Chiến dịch hoạt động hiệu quả với tỷ lệ phản hồi cao.';
-      } else if (data.openRate >= 20) {
-        this.emailPerformanceAnalysis = 'Tỷ lệ mở khá, nhưng cần cải thiện lời kêu gọi hành động.';
-      } else {
-        this.emailPerformanceAnalysis = 'Tỷ lệ mở thấp. Nên kiểm tra lại tiêu đề, thời gian gửi và nội dung.';
+        // ✅ Phân tích tự động
+        if (data.openRate >= 40 && data.clickRate >= 10) {
+          this.emailPerformanceAnalysis = 'Chiến dịch hoạt động hiệu quả với tỷ lệ phản hồi cao.';
+        } else if (data.openRate >= 20) {
+          this.emailPerformanceAnalysis = 'Tỷ lệ mở khá, nhưng cần cải thiện lời kêu gọi hành động.';
+        } else {
+          this.emailPerformanceAnalysis = 'Tỷ lệ mở thấp. Nên kiểm tra lại tiêu đề, thời gian gửi và nội dung.';
+        }
       }
+
     });
   }
 
-
   loadEmailTrend( days: number) {
     this.trendRange = days;
-    this.dashboardService.getEmailTrend().subscribe((response) => {
-      const data = response.data; // ✅ lấy mảng ra trước
+    this.dashboardService.getEmailTrend().subscribe((res) => {
 
-      const labels = data.map(item => 'Tuần ' + item.period);
-      const openRates = data.map(item => item.openRate);
-      const clickRates = data.map(item => item.clickRate);
+      if (res.success) {
 
-      this.engagementChartOptions = {
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['Open Rate', 'Click Rate'] },
-        xAxis: {
-          type: 'category',
-          data: labels
-        },
-        yAxis: {
-          type: 'value',
-          min: 0,
-          max: 100,
-          axisLabel: { formatter: '{value}%' }
-        },
-        series: [
-          {
-            name: 'Open Rate',
-            type: 'line',
-            data: openRates,
-            smooth: true
+        const data = res.data;
+
+        const labels = data.map(item => 'Tuần ' + item.period);
+        const openRates = data.map(item => item.openRate);
+        const clickRates = data.map(item => item.clickRate);
+
+        this.engagementChartOptions = {
+          tooltip: { trigger: 'axis' },
+          legend: { data: ['Open Rate', 'Click Rate'] },
+          xAxis: {
+            type: 'category',
+            data: labels
           },
-          {
-            name: 'Click Rate',
-            type: 'line',
-            data: clickRates,
-            smooth: true
-          }
-        ]
-      };
+          yAxis: {
+            type: 'value',
+            min: 0,
+            max: 100,
+            axisLabel: { formatter: '{value}%' }
+          },
+          series: [
+            {
+              name: 'Open Rate',
+              type: 'line',
+              data: openRates,
+              smooth: true
+            },
+            {
+              name: 'Click Rate',
+              type: 'line',
+              data: clickRates,
+              smooth: true
+            }
+          ]
+        };
 
-      // ✅ Lấy xu hướng từ tuần cuối để hiển thị mũi tên
-      const last = data[data.length - 1];
-      this.lastOpenTrend = last.openTrend;
-      this.lastClickTrend = last.clickTrend;
-      this.analysisTexts = this.getTrendAnalysisText(last);
+        // ✅ Lấy xu hướng từ tuần cuối để hiển thị mũi tên
+        const last = data[data.length - 1];
+        this.lastOpenTrend = last.openTrend;
+        this.lastClickTrend = last.clickTrend;
+        this.analysisTexts = this.getTrendAnalysisText(last);
+      }
 
-      console.log('lastClickTrend =', this.lastClickTrend); // phải là "DOWN" đúng chữ in hoa
     });
   }
 
   getTrendAnalysisText(last: any): string[] {
     const result: string[] = [];
-
     // Phân tích open rate
     if (last.openTrend === 'UP') {
       result.push(`Tỷ lệ mở tăng lên ${last.openRate}%. Chủ đề email có vẻ đang thu hút tốt hơn.`);
@@ -373,6 +375,5 @@ export class DashboardComponent {
       return 'trend-down';
     }
   }
-
 
 }

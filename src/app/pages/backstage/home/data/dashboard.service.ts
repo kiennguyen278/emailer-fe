@@ -1,128 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import {BaseApiService} from "@core/services/base-api.service";
+import {ApiResponse} from "@core/models/response.model";
+
+import {
+  SubscriberGrowthStats,
+  EmailPerformanceStats,
+  EmailTrendItem
+} from './dashboard.models';
 
 @Injectable({ providedIn: 'root' })
-export class DashboardService {
+export class DashboardService extends BaseApiService {
+  private readonly BASE_URL = this.buildUrl('/dashboard');
 
-  getSubscriberGrowth(): Observable<any> {
-    return of({
-      success: true,
-      message: 'Subscriber growth statistics',
-      data: {
-        today: {
-          count: 0,
-          compare: 0,
-          trend: 'STABLE'
-        },
-        last7Days: {
-          count: 0,
-          compare: 0,
-          trend: 'STABLE'
-        },
-        last30Days: {
-          count: 3,
-          compare: 3,
-          trend: 'UP'
-        },
-        total: {
-          count: 3,
-          compare: 0,
-          trend: 'STABLE'
-        }
-      }
-    });
+  /**
+   * Lấy thống kê tăng trưởng subscriber
+   */
+  getSubscriberGrowth(): Observable<ApiResponse<SubscriberGrowthStats>> {
+    return this.http.get<ApiResponse<SubscriberGrowthStats>>(`${this.BASE_URL}/subscriber-growth`);
   }
 
-  getEmailPerformance(): Observable<any> {
-    return of({
-      success: true,
-      message: 'Email performance statistics',
-      data: {
-        current: {
-          userId: null,
-          workflowId: null,
-          subscriberId: null,
-          campaignId: null,
-          sequenceId: null,
-          name: null,
-          createdAt: null,
-          totalSent: 18,
-          totalDelivered: 18,
-          totalOpened: 7,
-          totalUnopened: 0,
-          totalClicked: 5,
-          totalBounced: 0,
-          totalComplaint: 0,
-          totalUnsubscribed: 0,
-          openRate: 38.89,
-          unOpenRate: 0.0,
-          clickRate: 27.78,
-          bounceRate: 0.0,
-          complaintRate: 0.0,
-          unsubscribeRate: 0.0
-        },
-        previous: {
-          userId: null,
-          workflowId: null,
-          subscriberId: null,
-          campaignId: null,
-          sequenceId: null,
-          name: null,
-          createdAt: null,
-          totalSent: 3,
-          totalDelivered: 3,
-          totalOpened: 0,
-          totalUnopened: 0,
-          totalClicked: 1,
-          totalBounced: 0,
-          totalComplaint: 0,
-          totalUnsubscribed: 0,
-          openRate: 0.0,
-          unOpenRate: 0.0,
-          clickRate: 33.33,
-          bounceRate: 0.0,
-          complaintRate: 0.0,
-          unsubscribeRate: 0.0
-        }
-      }
-    });
+  /**
+   * Lấy hiệu suất email (so sánh kỳ hiện tại và kỳ trước)
+   */
+  getEmailPerformance(): Observable<ApiResponse<EmailPerformanceStats>> {
+    return this.http.get<ApiResponse<EmailPerformanceStats>>(`${this.BASE_URL}/email-performance`);
   }
 
-  getEmailTrend(): Observable<any> {
-    return of({
-      success: true,
-      message: 'Email trend weekly',
-      data: [
-        {
-          type: 'weekly',
-          period: '2025-12',
-          sent: 3,
-          delivered: 3,
-          opened: 0,
-          clicked: 1,
-          openRate: 0.0,
-          clickRate: 33.33,
-          openTrend: 'STABLE',
-          clickTrend: 'STABLE',
-          diffOpenRate: 0.0,
-          diffClickRate: 0.0
-        },
-        {
-          type: 'weekly',
-          period: '2025-13',
-          sent: 18,
-          delivered: 18,
-          opened: 7,
-          clicked: 5,
-          openRate: 38.89,
-          clickRate: 27.78,
-          openTrend: 'UP',
-          clickTrend: 'DOWN',
-          diffOpenRate: 38.89,
-          diffClickRate: -5.55
-        }
-      ]
-    });
+  /**
+   * Lấy xu hướng email ( 7d|30d|90d)
+   */
+  getEmailTrend(): Observable<ApiResponse<EmailTrendItem[]>> {
+    return this.http.get<ApiResponse<EmailTrendItem[]>>(`${this.BASE_URL}/email-trend`);
   }
-
 }
