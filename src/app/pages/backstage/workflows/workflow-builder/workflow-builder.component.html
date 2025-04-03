@@ -87,11 +87,53 @@
     </button>
   </div>
 
+
   <!-- Canvas -->
   <div class="flex-1 relative">
+    <!-- Preview Button -->
+    <div class="absolute top-4 right-4 z-10">
+      <button class="px-4 py-2 bg-gray-800 text-white rounded shadow" (click)="previewJSON()">👁 Xem JSON</button>
+    </div>
     <div id="drawflow" class="drawflow w-full h-full"></div>
   </div>
+
 </div>
 
 <!-- Keyboard Shortcut for Tab Navigation -->
 <div tabindex="0" (keydown.ArrowRight)="tab = 2" (keydown.ArrowLeft)="tab = 1"></div>
+
+
+<!-- Modal cấu hình Step -->
+<div *ngIf="showStepModal" class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+  <div class="bg-white rounded-lg p-6 w-[400px] shadow">
+    <h3 class="text-lg font-semibold mb-4">Cấu hình bước: {{ selectedStepType }}</h3>
+    <div *ngIf="selectedStepType === 'SEND_EMAIL'">
+      <label class="block mb-1">Chọn email template:</label>
+      <select class="w-full border p-2 rounded" [(ngModel)]="stepConfigValue">
+        <option *ngFor="let tmpl of emailTemplates" [value]="tmpl.id">{{ tmpl.name }}</option>
+      </select>
+    </div>
+    <div *ngIf="selectedStepType === 'ADD_TAG' || selectedStepType === 'REMOVE_TAG'">
+      <label class="block mb-1">Chọn tag:</label>
+      <select class="w-full border p-2 rounded" [(ngModel)]="stepConfigValue">
+        <option *ngFor="let tag of tags" [value]="tag.id">{{ tag.name }}</option>
+      </select>
+    </div>
+    <div *ngIf="selectedStepType === 'ADD_TO_SEQUENCE'">
+      <label class="block mb-1">Chọn sequence:</label>
+      <select class="w-full border p-2 rounded" [(ngModel)]="stepConfigValue">
+        <option *ngFor="let seq of sequences" [value]="seq.id">{{ seq.name }}</option>
+      </select>
+    </div>
+    <div *ngIf="selectedStepType === 'WAIT'">
+      <label class="block mb-1">Số ngày chờ:</label>
+      <select class="w-full border p-2 rounded" [(ngModel)]="stepConfigValue">
+        <option *ngFor="let day of [1, 2, 3, 5, 7, 10]" [value]="day">{{ day }} ngày</option>
+      </select>
+    </div>
+    <div class="text-right mt-4">
+      <button class="px-4 py-2 bg-gray-400 text-white rounded mr-2" (click)="closeStepModal()">Hủy</button>
+      <button class="px-4 py-2 bg-blue-600 text-white rounded" (click)="confirmStepConfig()">Lưu</button>
+    </div>
+  </div>
+</div>

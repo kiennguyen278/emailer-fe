@@ -61,6 +61,23 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   ];
 
+  showPreviewButton = true;
+  showStepModal = false;
+  selectedStepId = '';
+  selectedStepType = '';
+  stepConfigValue: any = '';
+
+  emailTemplates = [
+    { id: 1, name: 'Chào mừng' },
+    { id: 2, name: 'Giới thiệu sản phẩm' }
+  ];
+
+  sequences = [
+    { id: 7, name: 'Chuỗi chăm sóc 7 ngày' },
+    { id: 30, name: 'Chuỗi tương tác 30 ngày' }
+  ];
+
+
   ngOnInit(): void {
 
     const savedTriggers = localStorage.getItem('workflow_triggers');
@@ -150,7 +167,10 @@ export class WorkflowBuilderComponent implements OnInit {
 
 
   addNode(type: string) {
+    const id = type + '_' + new Date().getTime();
     const data = { label: type };
+    const html = `<div class='node hoverable' id='${id}' data-node-id='${id}'>${type}</div>`;
+
     this.editor.addNode(
       type,
       1,
@@ -159,8 +179,79 @@ export class WorkflowBuilderComponent implements OnInit {
       100 + Math.floor(Math.random() * 200),
       type,
       data,
-      `<div class='node'>${type}</div>`
+      html
     );
+
+    // Add highlight + open modal behavior
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', () => {
+          document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+          el.classList.add('selected');
+          this.openStepModal(id, type);
+        });
+      }
+    }, 100);
   }
+
+
+  getLabelForStep(type: string, value: any): string {
+    if (type === 'SEND_EMAIL') {
+      const email = this.emailTemplates.find(t => t.id == value);
+      return email ? email.name : `ID ${value}`;
+    }
+    if (type === 'ADD_TAG' || type === 'REMOVE_TAG') {
+      const tag = this.tags.find(t => t.id == value);
+      return tag ? tag.name : `Tag #${value}`;
+    }
+    if (type === 'ADD_TO_SEQUENCE') {
+      const seq = this.sequences.find(s => s.id == value);
+      return seq ? seq.name : `Sequence #${value}`;
+    }
+    if (type === 'WAIT') {
+      return `${value} ngày`;
+    }
+    return value;
+  }
+
+  previewJSON() {
+    const json = {
+      triggers: this.triggerConditions,
+      flow: this.editor?.export() || {}
+    };
+    alert(JSON.stringify(json, null, 2));
+  }
+
+  openStepModal(id: string, type: string) {
+    this.selectedStepId = id;
+    this.selectedStepType = type;
+    this.stepConfigValue = '';
+    this.showStepModal = true;
+  }
+
+  closeStepModal() {
+    this.showStepModal = false;
+    this.selectedStepId = '';
+    this.selectedStepType = '';
+    this.stepConfigValue = '';
+  }
+
+  confirmStepConfig() {
+    const nodeId = this.selectedStepId.split('_')[1];
+    const nodeData = this.editor.getNodeFromId(nodeId);
+    if (nodeData) {
+      nodeData.data.config = this.stepConfigValue;
+
+      // Cập nhật lại label hiển thị trên canvas
+      const displayText = `${this.selectedStepType}: ${this.getLabelForStep(this.selectedStepType, this.stepConfigValue)}`;
+      const el = document.getElementById(this.selectedStepId);
+      if (el) {
+        el.innerText = displayText;
+      }
+    }
+    this.closeStepModal();
+  }
+
 
 }
