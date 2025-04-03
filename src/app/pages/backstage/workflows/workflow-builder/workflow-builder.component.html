@@ -1,105 +1,95 @@
-<!-- workflow-builder.component.html -->
-<div class="workflow-page">
+<div class="tabs-container border-b p-4">
+  <ul class="flex justify-center">
+    <li class="mx-4 cursor-pointer" [class.font-bold]="tab === 1" (click)="tab = 1">1. Trigger</li>
+    <li class="mx-4 cursor-pointer" [class.font-bold]="tab === 2" (click)="nextTab()">2. Steps</li>
+  </ul>
+</div>
 
-  <div class="mode-banner" *ngIf="workflowId">
-    ✏️ <strong>Chế độ chỉnh sửa:</strong> Đang cập nhật workflow <b>{{ workflowName }}</b>
-  </div>
-
-  <!-- Step header -->
-  <div class="workflow-header-step">
-    <div [class.active]="currentStep === 1" (click)="goToStep(1)">1️⃣ Cấu hình Trigger</div>
-    <div [class.active]="currentStep === 2"
-         [class.disabled]="currentStep === 1"
-         (click)="goToStep(2)">2️⃣ Thiết kế Workflow</div>
-  </div>
-
-
-  <!-- Thân màn hình chia theo step -->
-  <div class="workflow-body">
-    <!-- Left Panel (chỉ hiện khi bước 2) -->
-    <div class="left-panel" *ngIf="currentStep === 2">
+<!-- Step 1: Trigger Builder -->
+<div *ngIf="tab === 1" class="max-w-3xl mx-auto px-4">
+  <div class="bg-white p-6 rounded shadow mb-6">
+    <h3 class="text-lg font-semibold mb-4">➕ Thêm điều kiện</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <h3>🧩 Thêm Step</h3>
-        <div class="step-buttons">
-          <button (click)="addNode('send_email')">📧 Gửi Email</button>
-          <button (click)="addNode('delay')">⏱️ Đợi</button>
-          <button (click)="addNode('add_tag')">🏷️ Thêm Tag</button>
-          <button (click)="addNode('remove_tag')">❌ Xoá Tag</button>
-          <button (click)="addNode('add_to_sequence')">📥 Add to Sequence</button>
-        </div>
-      </div>
-      <div class="action-buttons">
-        <button (click)="createWorkflow()">✅ Tạo Workflow</button>
-        <button (click)="resetWorkflow()">🔄 Reset</button>
-      </div>
-    </div>
-
-    <!-- Canvas chính -->
-    <div class="drawflow" #drawflowElement>
-      <!-- Step 1: Trigger Panel -->
-      <div class="trigger-panel" *ngIf="currentStep === 1">
-        <h4>🎯 Cấu hình Trigger START</h4>
-
-        <label>Tên Workflow:</label>
-        <input type="text" [(ngModel)]="workflowName" placeholder="Nhập tên workflow..." />
-
-        <label>Loại điều kiện:</label>
-        <select [(ngModel)]="newTrigger.conditionType">
-          <option value="">-- Chọn điều kiện --</option>
+        <label class="block mb-1">Loại điều kiện:</label>
+        <select class="w-full border p-2 rounded" [(ngModel)]="newTrigger.conditionType">
           <option *ngFor="let t of triggerTypes" [value]="t.value">{{ t.label }}</option>
         </select>
-
-        <div *ngIf="newTrigger.conditionType === 'TAG'">
-          <label>Tag:</label>
-          <select [value]="parsedTagId" (change)="handleTagChange($event)">
-            <option *ngFor="let tag of availableTags" [value]="tag.id">{{ tag.name }}</option>
-          </select>
-        </div>
-
-        <div *ngIf="newTrigger.conditionType === 'INACTIVE'">
-          <label>Số ngày không hoạt động:</label>
-          <input type="number" [value]="parsedDays" (input)="handleInactiveChange($event)" />
-        </div>
-
-        <div *ngIf="newTrigger.conditionType === 'INTERACTION'">
-          <label>Hành động:</label>
-          <select [value]="parsedAction" (change)="handleInteractionChange($event)">
-            <option value="OPEN">Mở Email</option>
-            <option value="CLICK">Click Link</option>
-          </select>
-        </div>
-
-        <div *ngIf="newTrigger.conditionType === 'SUBSCRIBED_BEFORE'">
-          <label>Ngày đăng ký trước:</label>
-          <input type="date" [value]="parsedDate" (change)="handleDateChange($event)" />
-        </div>
-
-        <label>Logic:</label>
-        <select [(ngModel)]="newTrigger.logicOperator">
+      </div>
+      <div>
+        <label class="block mb-1">Logic:</label>
+        <select class="w-full border p-2 rounded" [(ngModel)]="newTrigger.logicOperator">
           <option value="AND">AND</option>
           <option value="OR">OR</option>
         </select>
+      </div>
 
-        <button (click)="addOrUpdateTrigger()">
-          {{ editIndex !== null ? '✏️ Cập nhật' : '➕ Thêm điều kiện' }}
-        </button>
-
-        <!-- ✅ Preview trigger hiển thị rõ ràng -->
-        <div class="trigger-preview" *ngIf="triggerConditions.length">
-          <div *ngFor="let trig of triggerConditions; let i = index" class="trigger-item">
-            <span class="type">{{ trig.conditionType }}</span>
-            <span class="logic">({{ trig.logicOperator }})</span>
-            <span class="data">{{ getTriggerLabel(trig) }}</span>
-            <button (click)="editTrigger(i)">✏️</button>
-            <button (click)="removeTrigger(i)">❌</button>
-          </div>
+      <ng-container *ngIf="selectedTriggerType">
+        <div *ngFor="let field of selectedTriggerType.fields" class="col-span-2">
+          <label class="block mb-1">{{ field.label }}</label>
+          <select *ngIf="field.type === 'select'" class="w-full border p-2 rounded"
+                  [(ngModel)]="newTrigger.value[field.key]">
+            <option *ngFor="let opt of getFieldOptions(field)" [value]="opt.id">{{ opt.name }}</option>
+          </select>
+          <input *ngIf="field.type === 'date'" type="date" class="w-full border p-2 rounded"
+                 [(ngModel)]="newTrigger.value[field.key]" />
+          <input *ngIf="field.type === 'number'" type="number" class="w-full border p-2 rounded"
+                 [(ngModel)]="newTrigger.value[field.key]" />
         </div>
+      </ng-container>
+    </div>
+    <div class="mt-4 text-right">
+      <button class="px-4 py-2 bg-green-600 text-white rounded" (click)="addOrUpdateTrigger()">
+        {{ editIndex !== null ? '✏️ Cập nhật' : '➕ Thêm điều kiện' }}
+      </button>
+    </div>
+  </div>
 
-        <div class="bottom-action">
-          <button (click)="nextStep()">✅ Tiếp tục</button>
-        </div>
-
+  <div *ngIf="triggerConditions.length > 0">
+    <h3 class="text-lg font-semibold mb-2">🧾 Danh sách điều kiện đã chọn:</h3>
+    <div *ngFor="let trig of triggerConditions; let i = index" class="flex justify-between items-center bg-white p-4 rounded shadow mb-2">
+      <div>
+        <strong>{{ trig.conditionType }}</strong>
+        <span class="text-gray-500 text-sm">({{ trig.logicOperator }})</span>
+        <div class="text-sm text-gray-700">{{ getTriggerLabel(trig) }}</div>
+      </div>
+      <div>
+        <button class="text-blue-500 mr-2" (click)="editTrigger(i)">✏️</button>
+        <button class="text-red-500" (click)="removeTrigger(i)">❌</button>
       </div>
     </div>
+  </div>
+
+  <div class="text-center mt-6">
+    <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded" (click)="nextTab()">✅ Tiếp tục</button>
+  </div>
+</div>
+
+<!-- Step 2: Workflow Builder -->
+<div *ngIf="tab === 2" class="flex h-screen">
+
+  <!-- Sidebar -->
+  <div class="w-64 p-4 border-r">
+    <h2 class="text-xl font-semibold mb-4">Steps</h2>
+    <button class="block w-full mb-2 p-2 bg-blue-500 text-white rounded" (click)="addNode('SEND_EMAIL')">
+      Send Email
+    </button>
+    <button class="block w-full mb-2 p-2 bg-green-500 text-white rounded" (click)="addNode('WAIT')">
+      Wait
+    </button>
+    <button class="block w-full mb-2 p-2 bg-yellow-500 text-white rounded" (click)="addNode('ADD_TAG')">
+      Add Tag
+    </button>
+    <button class="block w-full mb-2 p-2 bg-red-500 text-white rounded" (click)="addNode('REMOVE_TAG')">
+      Remove Tag
+    </button>
+    <button class="block w-full mb-2 p-2 bg-purple-500 text-white rounded" (click)="addNode('ADD_TO_SEQUENCE')">
+      Add to Sequence
+    </button>
+  </div>
+
+  <!-- Canvas -->
+  <div class="flex-1 relative">
+    <div id="drawflow" class="drawflow w-full h-full"></div>
   </div>
 </div>
