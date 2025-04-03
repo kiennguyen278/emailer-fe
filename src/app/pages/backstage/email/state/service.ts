@@ -4,7 +4,13 @@ import { map } from 'rxjs/operators';
 import { omit } from 'lodash';
 import {BaseApiService} from "@core/services/base-api.service";
 import {ApiResponse} from "@core/models/response.model";
-import {EmailCampaignDTO, EmailTemplateDTO, SaveEmailCampaignRequest, SaveEmailTemplateRequest} from "../models";
+import {
+  CampaignDetailDTO,
+  EmailCampaignDTO,
+  EmailTemplateDTO,
+  SaveEmailCampaignRequest,
+  SaveEmailTemplateRequest
+} from "../models";
 
 @Injectable({ providedIn: 'root' })
 export class EmailService extends BaseApiService{
@@ -61,6 +67,12 @@ export class EmailService extends BaseApiService{
       const url = this.buildUrl(`/campaigns`);
       return this.http.post<ApiResponse<any>>(url, request);
     }
+  }
+
+
+  getDetailCampaignsById(id: number): Observable<any> {
+    const url = this.buildUrl(`/campaigns/${id}`);
+    return this.http.get<ApiResponse<CampaignDetailDTO>>(url);
   }
 
 

@@ -1,0 +1,64 @@
+
+
+
+<div>
+
+    <nz-tabset>
+
+      <!-- TAB 1: DETAIL -->
+      <nz-tab nzTitle="Thông tin campaign">
+        <div nz-row [nzGutter]="10">
+
+          <div nz-col [nzSpan]="11">
+            <div class="field-item mb-3 flex">
+              <label class="mr-2 font-medium">Tên campaign:</label>
+              <div class="flex-[1_0_0]">
+                {{detailCampaign?.name}}
+              </div>
+            </div>
+
+
+            <div class="field-item mb-3 flex">
+              <label class="mr-2 font-medium">Subject:</label>
+              <div class="flex-[1_0_0]">
+                {{detailCampaign?.subject}}
+              </div>
+            </div>
+
+            <div class="field-item mb-3 flex">
+              <label class="mr-2 font-medium">Scheduled Time:</label>
+              <div class="flex-[1_0_0]">
+                {{detailCampaign?.scheduledTime | date: DATE_TIME_FORMAT}}
+              </div>
+            </div>
+
+          </div>
+
+          <div nz-col [nzSpan]="13">
+            <div class="field-item mb-3">
+              <label class="mr-2 font-medium">Content:</label>
+              <div class="flex-[1_0_0]">
+                <div [innerHTML]="detailCampaign.htmlBody"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </nz-tab>
+
+      <nz-tab nzTitle="DS Subscriber">
+        <div class="mb-3">
+          <app-table
+            [columns]="columnsSubscriber"
+            [items]="itemsSubscriber"
+            [showPagination]="false"
+            [scrollY]="'70vh'"
+          ></app-table>
+        </div>
+
+      </nz-tab>
+    </nz-tabset>
+
+
+</div>
+

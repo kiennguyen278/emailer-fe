@@ -48,12 +48,10 @@ export class CampaignFormComponent implements OnInit {
   }
 
   itemsSubscriber: SubscriberDTO[] = [];
-  totalSubscriber: number = 0;
   columnsSubscriber: ColumnConfig[] = [
     {
       key: 'email',
       header: 'Email',
-      sortable: true,
       tdClass: 'text-center',
       nzWidth: '200px',
     },
@@ -61,14 +59,12 @@ export class CampaignFormComponent implements OnInit {
     {
       key: 'firstName',
       header: 'Name',
-      sortable: true,
       tdClass: 'text-center',
       nzWidth: '150px',
     },
     {
       key: 'status',
       header: 'Trạng thái',
-      sortable: true,
       nzWidth: '100px',
       tdClass: 'text-center',
     },
@@ -96,7 +92,6 @@ export class CampaignFormComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(getListTags());
 
-    this.getDetailTemplate();
     this.getSubscriberList();
     this.selectSubscribeStore();
   }
@@ -122,9 +117,9 @@ export class CampaignFormComponent implements OnInit {
   }
 
 
-  getDetailTemplate() {
+  getDetailCampaign() {
     if (this.emailCampaign){
-      this.emailService.getDetailTemplateById(this.emailCampaign.id)
+      this.emailService.getDetailCampaignsById(this.emailCampaign.id)
         .pipe(untilDestroyed(this))
         .subscribe((item) => {
           this.form.patchValue(item.data);

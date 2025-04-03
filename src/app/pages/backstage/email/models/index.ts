@@ -1,4 +1,5 @@
 import {ValidatorUtil} from "@core/utils/validator.util";
+import {SubscriberDTO} from "../../subscribers/models";
 
 export interface EmailTemplateDTO {
   id: number;
@@ -49,7 +50,39 @@ export interface SaveEmailCampaignRequest {
 }
 
 
-
+export interface CampaignDetailDTO {
+  userId: number;
+  name: string;
+  scheduledTime: string;
+  status: string;
+  subject: string;
+  htmlBody: string;
+  textBody: string;
+  stats: {
+    userId: number;
+    workflowId: number;
+    subscriberId: number;
+    campaignId: number;
+    sequenceId: number;
+    name: string;
+    createdAt: string;
+    totalSent: number;
+    totalDelivered: number;
+    totalOpened: number;
+    totalUnopened: number;
+    totalClicked: number;
+    totalBounced: number;
+    totalComplaint: number;
+    totalUnsubscribed: number;
+    openRate: number;
+    unOpenRate: number;
+    clickRate: number;
+    bounceRate: number;
+    complaintRate: number;
+    unsubscribeRate: number;
+  },
+  subscribers: SubscriberDTO[];
+}
 
 
 

@@ -12,6 +12,7 @@ import {SharedModule} from "@shared/shared.module";
 import {EmailStoreModule} from "./state/email-store.module";
 import {CampaignFormComponent} from "./pages/campaigns/campaign-form/campaign-form.component";
 import {SubscribersStoreModule} from "../subscribers/state/subscribers-store.module";
+import {CampaignDetailComponent} from "./pages/campaigns/campaign-detail/campaign-detail.component";
 
 const components = [
   TemplatesComponent,
@@ -19,6 +20,7 @@ const components = [
 
   CampaignsComponent,
   CampaignFormComponent,
+  CampaignDetailComponent,
 
   SequencesComponent,
 ];

@@ -18,6 +18,7 @@ import {TemplateFormComponent} from "../templates/template-form/template-form.co
 import { DATE_TIME_FORMAT } from '@core/constants';
 import {OptionScheduledStatus} from "@core/options";
 import {CampaignFormComponent} from "./campaign-form/campaign-form.component";
+import {CampaignDetailComponent} from "./campaign-detail/campaign-detail.component";
 
 
 @UntilDestroy()
@@ -146,7 +147,16 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   }
 
   showViewModal(item: EmailCampaignDTO): void {
-
+    this.modal.create({
+      nzTitle: 'Xem chi tiết Campaign',
+      nzContent: CampaignDetailComponent,
+      nzData: {
+        emailCampaign: item
+      },
+      nzFooter: null,
+      nzWidth: '1024px',
+      nzMaskClosable: false
+    });
   }
 
 
