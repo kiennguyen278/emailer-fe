@@ -154,7 +154,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
         emailCampaign: item
       },
       nzFooter: null,
-      nzWidth: '1024px',
+      nzWidth: 1200,
       nzMaskClosable: false
     });
   }

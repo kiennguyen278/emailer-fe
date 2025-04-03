@@ -12,6 +12,7 @@ import {SubscriberDTO} from "../../../../subscribers/models";
 @Component({
   selector: 'app-campaign-detail',
   templateUrl: './campaign-detail.component.html',
+  styleUrls: ['./campaign-detail.component.scss'],
 })
 export class CampaignDetailComponent implements OnInit {
   @ViewChild('quillEditor') quillEditorComponent!: QuillEditorComponent;

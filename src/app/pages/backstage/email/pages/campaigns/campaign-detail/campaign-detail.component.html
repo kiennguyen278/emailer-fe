@@ -3,6 +3,51 @@
 
 <div>
 
+  <div>
+    <div nz-row [nzGutter]="16">
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Total Sent</div>
+          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalSent}}</div>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Delivered</div>
+          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalDelivered}}</div>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Opened</div>
+          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalOpened}} - {{detailCampaign?.stats?.openRate}}%</div>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Clicked</div>
+          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalClicked}} - {{detailCampaign?.stats?.clickRate}}%</div>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Complaint</div>
+          <div class="summary-value text-red-600">{{detailCampaign?.stats?.totalComplaint}}</div>
+        </div>
+      </div>
+
+      <div nz-col [nzSpan]="4">
+        <div class="summary-box">
+          <div class="summary-title">Unsubscribed</div>
+          <div class="summary-value text-red-600">{{detailCampaign?.stats?.totalUnsubscribed}} - {{detailCampaign?.stats?.unsubscribeRate}}%</div>
+        </div>
+      </div>
+  </div>
+
     <nz-tabset>
 
       <!-- TAB 1: DETAIL -->
@@ -38,7 +83,7 @@
             <div class="field-item mb-3">
               <label class="mr-2 font-medium">Content:</label>
               <div class="flex-[1_0_0]">
-                <div [innerHTML]="detailCampaign.htmlBody"></div>
+                <div [innerHTML]="detailCampaign?.htmlBody"></div>
               </div>
             </div>
           </div>
