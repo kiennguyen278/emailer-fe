@@ -1,7 +1,7 @@
 <div class="tabs-container border-b p-4">
   <ul class="flex justify-center">
     <li class="mx-4 cursor-pointer" [class.font-bold]="tab === 1" (click)="tab = 1">1. Trigger</li>
-    <li class="mx-4 cursor-pointer" [class.font-bold]="tab === 2" (click)="nextTab()">2. Steps</li>
+    <li class="mx-4 cursor-pointer" [class.font-bold]="tab === 2" (click)="canProceedToNextTab() && nextTab()" [class.opacity-50]="!canProceedToNextTab()" [class.cursor-not-allowed]="!canProceedToNextTab()">2. Steps</li>
   </ul>
 </div>
 
@@ -39,7 +39,7 @@
       </ng-container>
     </div>
     <div class="mt-4 text-right">
-      <button class="px-4 py-2 bg-green-600 text-white rounded" (click)="addOrUpdateTrigger()">
+      <button class="px-4 py-2 bg-green-600 text-white rounded" [disabled]="!isTriggerValid()" (click)="addOrUpdateTrigger()">
         {{ editIndex !== null ? '✏️ Cập nhật' : '➕ Thêm điều kiện' }}
       </button>
     </div>
@@ -61,13 +61,12 @@
   </div>
 
   <div class="text-center mt-6">
-    <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded" (click)="nextTab()">✅ Tiếp tục</button>
+    <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded" [disabled]="triggerConditions.length === 0" (click)="nextTab()">✅ Tiếp tục</button>
   </div>
 </div>
 
 <!-- Step 2: Workflow Builder -->
 <div *ngIf="tab === 2" class="flex h-screen">
-
   <!-- Sidebar -->
   <div class="w-64 p-4 border-r">
     <h2 class="text-xl font-semibold mb-4">Steps</h2>
@@ -93,3 +92,6 @@
     <div id="drawflow" class="drawflow w-full h-full"></div>
   </div>
 </div>
+
+<!-- Keyboard Shortcut for Tab Navigation -->
+<div tabindex="0" (keydown.ArrowRight)="tab = 2" (keydown.ArrowLeft)="tab = 1"></div>

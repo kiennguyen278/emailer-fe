@@ -61,7 +61,14 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   ];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    const savedTriggers = localStorage.getItem('workflow_triggers');
+    if (savedTriggers) {
+      this.triggerConditions = JSON.parse(savedTriggers);
+    }
+
+  }
 
   get selectedTriggerType() {
     return this.triggerTypes.find(t => t.value === this.newTrigger.conditionType);
@@ -83,6 +90,8 @@ export class WorkflowBuilderComponent implements OnInit {
       this.triggerConditions.push({ ...this.newTrigger });
     }
     this.newTrigger = { conditionType: '', logicOperator: 'AND', value: {} };
+   // this.selectedTriggerType = null;
+    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
   }
 
   editTrigger(index: number) {
@@ -92,6 +101,7 @@ export class WorkflowBuilderComponent implements OnInit {
 
   removeTrigger(index: number) {
     this.triggerConditions.splice(index, 1);
+    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
   }
 
   getTriggerLabel(trigger: any): string {
@@ -113,8 +123,9 @@ export class WorkflowBuilderComponent implements OnInit {
       alert('Bạn cần thêm ít nhất 1 điều kiện');
       return;
     }
-
     this.tab = 2;
+    //save
+    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
 
     setTimeout(() => {
       const container = document.getElementById('drawflow');
@@ -125,6 +136,18 @@ export class WorkflowBuilderComponent implements OnInit {
       }
     }, 0);
   }
+
+  isTriggerValid(): boolean {
+    if (!this.selectedTriggerType) return false;
+    return this.selectedTriggerType.fields.every((field: any) => {
+      return this.newTrigger.value[field.key] !== undefined && this.newTrigger.value[field.key] !== '';
+    });
+  }
+
+  canProceedToNextTab(): boolean {
+    return this.triggerConditions.length > 0;
+  }
+
 
   addNode(type: string) {
     const data = { label: type };
