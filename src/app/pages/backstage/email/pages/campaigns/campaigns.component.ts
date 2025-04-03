@@ -17,6 +17,7 @@ import {getListEmailCampaign, getListEmailTemplate} from "../../state/actions";
 import {TemplateFormComponent} from "../templates/template-form/template-form.component";
 import { DATE_TIME_FORMAT } from '@core/constants';
 import {OptionScheduledStatus} from "@core/options";
+import {CampaignFormComponent} from "./campaign-form/campaign-form.component";
 
 
 @UntilDestroy()
@@ -120,12 +121,12 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
     this.modalRef = this.modal.create({
       nzTitle: item?.id ? `Cập nhật email campaign "${item.name}"` : 'Thêm mới email campaign',
-      nzContent: TemplateFormComponent,
+      nzContent: CampaignFormComponent,
       nzData: {
-        emailTemplate: item || null
+        emailCampaign: item || null
       },
       nzFooter: null,
-      nzWidth: '860px',
+      nzWidth: '1024px',
       nzMaskClosable: false
     });
 

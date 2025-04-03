@@ -37,3 +37,31 @@ export interface EmailCampaignDTO {
   createdAt: string,
   updatedAt: string
 }
+
+export interface SaveEmailCampaignRequest {
+  id: number | null | undefined,
+  name: string,
+  subject: string,
+  scheduledTime: string,
+  tagIds: number[] | string[],
+  subscriberIds: number[] | string[],
+  htmlBody: string,
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

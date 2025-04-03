@@ -34,6 +34,7 @@ export interface SubscriberDTO {
 export interface SubscriberResponseDTO {
   content: SubscriberDTO[],
   totalElements: number
+  totalPages: number
 }
 
 
