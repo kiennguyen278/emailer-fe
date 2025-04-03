@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.less']
+  styleUrls: ['./dashboard.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
 
@@ -339,6 +340,7 @@ export class DashboardComponent {
   }
 
   getTrendIcon(trend: string): string {
+    console.log('trend', trend)
     switch (trend) {
       case 'UP': return 'arrow-up';
       case 'DOWN': return 'arrow-down';

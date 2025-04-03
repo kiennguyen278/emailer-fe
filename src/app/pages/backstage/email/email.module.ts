@@ -10,21 +10,30 @@ import {CampaignsComponent} from "./pages/campaigns/campaigns.component";
 import {SequencesComponent} from "./pages/sequences/sequences.component";
 import {SharedModule} from "@shared/shared.module";
 import {EmailStoreModule} from "./state/email-store.module";
+import {CampaignFormComponent} from "./pages/campaigns/campaign-form/campaign-form.component";
+import {SubscribersStoreModule} from "../subscribers/state/subscribers-store.module";
+import {CampaignDetailComponent} from "./pages/campaigns/campaign-detail/campaign-detail.component";
 
+const components = [
+  TemplatesComponent,
+  TemplateFormComponent,
+
+  CampaignsComponent,
+  CampaignFormComponent,
+  CampaignDetailComponent,
+
+  SequencesComponent,
+];
 
 @NgModule({
-  declarations: [
-    TemplatesComponent,
-    CampaignsComponent,
-    SequencesComponent,
-    TemplateFormComponent
-  ],
+  declarations: components,
   imports: [
     CommonModule,
     QuillModule,
     ReactiveFormsModule,
     EmailRoutingModule,
     EmailStoreModule,
+    SubscribersStoreModule,
     SharedModule
   ]
 })

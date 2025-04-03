@@ -118,6 +118,8 @@ export class TemplateFormComponent implements OnInit {
       this.form.controls['textBody'].updateValueAndValidity();
     }
     this.cdr.detectChanges();
+    this.form.markAsPristine(); // clear form error when cancel edit
+    this.form.markAsUntouched(); // clear form error when cancel edit
   }
 
   closeModal(){
