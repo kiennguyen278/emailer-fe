@@ -256,3 +256,49 @@
   border-radius: 4px;
   font-size: 14px;
 }
+
+.floating-buttons {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+
+  button {
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
+
+
+.drawflow {
+  position: relative; /* Đảm bảo container định vị đúng */
+
+  .floating-buttons {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 12px;
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #125a9c;
+    }
+  }
+}
+

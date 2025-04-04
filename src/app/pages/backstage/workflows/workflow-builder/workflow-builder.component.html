@@ -28,14 +28,18 @@
           <button (click)="addNode('add_to_sequence')">📥 Add to Sequence</button>
         </div>
       </div>
-      <div class="action-buttons">
-        <button (click)="createWorkflow()">✅ Tạo Workflow</button>
-        <button (click)="resetWorkflow()">🔄 Reset</button>
-      </div>
     </div>
 
     <!-- Canvas chính -->
     <div class="drawflow" #drawflowElement>
+
+      <!-- 💡 Nút ở góc trên phải -->
+      <div class="floating-buttons" *ngIf="currentStep === 2">
+        <button type="button" (click)="createWorkflow()">✅ Save Workflow</button>
+        <button type="button" (click)="resetWorkflow()">🔄 Reset</button>
+      </div>
+
+
       <!-- Step 1: Trigger Panel -->
       <div class="trigger-panel" *ngIf="currentStep === 1">
         <h4>🎯 Cấu hình Trigger START</h4>
