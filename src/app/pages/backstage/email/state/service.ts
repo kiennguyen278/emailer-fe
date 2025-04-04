@@ -9,7 +9,7 @@ import {
   EmailCampaignDTO,
   EmailTemplateDTO,
   SaveEmailCampaignRequest,
-  SaveEmailTemplateRequest
+  SaveEmailTemplateRequest, SequenceDTO
 } from "../models";
 
 @Injectable({ providedIn: 'root' })
@@ -77,28 +77,12 @@ export class EmailService extends BaseApiService{
 
 
 
-  // getListSubscribers(params: SubscriberSearchDTO): Observable<any> {
-  //   const url = this.buildUrl('/subscribers/search');
-  //   const paramRequest = {...params, page: params.page - 1};
-  //   return this.http.get<ApiResponse<SubscriberResponseDTO>>(url,{params: {...paramRequest}} );
-  // }
-  //
-  // saveSubscribers(request: SaveSubscriberRequest): Observable<any> {
-  //   if (request.id){
-  //     const bodyRequest = omit(request, 'id');
-  //     const url = this.buildUrl(`/subscribers/${request.id}`);
-  //     return this.http.put<ApiResponse<any>>(url, bodyRequest,);
-  //   } else {
-  //     const url = this.buildUrl(`/subscribers`);
-  //     return this.http.post<ApiResponse<any>>(url, request);
-  //   }
-  // }
-  //
-  // deleteSubscriber(id: number): Observable<any> {
-  //   const url = this.buildUrl(`/subscribers/${id}`);
-  //   return this.http.delete<ApiResponse<any>>(url);
-  // }
-
+  getAllSequence(): Observable<SequenceDTO[]> {
+    const url = this.buildUrl('/sequences');
+    return this.http.get<ApiResponse<SequenceDTO[]>>(url).pipe(
+      map(res => res.data)
+    );
+  }
 
 
 

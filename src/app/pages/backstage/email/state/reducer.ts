@@ -1,17 +1,19 @@
 import {createReducer, on} from "@ngrx/store";
 import * as Actions from "./actions";
-import {EmailCampaignDTO, EmailTemplateDTO} from '../models';
+import {EmailCampaignDTO, EmailTemplateDTO, SequenceDTO} from '../models';
 
 export const emailFeatureKey = 'emailTemplate';
 
 export interface EmailState {
   emailTemplateList: {data: EmailTemplateDTO[], loading: boolean, error: any},
   emailCampaignList: {data: EmailCampaignDTO[], loading: boolean, error: any},
+  sequenceList: {data: SequenceDTO[], loading: boolean, error: any},
 }
 
 const initialState: EmailState = {
   emailTemplateList: {data: [], loading: false, error: null},
   emailCampaignList: {data: [], loading: false, error: null},
+  sequenceList: {data: [], loading: false, error: null},
 };
 
 export const EmailReducer = createReducer(
@@ -46,6 +48,22 @@ export const EmailReducer = createReducer(
   on(Actions.getListEmailCampaignFail, (state, { error }) => ({
     ...state,
     emailCampaignList: { ...initialState.emailCampaignList, error: error}
+  })),
+
+
+  on(Actions.getListSequence, (state) => ({
+    ...state,
+    sequenceList: { ...initialState.sequenceList, loading: true }
+  })),
+  on(Actions.getListSequenceSuccess, (state, res) => {
+    return {
+      ...state,
+      sequenceList: { ...initialState.sequenceList, data: res.payload}
+    }
+  }),
+  on(Actions.getListSequenceFail, (state, { error }) => ({
+    ...state,
+    sequenceList: { ...initialState.sequenceList, error: error}
   })),
 
 

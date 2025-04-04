@@ -34,3 +34,17 @@ export const selectErrorGetEmailCampaignList = createSelector(
   (state) => state.emailCampaignList.error
 );
 
+
+
+export const selectDataGetSequenceList = createSelector(
+  selectEmailState,
+  (state) => state.sequenceList.data || []
+);
+export const selectLoadingGetSequenceList = createSelector(
+  selectEmailState,
+  (state) => state.sequenceList.loading
+);
+export const selectErrorGetSequenceList = createSelector(
+  selectEmailState,
+  (state) => state.sequenceList.error
+);

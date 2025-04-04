@@ -39,5 +39,17 @@ export class EmailEffects {
     )
   );
 
+  getListEmailSequence$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(Actionss.getListSequence),
+      switchMap(() => {
+        return this.service.getAllSequence().pipe(
+          map((data) => Actionss.getListSequenceSuccess(data)),
+          catchError((error) => of(Actionss.getListSequenceFail(error)))
+        )
+      }),
+    )
+  );
+
 
 }

@@ -18,3 +18,13 @@ export const [
   getListEmailCampaignFail
 ] = createHTTPActions<void, any, { error: any}>('[Email Campaign List] Get List', false);
 export const clearStateListEmailCampaign = createAction('[Email Campaign List] Clear State List');
+
+
+
+
+export const [
+  getListSequence,
+  getListSequenceSuccess,
+  getListSequenceFail
+] = createHTTPActions<void, any, { error: any}>('[Email Sequence List] Get List', false);
+export const clearStateListSequence = createAction('[Email Sequence List] Clear State List');

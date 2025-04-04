@@ -1,20 +1,18 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {EmailCampaignDTO, EmailTemplateDTO} from "../../models";
+import {EmailCampaignDTO} from "../../models";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {Observable} from "rxjs";
 import {
   selectDataGetEmailCampaignList,
-  selectDataGetEmailTemplateList, selectErrorGetEmailCampaignList,
-  selectErrorGetEmailTemplateList, selectLoadingGetEmailCampaignList,
-  selectLoadingGetEmailTemplateList
+  selectErrorGetEmailCampaignList,
+  selectLoadingGetEmailCampaignList,
 } from "../../state/selectors";
 import {Store} from "@ngrx/store";
 import {NotificationService} from "@core/services/notification.service";
 import {EmailService} from "../../state/service";
-import {ColumnConfig, OptionModel} from "@core/models";
+import {ColumnConfig} from "@core/models";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
-import {getListEmailCampaign, getListEmailTemplate} from "../../state/actions";
-import {TemplateFormComponent} from "../templates/template-form/template-form.component";
+import {getListEmailCampaign} from "../../state/actions";
 import { DATE_TIME_FORMAT } from '@core/constants';
 import {OptionScheduledStatus} from "@core/options";
 import {CampaignFormComponent} from "./campaign-form/campaign-form.component";
@@ -138,15 +136,15 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     });
   }
 
-  showCreateModal(): void {
+  showCreateModal() {
     this.openModal();
   }
 
-  showEditModal(item: EmailCampaignDTO): void {
+  showEditModal(item: EmailCampaignDTO) {
     this.openModal(item);
   }
 
-  showViewModal(item: EmailCampaignDTO): void {
+  showViewModal(item: EmailCampaignDTO) {
     this.modal.create({
       nzTitle: 'Xem chi tiết Campaign',
       nzContent: CampaignDetailComponent,
@@ -160,7 +158,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   }
 
 
-  confirmDelete(item: EmailCampaignDTO): void {
+  confirmDelete(item: EmailCampaignDTO) {
     this.modal.confirm({
       nzTitle: `Bạn có chắc muốn xoá email campaign "${item.name}"?`,
       nzOkText: 'Xoá',
