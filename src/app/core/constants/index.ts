@@ -46,10 +46,24 @@ export const YEAR_FORMAT = 'yyyy';
 export const TIME_FORMAT = 'HH:mm';
 
 
+
+
+// customize Quill editor
+const Parchment = Quill.import('parchment');
 const fontSizeArr = ['10px', '11px', '12px', '13px', '14px', '15px', '16px', '17px', '18px', '19px', '20px', '21px', '22px', '23px', '24px'];
 let Size = Quill.import('attributors/style/size');
 Size.whitelist = fontSizeArr
 Quill.register(Size, true);
+
+const FontArr = ['Arial', 'Tahoma', 'Segoe UI', 'Times New Roman'];
+let Font = Quill.import('attributors/style/font');
+Font.whitelist = FontArr;
+Quill.register(Font, true);
+
+const AlignStyle = new Parchment.Attributor.Style('align', 'text-align', {
+  scope: Parchment.Scope.BLOCK,
+});
+Quill.register(AlignStyle, true);
 
 export const ModuleQuill = {
   // 'emoji-shortname': true,
@@ -72,8 +86,7 @@ export const ModuleQuill = {
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-      [{ font: [] }],
-
+      [{ font: FontArr }],
       ['clean'], // remove formatting button
 
       ['link', 'image', 'video'], // link and image, video

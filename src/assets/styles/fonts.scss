@@ -11,7 +11,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: 'Roboto', SansSerif;
   src: url('../../assets/fonts/roboto/Roboto-Regular.ttf');
   font-weight: normal;
 }
@@ -32,4 +32,18 @@
   font-family: 'Roboto';
   src: url('../../assets/fonts/roboto/Roboto-Black.ttf');
   font-weight: 900;
+}
+
+
+
+/*custom css cho label chọn font ở quill editor*/
+/* Sửa tên hiển thị trong dropdown */
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+  content: attr(data-value);
+}
+.ql-snow .ql-picker.ql-font .ql-picker-label::before{
+  content: attr(data-value);
+}
+.ql-snow .ql-picker.ql-font{
+  width: 150px; /* Tuỳ chỉnh độ rộng dropdown */
 }

@@ -10,6 +10,7 @@ import {EmailTemplateDTO, SaveEmailTemplateRequest} from "../../../models";
 import {EmailService} from "../../../state/service";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {NotificationService} from "@core/services/notification.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @UntilDestroy()
 @Component({
@@ -27,6 +28,7 @@ export class TemplateFormComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private emailService: EmailService,
     private notification: NotificationService,
+    private sanitizer: DomSanitizer,
   ) {
     this.buildForm();
   }
@@ -35,7 +37,7 @@ export class TemplateFormComponent implements OnInit {
     return this.modalData.emailTemplate;
   }
 
-  contentPreviewHTML= ''; // Dùng cho Quill
+  contentPreviewHTML: any; // Dùng cho Quill
   showPreview = false;
   moduleQuill = ModuleQuill;
   isLoadingSave = false
@@ -131,7 +133,7 @@ export class TemplateFormComponent implements OnInit {
     if (this.form.controls['type'].value === 'HTML') {
       result = content && content.replace(/{{\s*subscriber\.first_name\s*}}/g, '{{ contact.first_name }}');
     }
-    this.contentPreviewHTML = result || '';
+    this.contentPreviewHTML = this.sanitizer.bypassSecurityTrustHtml(result || '');
   }
 
   insertPlaceholder(text: string) {
