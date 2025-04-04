@@ -86,7 +86,10 @@ export class EmailService extends BaseApiService{
 
 
 
-
+  deleteSequence(id: number): Observable<any> {
+    const url = this.buildUrl(`/sequences/${id}`);
+    return this.http.delete<ApiResponse<any>>(url);
+  }
 
 
 

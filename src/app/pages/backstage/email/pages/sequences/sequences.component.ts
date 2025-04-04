@@ -159,12 +159,12 @@ export class SequencesComponent implements OnInit, OnDestroy {
       nzTitle: `Bạn có chắc muốn xoá sequence "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
-      nzOnOk: () => this.deleteEmailTemplate(item.id)
+      nzOnOk: () => this.deleteSequence(item.id)
     });
   }
 
-  deleteEmailTemplate(id: number) {
-    this.emailService.deleteMailCampaign(id).subscribe({
+  deleteSequence(id: number) {
+    this.emailService.deleteSequence(id).subscribe({
       next: () => {
         this.notification.open({
           type: 'success',
