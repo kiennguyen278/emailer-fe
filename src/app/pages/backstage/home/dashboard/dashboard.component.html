@@ -32,6 +32,20 @@
   <!-- 2. Hiệu suất gửi email -->
   <nz-card nzTitle="Hiệu suất gửi email" [nzSize]="'small'" class="mb-4">
 
+    <div class="card-header-with-filter">
+      <span></span>
+      <nz-radio-group
+        [(ngModel)]="performanceRange"
+        (ngModelChange)="onPerformanceRangeChange($event)"
+        size="small"
+      >
+        <label nz-radio-button nzValue="7d">7 ngày</label>
+        <label nz-radio-button nzValue="30d">30 ngày</label>
+        <label nz-radio-button nzValue="90d">90 ngày</label>
+      </nz-radio-group>
+
+    </div>
+
     <div nz-row [nzGutter]="16">
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
@@ -77,21 +91,6 @@
       </div>
 
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
-        <div class="card-header-with-filter">
-          <span></span>
-
-          <nz-radio-group
-            [(ngModel)]="performanceRange"
-            (ngModelChange)="onPerformanceRangeChange($event)"
-            size="small"
-          >
-            <label nz-radio-button nzValue="7d">7 ngày</label>
-            <label nz-radio-button nzValue="30d">30 ngày</label>
-            <label nz-radio-button nzValue="90d">90 ngày</label>
-          </nz-radio-group>
-
-        </div>
-
         <div class="email-analysis-text">
           📊 <strong>Phân tích:</strong> {{ emailPerformanceAnalysis }}
           <p class="time-note">
@@ -130,31 +129,33 @@
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="18">
             <div echarts [options]="engagementChartOptions" class="chart-container"></div>
           </div>
+
           <!-- Phân tích xu hướng -->
+          <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+            <div class="summary-box analysis-box">
+              <div class="summary-title">📊 Phân tích xu hướng</div>
+              <div class="analysis-text">
 
-          <div class="summary-box analysis-box">
-            <div class="summary-title">📊 Phân tích xu hướng</div>
-            <div class="analysis-text">
+                <!-- Tỷ lệ mở -->
+                <div class="trend-group">
+                  <strong>📩 Tỷ lệ mở:</strong>
+                  <ul class="trend-analysis-list">
+                    <li *ngFor="let text of openTrendTexts" [innerHTML]="text"></li>
+                  </ul>
+                </div>
 
-              <!-- Tỷ lệ mở -->
-              <div class="trend-group">
-                <strong>📩 Tỷ lệ mở:</strong>
-                <ul class="trend-analysis-list">
-                  <li *ngFor="let text of openTrendTexts" [innerHTML]="text"></li>
-                </ul>
+                <!-- Tỷ lệ click -->
+                <div class="trend-group">
+                  <strong>🖱️ Tỷ lệ click:</strong>
+                  <ul class="trend-analysis-list">
+                    <li *ngFor="let text of clickTrendTexts" [innerHTML]="text"></li>
+                  </ul>
+                </div>
+
+                <p class="time-note">
+                  📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }}</strong> gần nhất
+                </p>
               </div>
-
-              <!-- Tỷ lệ click -->
-              <div class="trend-group">
-                <strong>🖱️ Tỷ lệ click:</strong>
-                <ul class="trend-analysis-list">
-                  <li *ngFor="let text of clickTrendTexts" [innerHTML]="text"></li>
-                </ul>
-              </div>
-
-              <p class="time-note">
-                📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }}</strong> gần nhất
-              </p>
             </div>
           </div>
 
