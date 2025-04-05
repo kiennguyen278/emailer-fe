@@ -251,7 +251,7 @@
           <h4 class="section-title">👤 Thông tin Subscriber</h4>
           <nz-descriptions [nzColumn]="3" nzBordered class="mb-4">
             <nz-descriptions-item nzTitle="Trạng thái">
-              <nz-tag [nzColor]="getStatusColor(selectedSubscriber.status)">
+              <nz-tag [nzColor]="getSubscriberStatusColor(selectedSubscriber.status)">
                 {{ selectedSubscriber.status }}
               </nz-tag>
             </nz-descriptions-item>
@@ -327,7 +327,13 @@
           <tbody>
           <tr *ngFor="let email of selectedSubscriber.emailHistorys">
             <td>{{ email.subject }}</td>
-            <td>{{ email.status }}</td>
+
+
+            <nz-tag [nzColor]="getStatusColor(email.status)">
+              <i nz-icon [nzType]="getStatusIcon(email.status)" class="mr-1"></i>
+              {{ email.status }}
+            </nz-tag>
+
             <td>{{ email.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
           </tr>
           </tbody>

@@ -427,8 +427,45 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
 
+  setProgressBarStats(): void {
+    const s = this.selectedSubscriber.stats;
+    this.progressData = [
+      { label: '📬 Open Rate', value: s.openRate || 0, color: '#1890ff' },
+      { label: '🔗 Click Rate', value: s.clickRate || 0, color: '#52c41a' },
+      { label: '❌ Bounce Rate', value: s.bounceRate || 0, color: '#f5222d' },
+      { label: '🚫 Unsubscribe Rate', value: s.unsubscribeRate || 0, color: '#faad14' },
+      { label: '🛑 Complaint Rate', value: s.complaintRate || 0, color: '#722ed1' }
+    ];
+  }
+
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'SENT': return 'send';
+      case 'DELIVERED': return 'check-circle';
+      case 'OPENED': return 'eye';
+      case 'CLICKED': return 'link';
+      case 'BOUNCED': return 'close-circle';
+      case 'UNSUBSCRIBED': return 'stop';
+      case 'COMPLAINT': return 'warning';
+      default: return 'question-circle';
+    }
+  }
 
   getStatusColor(status: string): string {
+    switch (status) {
+      case 'SENT': return 'blue';
+      case 'DELIVERED': return 'green';
+      case 'OPENED': return 'geekblue';
+      case 'CLICKED': return 'gold';
+      case 'BOUNCED': return 'red';
+      case 'UNSUBSCRIBED': return 'volcano';
+      case 'COMPLAINT': return 'orange';
+      default: return 'default';
+    }
+  }
+
+  getSubscriberStatusColor(status: string): string {
     switch (status) {
       case 'ACTIVE':
         return 'green';
@@ -445,16 +482,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
-  setProgressBarStats(): void {
-    const s = this.selectedSubscriber.stats;
-    this.progressData = [
-      { label: '📬 Open Rate', value: s.openRate || 0, color: '#1890ff' },
-      { label: '🔗 Click Rate', value: s.clickRate || 0, color: '#52c41a' },
-      { label: '❌ Bounce Rate', value: s.bounceRate || 0, color: '#f5222d' },
-      { label: '🚫 Unsubscribe Rate', value: s.unsubscribeRate || 0, color: '#faad14' },
-      { label: '🛑 Complaint Rate', value: s.complaintRate || 0, color: '#722ed1' }
-    ];
-  }
 
 
 
