@@ -133,40 +133,31 @@
             <div echarts [options]="engagementChartOptions" class="chart-container"></div>
           </div>
           <!-- Phân tích xu hướng -->
-          <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="6">
 
+          <div class="summary-box analysis-box">
+            <div class="summary-title">📊 Phân tích xu hướng</div>
+            <div class="analysis-text">
 
-            <div class="summary-box analysis-box">
-              <div class="summary-title"> 📊 Phân tích xu hướng</div>
-
-
-              <div class="analysis-text">
-
-                <div class="trend-group">
-                  <strong>📩 Tỷ lệ mở:</strong>
-                  <ul class="trend-analysis-list">
-                    <li *ngFor="let text of openTexts" [innerHTML]="text"></li>
-                  </ul>
-                </div>
-
-                <div class="trend-group">
-                  <strong>🖱️ Tỷ lệ click:</strong>
-                  <ul class="trend-analysis-list">
-                    <li *ngFor="let text of clickTexts" [innerHTML]="text"></li>
-                  </ul>
-                </div>
-
-                <p class="time-note">
-                  📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }}</strong> gần nhất
-                </p>
-
+              <!-- Tỷ lệ mở -->
+              <div class="trend-group">
+                <strong>📩 Tỷ lệ mở:</strong>
+                <ul class="trend-analysis-list">
+                  <li *ngFor="let text of openTrendTexts" [innerHTML]="text"></li>
+                </ul>
               </div>
 
+              <!-- Tỷ lệ click -->
+              <div class="trend-group">
+                <strong>🖱️ Tỷ lệ click:</strong>
+                <ul class="trend-analysis-list">
+                  <li *ngFor="let text of clickTrendTexts" [innerHTML]="text"></li>
+                </ul>
+              </div>
 
-
-
+              <p class="time-note">
+                📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }}</strong> gần nhất
+              </p>
             </div>
-
           </div>
 
         </div>

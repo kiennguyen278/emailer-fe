@@ -35,9 +35,8 @@ export class DashboardComponent {
     topSubscribers: []
   };
 
-
-  openTexts: string[] = [];
-  clickTexts: string[] = [];
+  openTrendTexts: string[] = [];
+  clickTrendTexts: string[] = [];
 
   constructor(private dashboardService: DashboardService, private datePipe: DatePipe) {}
 
@@ -166,8 +165,8 @@ export class DashboardComponent {
 
         // Phân tích
         const { openTexts, clickTexts } = this.getOverallTrendAnalysis(data);
-        this.openTexts = openTexts;
-        this.clickTexts = clickTexts;
+        this.openTrendTexts = openTexts;
+        this.clickTrendTexts = clickTexts;
       }
 
     });
