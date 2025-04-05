@@ -54,6 +54,19 @@ export class SubscribersService extends BaseApiService{
   }
 
 
+  importCSV(file: File, tagId?: number): Observable<any> {
+    const url = this.buildUrl(`/subscribers/import-csv`);
+    const formData = new FormData();
+    formData.append('file', file);
+    if (tagId) {
+      formData.append('tagId', tagId.toString());
+    }
+    //return this.http.post(url, formData);
+    return this.http.post<ApiResponse<any>>(url, formData);
+  }
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { FormUtil } from '@core/utils/form.util';
 import { ValidatorUtil } from '@core/utils/validator.util';
 import { Store } from '@ngrx/store';
@@ -20,6 +20,7 @@ import {SubscribersService} from "../../state/service";
 import {SaveSubscriberRequest, SubscriberDTO} from "../../models";
 import {ColumnConfig} from "@core/models/column-config.model";
 import {getListSubscribers, getListTags} from "../../state/actions";
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 
 @UntilDestroy()
@@ -103,6 +104,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     private notification: NotificationService,
     private modal: NzModalService,
     private fb: FormBuilder,
+    private message: NzMessageService, // ✅ thêm dòng này
   ) {
     super(store, activatedRoute, cdr);
     this.buildForm();
@@ -137,32 +139,39 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
   closeImportModal() {
-    this.modal.closeAll();
+    this.formImport.reset();
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file && file.type === 'text/csv') {
-      this.selectedFile = file;
-    } else {
-      this.selectedFile = null;
-      // Hiển thị thông báo nếu cần
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.selectedFile = target.files[0]; // ✅ lưu file
     }
   }
 
-  importSubscribers() {
-    if (!this.selectedFile || !this.formImport.valid) {
+
+  importSubscribers(): void {
+    if (!this.selectedFile) {
+      this.message.warning('📎 Vui lòng chọn file CSV để import!');
       return;
     }
 
+    const tagId = this.formImport.get('tagId')?.value;
     this.isLoadingImport = true;
 
-    // TODO: Gửi file và tagId lên server
-    const tagId = this.formImport.value.tagId;
-
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-    formData.append('tagId', tagId);
+    this.subscribersService.importCSV(this.selectedFile, tagId).subscribe({
+      next: (res) => {
+        this.message.success(res?.message || 'Import thành công!');
+        this.closeImportModal();
+      },
+      error: () => {
+        this.message.error('Import thất bại!');
+        this.isLoadingImport = false;
+      },
+      complete: () => {
+        this.isLoadingImport = false;
+      }
+    });
   }
 
   showCreateModal(): void {
@@ -248,6 +257,8 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
   buildForm(){
+
+    // subcriber form
     this.form = this.fb.group({
       id: [null],
       email: [null, [ValidatorUtil.required('Email không được để trống!'), ValidatorUtil.email('Email không đúng định dạng!')]],
@@ -256,11 +267,19 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       tagIds: [null],
     });
 
+    // search form
     this.formSearch = this.fb.group({
       status: ['ACTIVE'], // giá trị mặc định
       keyword: [null],
       tagId: [null],
     })
+
+    // import form
+    this.formImport = this.fb.group({
+      file: [null, Validators.required],
+      tagId: [null],
+    });
+
   }
 
   getParams() {
