@@ -205,7 +205,7 @@ export class DashboardComponent {
     // Đột biến Open
     for (let i = 1; i < openRates.length; i++) {
       const diff = Math.abs(openRates[i] - openRates[i - 1]);
-      if (diff >= 20) {
+      if (diff >= 15) {
         openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
       }
     }
@@ -213,7 +213,7 @@ export class DashboardComponent {
     // Đột biến Click
     for (let i = 1; i < clickRates.length; i++) {
       const diff = Math.abs(clickRates[i] - clickRates[i - 1]);
-      if (diff >= 20) {
+      if (diff >= 15) {
         clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
       }
     }
