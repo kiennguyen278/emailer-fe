@@ -327,7 +327,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     this.formSearch = this.fb.group({
       status: ['ACTIVE'], // giá trị mặc định
       tagId: [null],
-      keyword: [null],
+      query: [null],
     })
 
     // import form
