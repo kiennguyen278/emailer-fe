@@ -45,3 +45,37 @@ export interface SaveSubscriberRequest {
   lastName?: string;
   tagIds: number[];
 }
+
+export interface EmailLog {
+  status: string;
+  subject: string;
+  createdAt: string;
+}
+
+export interface EmailStatsDTO {
+  totalSent: number;
+  totalDelivered: number;
+  totalOpened: number;
+  totalUnopened: number;
+  totalClicked: number;
+  totalBounced: number;
+  totalComplaint: number;
+  totalUnsubscribed: number;
+  openRate: number;
+  unOpenRate: number;
+  clickRate: number;
+  bounceRate: number;
+  complaintRate: number;
+  unsubscribeRate: number;
+}
+
+export interface SubscriberDetailDTO {
+  userId: number;
+  subscriberId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  tags: TagDTO[];
+  emailHistorys: EmailLog[];
+  stats: EmailStatsDTO;
+}

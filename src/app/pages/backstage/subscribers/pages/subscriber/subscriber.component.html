@@ -225,7 +225,6 @@
 </ng-template>
 
 
-
 <ng-template #modalViewSubscriber>
     <div *ngIf="selectedSubscriber">
       <nz-tabset>
@@ -233,29 +232,32 @@
         <!-- TAB 1: DETAIL -->
         <nz-tab nzTitle="Detail">
           <div class="detail-section">
-            <nz-descriptions nzTitle="Thông tin cơ bản" [nzColumn]="2">
-              <nz-descriptions-item nzTitle="Status">{{ selectedSubscriber.status }}</nz-descriptions-item>
+            <nz-descriptions nzTitle="Thông tin cơ bản" [nzColumn]="3">
               <nz-descriptions-item nzTitle="Email">{{ selectedSubscriber.email }}</nz-descriptions-item>
               <nz-descriptions-item nzTitle="First Name">{{ selectedSubscriber.firstName }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Last Name">{{ selectedSubscriber.lastName }}</nz-descriptions-item>
+
               <nz-descriptions-item nzTitle="Tags">
-                <nz-tag *ngFor="let tag of selectedSubscriber.tags">{{ tag }}</nz-tag>
+                <ng-container *ngFor="let tag of selectedSubscriber.tags; let i = index">
+                  <nz-tag>{{ tag.name }}</nz-tag><span *ngIf="i < selectedSubscriber.tags.length - 1">, </span>
+                </ng-container>
               </nz-descriptions-item>
+
+
             </nz-descriptions>
 
             <nz-divider></nz-divider>
 
             <nz-descriptions nzTitle="Thống kê tương tác" [nzColumn]="3">
-              <nz-descriptions-item nzTitle="Email Received">{{ selectedSubscriber.stats.emailsReceived }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Email Opened">{{ selectedSubscriber.stats.opens }}</nz-descriptions-item>
-              <nz-descriptions-item nzTitle="Email Clicked">{{ selectedSubscriber.stats.clicks }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Email Received">{{ selectedSubscriber.stats.totalSent }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Email Opened">{{ selectedSubscriber.stats.totalOpened }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Email Clicked">{{ selectedSubscriber.stats.totalClicked }}</nz-descriptions-item>
             </nz-descriptions>
           </div>
         </nz-tab>
 
         <!-- TAB 2: EMAIL HISTORY -->
         <nz-tab nzTitle="Email History">
-          <nz-table [nzData]="selectedSubscriber.emailHistory" [nzBordered]="true" [nzSize]="'small'">
+          <nz-table [nzData]="selectedSubscriber.emailHistorys" [nzBordered]="true" [nzSize]="'small'">
             <thead>
             <tr>
               <th>Subject</th>
@@ -264,10 +266,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let email of selectedSubscriber.emailHistory">
+            <tr *ngFor="let email of selectedSubscriber.emailHistorys">
               <td>{{ email.subject }}</td>
-              <td>{{ email.sentAt }}</td>
               <td>{{ email.status }}</td>
+              <td>{{ email.createdAt }}</td>
             </tr>
             </tbody>
           </nz-table>

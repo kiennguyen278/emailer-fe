@@ -17,7 +17,7 @@ import {
   selectOptionsTagsList, selectTotalItemsGetSubscriberList
 } from "../../state/selectors";
 import {SubscribersService} from "../../state/service";
-import {SaveSubscriberRequest, SubscriberDTO} from "../../models";
+import {SaveSubscriberRequest, SubscriberDetailDTO, SubscriberDTO} from "../../models";
 import {ColumnConfig} from "@core/models/column-config.model";
 import {getListSubscribers, getListTags} from "../../state/actions";
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -91,6 +91,11 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       nzWidth: '80px',
     },
   ];
+
+
+  isViewModalVisible = false;
+
+  selectedSubscriber: SubscriberDetailDTO;
 
   findItemsAction = getListSubscribers as (arg: { payload: any }) => any;
   selectItems = selectDataGetSubscriberList;
@@ -347,43 +352,26 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
-  isViewModalVisible = false;
-
-  selectedSubscriber = {
-    status: 'ACTIVE',
-    email: 'alice@example.com',
-    firstName: 'Alice',
-    lastName: 'Nguyen',
-    tags: ['Welcome', 'Onboarding'],
-    stats: {
-      emailsReceived: 45,
-      opens: 32,
-      clicks: 14
-    },
-    emailHistory: [
-      { subject: 'Welcome to our platform!', sentAt: '2025-03-20', status: 'Opened' },
-      { subject: 'Discover new features', sentAt: '2025-03-22', status: 'Clicked' },
-      { subject: 'Weekly Digest', sentAt: '2025-03-28', status: 'Sent' }
-    ],
-    workflows: [
-      { name: 'Onboarding Flow', startedAt: '2025-03-20', status: 'In Progress' },
-      { name: 'Nurture Series', startedAt: '2025-03-25', status: 'Completed' }
-    ],
-    sequences: [
-      { title: 'Getting Started Guide', step: 'Step 2 of 5', lastSent: '2025-03-24' }
-    ],
-    campaigns: [
-      { name: 'Spring Promo', sentDate: '2025-03-15', openRate: 52.3 }
-    ]
-  };
-
   showViewModal(subscriber: any) {
-    console.log('Subscriber được xem chi tiết:', subscriber); // để debug
+    this.subscribersService.getSubscriberDetail(subscriber.id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.selectedSubscriber = res.data;
+          this.isViewModalVisible = true;
+        }
+      },
+      error: () => {
+        this.message.error('Lỗi khi tải chi tiết subscriber!');
+      }
+    });
 
     this.modal.create({
       nzTitle: 'Chi tiết Subscriber',
       nzContent: this.modalViewSubscriber,
       nzWidth: 1024,
+      nzBodyStyle: {
+        'min-height': '500px'
+      },
       nzFooter: null
     });
 

@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SaveSubscriberRequest, SaveTagRequest, SubscriberResponseDTO, SubscriberSearchDTO, TagDTO } from '../models';
+import {
+  SaveSubscriberRequest,
+  SaveTagRequest,
+  SubscriberDetailDTO,
+  SubscriberResponseDTO,
+  SubscriberSearchDTO,
+  TagDTO
+} from '../models';
 import { omit } from 'lodash';
 import {BaseApiService} from "@core/services/base-api.service";
 import {ApiResponse} from "@core/models/response.model";
@@ -66,17 +73,9 @@ export class SubscribersService extends BaseApiService{
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+  getSubscriberDetail(id: number): Observable<ApiResponse<SubscriberDetailDTO>> {
+    const url = this.buildUrl(`/subscribers/${id}`);
+    return this.http.get<ApiResponse<SubscriberDetailDTO>>(url);
+  }
 
 }
