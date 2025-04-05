@@ -228,5 +228,72 @@ nz-radio-button.ant-radio-button-wrapper-checked {
 .text-orange-600 {
   color: #d97706;
 }
+.analysis-box {
+  .summary-title {
+    text-align: left; // 👉 Căn trái tiêu đề
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: #faad14;
+  }
+
+  .analysis-text {
+    text-align: left;
+    padding: 0 4px;
+
+    ul.trend-analysis-list {
+      list-style: none;
+      padding-left: 1.2rem;
+      margin: 0;
+
+      li {
+        position: relative;
+        padding-left: 1em;
+        margin-bottom: 6px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #262626;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          top: 0.1em;
+          color: #faad14;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .time-note {
+      font-size: 13px;
+      color: #8c8c8c;
+      margin-top: 8px;
+
+      strong {
+        color: #141414;
+      }
+    }
+  }
+}
+
+.analysis-text strong {
+  color: #141414;
+  font-weight: 600;
+}
+
+.trend-group {
+  margin-bottom: 12px;
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #141414;
+    font-size: 14px;
+  }
+}
+
+
+
 
 

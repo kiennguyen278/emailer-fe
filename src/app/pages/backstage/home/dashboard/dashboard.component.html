@@ -1,7 +1,7 @@
 <div class="dashboard-wrapper">
 
   <!-- 1. Tăng trưởng Subscriber -->
-  <nz-card nzTitle="Tăng trưởng Subscriber" [nzSize]="'small'" class="mb-4">
+  <nz-card nzTitle="Tăng trưởng subscribers" [nzSize]="'small'" class="mb-4">
     <div nz-row [nzGutter]="16">
       <div
         nz-col
@@ -134,29 +134,41 @@
           </div>
           <!-- Phân tích xu hướng -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="6">
+
+
             <div class="summary-box analysis-box">
               <div class="summary-title"> 📊 Phân tích xu hướng</div>
-              <div class="analysis-text">
-                <p>
-                  <strong>Open rate:</strong>
-                  <span [ngClass]="getTrendColorClass(lastOpenTrend)">
-                  {{ getTrendEmoji(lastOpenTrend) }}
-                </span>
-                  {{ analysisTexts[0] }}
-                </p>
-                <p>
-                  <strong>Click rate:</strong>
-                  <span [ngClass]="getTrendColorClass(lastClickTrend)">
-                    {{ getTrendEmoji(lastClickTrend) }}
-                  </span>
-                  {{ analysisTexts[1] }}
-                </p>
 
-                <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }} </strong> gần nhất</p>
+
+              <div class="analysis-text">
+
+                <div class="trend-group">
+                  <strong>📩 Tỷ lệ mở:</strong>
+                  <ul class="trend-analysis-list">
+                    <li *ngFor="let text of openTexts" [innerHTML]="text"></li>
+                  </ul>
+                </div>
+
+                <div class="trend-group">
+                  <strong>🖱️ Tỷ lệ click:</strong>
+                  <ul class="trend-analysis-list">
+                    <li *ngFor="let text of clickTexts" [innerHTML]="text"></li>
+                  </ul>
+                </div>
+
+                <p class="time-note">
+                  📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }}</strong> gần nhất
+                </p>
 
               </div>
+
+
+
+
             </div>
+
           </div>
+
         </div>
       </nz-tab>
 

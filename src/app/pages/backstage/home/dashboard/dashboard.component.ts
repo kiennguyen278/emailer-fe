@@ -12,8 +12,6 @@ import {EmailTrendItem} from "../data/dashboard.models";
 export class DashboardComponent {
 
   engagementChartOptions: any;
-  lastOpenTrend = 'STABLE';
-  lastClickTrend = 'STABLE';
 
   subscriberGrowthItems: any[] = [];
 
@@ -37,10 +35,11 @@ export class DashboardComponent {
     topSubscribers: []
   };
 
-  analysisTexts: string[] = [];
+
+  openTexts: string[] = [];
+  clickTexts: string[] = [];
 
   constructor(private dashboardService: DashboardService, private datePipe: DatePipe) {}
-
 
   ngOnInit() {
     this.loadSubscriberGrowth();
@@ -101,12 +100,10 @@ export class DashboardComponent {
     });
   }
 
-
   onTrendRangeChange(range: string) {
     this.trendRange = range;
     this.loadEmailTrend(range);
   }
-
 
   loadEmailTrend( range: string) {
     const unit = range.endsWith('d') ? 'daily' : range.endsWith('w') ? 'weekly' : 'monthly';
@@ -167,78 +164,63 @@ export class DashboardComponent {
           ]
         };
 
-        // ✅ Lấy xu hướng từ tuần cuối để hiển thị mũi tên
-        // const last = data[data.length - 1];
-        // this.lastOpenTrend = last.openTrend;
-        // this.lastClickTrend = last.clickTrend;
-        // this.analysisTexts = this.getTrendAnalysisText(last);
-
-        this.analysisTexts = this.getOverallTrendAnalysis(data);
+        // Phân tích
+        const { openTexts, clickTexts } = this.getOverallTrendAnalysis(data);
+        this.openTexts = openTexts;
+        this.clickTexts = clickTexts;
       }
 
     });
   }
 
-  getTrendAnalysisText(last: any): string[] {
-    const result: string[] = [];
 
-    // 👉 Phân tích open rate
-    if (last.openRate === 0) {
-      result.push('Tỷ lệ mở bằng 0%. Cần kiểm tra lại tiêu đề, thời điểm gửi và danh sách người nhận.');
-    } else if (last.openTrend === 'UP') {
-      result.push(`Tỷ lệ mở tăng lên ${last.openRate}%. Chủ đề email có vẻ đang thu hút tốt hơn.`);
-    } else if (last.openTrend === 'DOWN') {
-      result.push(`Tỷ lệ mở giảm còn ${last.openRate}%. Cần xem lại tiêu đề hoặc thời điểm gửi.`);
-    } else {
-      result.push(`Tỷ lệ mở ổn định ở mức ${last.openRate}%.`);
-    }
+  getOverallTrendAnalysis(data: EmailTrendItem[]): { openTexts: string[], clickTexts: string[] } {
+    const openTexts: string[] = [];
+    const clickTexts: string[] = [];
 
-    // 👉 Phân tích click rate
-    if (last.clickRate === 0) {
-      result.push('Tỷ lệ click bằng 0%. Nên cải thiện lời kêu gọi hành động và nội dung.');
-    } else if (last.clickTrend === 'UP') {
-      result.push(`Tỷ lệ click tăng lên ${last.clickRate}%. Nội dung có thể đang hấp dẫn hơn.`);
-    } else if (last.clickTrend === 'DOWN') {
-      result.push(`Tỷ lệ click giảm còn ${last.clickRate}%. Cần cải thiện lời kêu gọi hành động.`);
-    } else {
-      result.push(`Tỷ lệ click ổn định ở mức ${last.clickRate}%.`);
-    }
-
-    return result;
-  }
-
-  getOverallTrendAnalysis(data: EmailTrendItem[]): string[] {
-    const result: string[] = [];
-
-    const openRates = data.map(item => item.openRate);
-    const clickRates = data.map(item => item.clickRate);
-
+    const openRates = data.map(item => item.openRate ?? 0);
+    const clickRates = data.map(item => item.clickRate ?? 0);
     const openStart = openRates[0];
     const openEnd = openRates[openRates.length - 1];
-
     const clickStart = clickRates[0];
     const clickEnd = clickRates[clickRates.length - 1];
 
-    // 🔍 OPEN RATE
+    // Tổng thể
     if (openEnd > openStart) {
-      result.push(`Tỷ lệ mở có xu hướng tăng từ ${openStart}% lên ${openEnd}%.`);
+      openTexts.push(`Tỷ lệ mở có xu hướng tăng từ ${openStart}% lên ${openEnd}%.`);
     } else if (openEnd < openStart) {
-      result.push(`Tỷ lệ mở giảm từ ${openStart}% xuống còn ${openEnd}%.`);
+      openTexts.push(`Tỷ lệ mở giảm từ ${openStart}% xuống còn ${openEnd}%.`);
     } else {
-      result.push(`Tỷ lệ mở ổn định quanh mức ${openStart}%.`);
+      openTexts.push(`Tỷ lệ mở ổn định quanh mức ${openStart}%.`);
     }
 
-    // 🔍 CLICK RATE
     if (clickEnd > clickStart) {
-      result.push(`Tỷ lệ click tăng từ ${clickStart}% lên ${clickEnd}%.`);
+      clickTexts.push(`Tỷ lệ click có xu hướng tăng từ ${clickStart}% lên ${clickEnd}%.`);
     } else if (clickEnd < clickStart) {
-      result.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
+      clickTexts.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
     } else {
-      result.push(`Tỷ lệ click giữ ổn định ở mức ${clickStart}%.`);
+      clickTexts.push(`Tỷ lệ click ổn định ở mức ${clickStart}%.`);
     }
 
-    return result;
+    // Đột biến Open
+    for (let i = 1; i < openRates.length; i++) {
+      const diff = Math.abs(openRates[i] - openRates[i - 1]);
+      if (diff >= 20) {
+        openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
+      }
+    }
+
+    // Đột biến Click
+    for (let i = 1; i < clickRates.length; i++) {
+      const diff = Math.abs(clickRates[i] - clickRates[i - 1]);
+      if (diff >= 20) {
+        clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
+      }
+    }
+
+    return { openTexts, clickTexts };
   }
+
 
   getPeriodText(range: string): string {
     if (!range) return '';
@@ -253,27 +235,6 @@ export class DashboardComponent {
         return `${number} tháng`;
       default:
         return range;
-    }
-  }
-
-
-
-  getTrendEmoji(trend: string): string {
-    switch (trend) {
-      case 'UP': return '🔼';
-      case 'DOWN': return '🔽';
-      default: return '➖';
-    }
-  }
-
-  getTrendColorClass(trend: string): string {
-    switch (trend) {
-      case 'UP':
-        return 'trend-up';
-      case 'DOWN':
-        return 'trend-down';
-      default:
-        return 'trend-stable';
     }
   }
 
