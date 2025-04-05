@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ZorroAntdModule } from '@shared/zorro-antd.module';
 import { CheckboxComponent } from '@shared/controls/checkbox/checkbox.component';
@@ -20,6 +20,7 @@ import { QuillModule } from 'ngx-quill';
 import { SelectComponent } from '@shared/controls/select/select.component';
 import { TextareaComponent } from '@shared/controls/textarea/textarea.component';
 import { SwitchComponent } from '@shared/controls/switch/switch.component';
+import {RichtextEmailComponent} from "@shared/controls/richtext-email/richtext-email.component";
 
 const components = [
   CheckboxComponent,
@@ -35,6 +36,7 @@ const components = [
   RadioGroupComponent,
   RadioGroupConfirmComponent,
   RichtextComponent,
+  RichtextEmailComponent,
   SelectComponent,
   TextareaComponent,
   SwitchComponent,
@@ -48,6 +50,7 @@ const components = [
     ZorroAntdModule,
     TranslateModule,
     QuillModule.forRoot(),
+    ReactiveFormsModule,
   ],
   declarations: components,
   exports: components

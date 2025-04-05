@@ -1,0 +1,50 @@
+<div class="relative">
+  <div class="space-x-2 text-sm text-gray-600 mb-2 flex justify-between">
+    <div>
+      <span>🔖 Chèn Placeholder:</span>
+      <button
+        type="button"
+        class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+        (click)="insertPlaceholder('{{ contact.first_name }}')">
+        Tên
+      </button>
+      <button
+        type="button"
+        class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+        (click)="insertPlaceholder('{{ contact.email }}')">
+        Email
+      </button>
+    </div>
+
+
+    <div>
+      <ng-container *ngIf="extraTpl">
+        <ng-container *ngTemplateOutlet="extraTpl"></ng-container>
+      </ng-container>
+
+      <button
+        type="button"
+        class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2"
+        (click)="showPreview = !showPreview">
+        {{showPreview ? "Ẩn xem trước" : "Xem trước"}}
+      </button>
+    </div>
+
+  </div>
+
+  <quill-editor
+    #quillEditor
+    class="editor tool bg-white"
+    [modules]="moduleQuill"
+    [styles]="{height: '300px'}"
+    placeholder="{{ placeholder }}"
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
+    [disabled]="disabled"
+  ></quill-editor>
+</div>
+<div *ngIf="showPreview" class="p-3 border rounded bg-gray-50 mt-4">
+  <div class="text-sm font-semibold mb-2">👁️ Xem trước nội dung email:</div>
+  <iframe [srcdoc]="contentPreviewHTML" width="100%;" height="auto"></iframe>
+
+</div>

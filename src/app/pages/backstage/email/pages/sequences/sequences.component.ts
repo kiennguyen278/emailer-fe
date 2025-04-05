@@ -17,6 +17,7 @@ import {getListEmailCampaign, getListSequence} from "../../state/actions";
 import {CampaignFormComponent} from "../campaigns/campaign-form/campaign-form.component";
 import {CampaignDetailComponent} from "../campaigns/campaign-detail/campaign-detail.component";
 import { DATE_TIME_FORMAT } from '@core/constants';
+import {SequenceFormComponent} from "./sequence-form/sequence-form.component";
 
 
 @UntilDestroy()
@@ -107,13 +108,11 @@ export class SequencesComponent implements OnInit, OnDestroy {
 
   openModal(item?: SequenceDTO) {
 
-    return;
-
     this.modalRef = this.modal.create({
       nzTitle: item?.id ? `Cập nhật sequence "${item.name}"` : 'Thêm mới sequence',
-      nzContent: CampaignFormComponent,
+      nzContent: SequenceFormComponent,
       nzData: {
-        emailCampaign: item || null
+        sequence: item || null
       },
       nzFooter: null,
       nzWidth: '1024px',

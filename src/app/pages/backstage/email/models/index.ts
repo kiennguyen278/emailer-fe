@@ -103,7 +103,21 @@ export interface SequenceDTO {
 }
 
 
+export interface SaveSequenceRequest {
+  id: number | null | undefined,
+  name: string,
+  description: string,
+}
 
+
+
+export interface SaveStepSequenceRequest {
+  id: number | null | undefined, // id của step - khi cập nhật step sẽ dùng cái này
+  sequenceId: number | null | undefined, // id của sequence - khi tạo mới step sẽ dùng cái này
+  subject: string,
+  htmlBody: string,
+  delayDays: string | number,
+}
 
 
 

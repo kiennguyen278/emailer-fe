@@ -15,6 +15,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class SwitchComponent implements ControlValueAccessor {
   @Input() loading = false;
+  @Input() checkedLabel = '';
+  @Input() unCheckedLabel = '';
   value!: boolean;
 
   @Output() switchChange = new EventEmitter<boolean>();

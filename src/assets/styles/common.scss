@@ -129,6 +129,16 @@ body{
 }
 
 
+.cdk-drag-preview {
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+}
+.cdk-drag-placeholder{
+  opacity: 0.5;
+  background: #f9f9f9;
+}
+
 
 
 
