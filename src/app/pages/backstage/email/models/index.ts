@@ -1,4 +1,3 @@
-import {ValidatorUtil} from "@core/utils/validator.util";
 import {SubscriberDTO} from "../../subscribers/models";
 
 export interface EmailTemplateDTO {
@@ -119,6 +118,21 @@ export interface SaveStepSequenceRequest {
   delayDays: string | number,
 }
 
+
+
+
+export interface StepSequenceDTO {
+  id: number;
+  userId: number;
+  sequenceId: number;
+  templateId: number;
+  subject: string;
+  htmlBody: string;
+  textBody: string;
+  delayDays: string | number;
+  position: string | number;
+  createdAt: string;
+}
 
 
 

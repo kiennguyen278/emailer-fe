@@ -9,7 +9,7 @@ import {
   EmailCampaignDTO,
   EmailTemplateDTO,
   SaveEmailCampaignRequest,
-  SaveEmailTemplateRequest, SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO
+  SaveEmailTemplateRequest, SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO, StepSequenceDTO
 } from "../models";
 
 @Injectable({ providedIn: 'root' })
@@ -85,6 +85,10 @@ export class EmailService extends BaseApiService{
   }
 
 
+  getDetailSequenceById(id: number): Observable<any> {
+    const url = this.buildUrl(`/sequences/${id}`);
+    return this.http.get<ApiResponse<SequenceDTO>>(url);
+  }
 
   deleteSequence(id: number): Observable<any> {
     const url = this.buildUrl(`/sequences/${id}`);
@@ -112,6 +116,10 @@ export class EmailService extends BaseApiService{
     }
   }
 
+  getAllStepInSequence(sequenceId: number): Observable<any> {
+    const url = this.buildUrl(`sequences/${sequenceId}/steps`);
+    return this.http.get<ApiResponse<StepSequenceDTO[]>>(url);
+  }
 
 
 

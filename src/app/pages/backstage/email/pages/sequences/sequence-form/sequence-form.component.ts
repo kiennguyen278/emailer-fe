@@ -6,7 +6,7 @@ import {ValidatorUtil} from "@core/utils/validator.util";
 import {DATE_TIME_FORMAT, ModuleQuill} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
-import {SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO} from "../../../models";
+import {SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO, StepSequenceDTO} from "../../../models";
 import {EmailService} from "../../../state/service";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {NotificationService} from "@core/services/notification.service";
@@ -60,18 +60,58 @@ export class SequenceFormComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (this.sequence?.id) {
+      this.getDetailSequence(this.sequence.id);
+      this.getAllStepInSequence(this.sequence.id);
+      // nếu sequence từ màn hình list có đủ data thì có thể ko cần gọi api get detail sequence mà patchValue luôn đc
+      // this.form.patchValue({
+      //     ...this.sequence,
+      //     status: this.sequence.status == 'ACTIVE' ? true : false,
+      //   });
+    }
   }
 
 
 
-  getDetailCampaign() {
+  getDetailSequence(sequenceId: number) {
     if (this.sequence){
-      this.emailService.getDetailCampaignsById(this.sequence.id)
+      this.emailService.getDetailSequenceById(sequenceId)
         .pipe(untilDestroyed(this))
         .subscribe((item) => {
-          this.form.patchValue(item.data);
+          console.log('item', item)
+          this.form.patchValue({
+            ...item.data,
+            status: item.data.status == 'ACTIVE' ? 1 : 0,
+          });
         })
     }
+  }
+
+
+  getAllStepInSequence(sequenceId: number) {
+    if (this.sequence){
+      this.emailService.getAllStepInSequence(sequenceId)
+        .pipe(untilDestroyed(this))
+        .subscribe((item) => {
+          this.setValueSteps(item.data)
+        })
+    }
+  }
+
+
+  setValueSteps(data: StepSequenceDTO[]){
+    this.formStep = this.fb.group({
+      steps: this.fb.array(data.map((item: StepSequenceDTO) => this.fb.group({
+        id: [item.id],
+        sequenceId: [item.sequenceId],
+        templateId: [item.templateId],
+        templateName: [],
+        subject: [item.subject, [ValidatorUtil.required('Subject không được để trống')]],
+        htmlBody: [item.htmlBody, [ValidatorUtil.required('Nội dung không được để trống')]],
+        delayDays: [item.delayDays, [ValidatorUtil.required()]],
+      })
+      ))
+    });
   }
 
 
@@ -80,7 +120,6 @@ export class SequenceFormComponent implements OnInit {
 
     FormUtil.validate(this.form);
 
-    console.log('formVal', formVal)
     this.isLoadingSave = true;
 
     const request = {
@@ -115,7 +154,6 @@ export class SequenceFormComponent implements OnInit {
           this.isLoadingSave = false;
         }
       });
-
   }
 
   buildForm(){
@@ -181,6 +219,7 @@ export class SequenceFormComponent implements OnInit {
     const totalSteps = this.steps.length;
     console.log('totalSteps', totalSteps)
     this.steps.insert(totalSteps, this.newStep());
+    this.crrStep = totalSteps;
     this.cdr.detectChanges();
   }
 
