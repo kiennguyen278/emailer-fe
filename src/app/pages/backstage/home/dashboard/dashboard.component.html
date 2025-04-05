@@ -97,7 +97,7 @@
         <div class="email-analysis-text">
           📊 <strong>Phân tích:</strong> {{ emailPerformanceAnalysis }}
           <p class="time-note">
-            📆 Dữ liệu trong vòng <strong>{{ performanceRange }}</strong> ngày gần nhất.
+            📆 Dữ liệu trong vòng <strong>{{ getPeriodText(performanceRange) }}</strong> gần nhất.
           </p>
 
         </div>
@@ -152,7 +152,7 @@
                   {{ analysisTexts[1] }}
                 </p>
 
-                <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ trendRange }} </strong> ngày gần nhất</p>
+                <p class="time-note">📆 Dữ liệu trong vòng <strong>{{ getPeriodText(trendRange) }} </strong> gần nhất</p>
 
               </div>
             </div>
@@ -204,7 +204,7 @@
                 </li>
               </ul>
               <p class="time-note">
-                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> gần nhất
+                📆 Dữ liệu trong vòng <strong>{{ getPeriodText(advancedRange) }}</strong> gần nhất
               </p>
             </div>
           </div>
@@ -223,7 +223,7 @@
                 </li>
               </ul>
               <p class="time-note">
-                📆 Dữ liệu trong vòng <strong>{{ advancedRange }}</strong> gần nhất
+                📆 Dữ liệu trong vòng <strong>{{ getPeriodText(advancedRange) }}</strong> gần nhất
               </p>
             </div>
           </div>

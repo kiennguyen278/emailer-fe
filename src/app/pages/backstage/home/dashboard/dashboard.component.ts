@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
 
 import { DatePipe } from '@angular/common';
+import {EmailTrendItem} from "../data/dashboard.models";
 
 @Component({
   selector: 'app-dashboard',
@@ -167,10 +168,12 @@ export class DashboardComponent {
         };
 
         // ✅ Lấy xu hướng từ tuần cuối để hiển thị mũi tên
-        const last = data[data.length - 1];
-        this.lastOpenTrend = last.openTrend;
-        this.lastClickTrend = last.clickTrend;
-        this.analysisTexts = this.getTrendAnalysisText(last);
+        // const last = data[data.length - 1];
+        // this.lastOpenTrend = last.openTrend;
+        // this.lastClickTrend = last.clickTrend;
+        // this.analysisTexts = this.getTrendAnalysisText(last);
+
+        this.analysisTexts = this.getOverallTrendAnalysis(data);
       }
 
     });
@@ -203,6 +206,56 @@ export class DashboardComponent {
 
     return result;
   }
+
+  getOverallTrendAnalysis(data: EmailTrendItem[]): string[] {
+    const result: string[] = [];
+
+    const openRates = data.map(item => item.openRate);
+    const clickRates = data.map(item => item.clickRate);
+
+    const openStart = openRates[0];
+    const openEnd = openRates[openRates.length - 1];
+
+    const clickStart = clickRates[0];
+    const clickEnd = clickRates[clickRates.length - 1];
+
+    // 🔍 OPEN RATE
+    if (openEnd > openStart) {
+      result.push(`Tỷ lệ mở có xu hướng tăng từ ${openStart}% lên ${openEnd}%.`);
+    } else if (openEnd < openStart) {
+      result.push(`Tỷ lệ mở giảm từ ${openStart}% xuống còn ${openEnd}%.`);
+    } else {
+      result.push(`Tỷ lệ mở ổn định quanh mức ${openStart}%.`);
+    }
+
+    // 🔍 CLICK RATE
+    if (clickEnd > clickStart) {
+      result.push(`Tỷ lệ click tăng từ ${clickStart}% lên ${clickEnd}%.`);
+    } else if (clickEnd < clickStart) {
+      result.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
+    } else {
+      result.push(`Tỷ lệ click giữ ổn định ở mức ${clickStart}%.`);
+    }
+
+    return result;
+  }
+
+  getPeriodText(range: string): string {
+    if (!range) return '';
+    const number = range.slice(0, -1);
+    const unit = range.slice(-1);
+    switch (unit) {
+      case 'd':
+        return `${number} ngày`;
+      case 'w':
+        return `${number} tuần`;
+      case 'm':
+        return `${number} tháng`;
+      default:
+        return range;
+    }
+  }
+
 
 
   getTrendEmoji(trend: string): string {
