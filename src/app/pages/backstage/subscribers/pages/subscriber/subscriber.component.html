@@ -225,7 +225,7 @@
 </ng-template>
 
 <ng-template #modalViewSubscriber>
-  <div *ngIf="selectedSubscriber" class="subscriber-detail-modal">
+  <div *ngIf="selectedSubscriber; else loadingSubscriber" class="subscriber-detail-modal">
 
     <div class="header-info flex items-center mb-4">
       <div class="avatar mr-4">
@@ -343,6 +343,10 @@
     </nz-tabset>
 
   </div>
+
+  <ng-template #loadingSubscriber>
+    <div class="text-center py-4 text-muted">Đang tải dữ liệu...</div>
+  </ng-template>
 </ng-template>
 
 
