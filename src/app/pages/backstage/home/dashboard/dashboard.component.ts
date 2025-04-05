@@ -52,10 +52,10 @@ export class DashboardComponent {
       if (res.success) {
         const data = res.data;
         this.subscriberGrowthItems = [
-          { label: 'Hôm nay', count: data.today.count, trend: data.today.trend },
-          { label: '7 ngày', count: data.last7Days.count, trend: data.last7Days.trend },
-          { label: '30 ngày', count: data.last30Days.count, trend: data.last30Days.trend },
-          { label: 'Total', count: data.total.count, trend: data.total.trend }
+          { label: 'Hôm nay', count: data.today.count,compare:data.today.compare, trend: data.today.trend },
+          { label: '7 ngày', count: data.last7Days.count,compare:data.last7Days.compare, trend: data.last7Days.trend },
+          { label: '30 ngày', count: data.last30Days.count,compare:data.last30Days.compare, trend: data.last30Days.trend },
+          { label: 'Total subscribers', count: data.total.count, compare:0,trend: 'STABLE'}
         ];
       }
     });
@@ -372,7 +372,7 @@ export class DashboardComponent {
     const diff = current - previous;
     if (diff > 0) return 'arrow-up';
     if (diff < 0) return 'arrow-down';
-    return 'minus';
+    return '';
   }
   getRateTrendClass(current: number, previous: number): string {
     const diff = current - previous;
@@ -386,8 +386,37 @@ export class DashboardComponent {
     switch (trend) {
       case 'UP': return 'arrow-up';
       case 'DOWN': return 'arrow-down';
-      default: return 'minus';
+      default: return '';
     }
   }
+
+  getRateDiffText(current: number, previous: number): string {
+    if (previous === 0) {
+      if (current === 0) return '0%';
+      // Trường hợp đặc biệt: tăng từ 0 → hiện "+new"
+     return '+Mới';
+    }
+
+    const diff = current - previous;
+    const percent = ((diff / Math.abs(previous)) * 100).toFixed(2);
+    const sign = diff > 0 ? '+' : diff < 0 ? '-' : '';
+    return `${sign}${Math.abs(+percent)}%`;
+  }
+
+  formatCompareValue(value: number): string {
+    if (value == null) return '0';
+    if (value > 0) return `+${value}`;
+    return `${value}`;
+  }
+
+
+  getTrendColorClass(trend: string): string {
+    switch (trend) {
+      case 'UP': return 'trend-up';
+      case 'DOWN': return 'trend-down';
+      default: return 'trend-stable';
+    }
+  }
+
 
 }

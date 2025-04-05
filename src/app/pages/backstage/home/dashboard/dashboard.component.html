@@ -14,27 +14,20 @@
           <div class="summary-title">{{ item.label }}</div>
           <div class="summary-value">
             {{ item.count }}
-            <ng-container *ngIf="item.label !== 'Total'">
-              <i
-                nz-icon
-                [nzType]="getTrendIcon(item.trend)"
-                [ngClass]="getRateTrendClass(item.count, item.compare)"
-              ></i>
+            <ng-container *ngIf="item.label !== 'Total subscribers'">
+            <span
+              class="trend-diff"
+              [ngClass]="getTrendColorClass(item.trend)"
+            >
+              <i nz-icon [nzType]="getTrendIcon(item.trend)"></i>
+              {{ formatCompareValue(item.compare) }}
+            </span>
             </ng-container>
           </div>
-
-          <ng-container *ngIf="item.label !== 'Total'">
-            <div
-              class="summary-trend"
-              [ngClass]="getRateTrendClass(item.count, item.compare)"
-            >
-            </div>
-          </ng-container>
         </div>
       </div>
     </div>
   </nz-card>
-
 
   <!-- 2. Hiệu suất gửi email -->
   <nz-card nzTitle="Hiệu suất gửi Email" [nzSize]="'small'" class="mb-4">
@@ -45,9 +38,11 @@
           <div class="summary-title">Tổng gửi</div>
           <div class="summary-value">
             {{ emailPerformance.totalSent }}
-            <span [ngClass]="getRateTrendClass(emailPerformance.totalSent, previousEmailPerformance.totalSent)">
-              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.totalSent, previousEmailPerformance.totalSent)" [ngClass]="getRateTrendClass(emailPerformance.totalSent, previousEmailPerformance.totalSent)"></i>
+            <span class="trend-diff" [ngClass]="getRateTrendClass(emailPerformance.totalSent, previousEmailPerformance.totalSent)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.totalSent, previousEmailPerformance.totalSent)"></i>
+              {{ getRateDiffText(emailPerformance.totalSent, previousEmailPerformance.totalSent) }}
             </span>
+
           </div>
         </div>
       </div>
@@ -55,10 +50,12 @@
       <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
         <div class="summary-box">
           <div class="summary-title">Tỷ lệ mở</div>
+
           <div class="summary-value">
             {{ emailPerformance.openRate }}%
-            <span [ngClass]="getRateTrendClass(emailPerformance.openRate, previousEmailPerformance.openRate)">
-              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.openRate, previousEmailPerformance.openRate)" [ngClass]="getRateTrendClass(emailPerformance.openRate, previousEmailPerformance.openRate)"></i>
+            <span class="trend-diff" [ngClass]="getRateTrendClass(emailPerformance.openRate, previousEmailPerformance.openRate)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.openRate, previousEmailPerformance.openRate)"></i>
+                        {{ getRateDiffText(emailPerformance.openRate, previousEmailPerformance.openRate) }}
             </span>
           </div>
         </div>
@@ -70,8 +67,9 @@
           <div class="summary-title">Tỷ lệ click</div>
           <div class="summary-value">
             {{ emailPerformance.clickRate }}%
-            <span [ngClass]="getRateTrendClass(emailPerformance.clickRate, previousEmailPerformance.clickRate)">
-              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.clickRate, previousEmailPerformance.clickRate)" [ngClass]="getRateTrendClass(emailPerformance.clickRate, previousEmailPerformance.clickRate)"></i>
+            <span class="trend-diff" [ngClass]="getRateTrendClass(emailPerformance.clickRate, previousEmailPerformance.clickRate)">
+              <i nz-icon [nzType]="getRateTrendIcon(emailPerformance.clickRate, previousEmailPerformance.clickRate)"></i>
+              {{ getRateDiffText(emailPerformance.clickRate, previousEmailPerformance.clickRate) }}
             </span>
           </div>
 
