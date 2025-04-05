@@ -21,6 +21,7 @@ import {Store} from "@ngrx/store";
 import {getListSubscribers, getListTags} from "../../../../subscribers/state/actions";
 import {SubscriberDTO} from "../../../../subscribers/models";
 import {isEmpty} from "lodash";
+import {differenceInCalendarDays} from "date-fns";
 
 @UntilDestroy()
 @Component({
@@ -46,6 +47,9 @@ export class CampaignFormComponent implements OnInit {
   ) {
     this.buildForm();
   }
+
+  disabledDate = (current: Date): boolean => (differenceInCalendarDays(current, new Date()) < 0);
+
 
   itemsSubscriber: SubscriberDTO[] = [];
   columnsSubscriber: ColumnConfig[] = [
@@ -149,13 +153,13 @@ export class CampaignFormComponent implements OnInit {
 
     FormUtil.validate(this.form);
 
-    if (isEmpty(formVal.subscriberIds)){
-      this.notification.open({
-        type: 'error',
-        content: 'Vui lòng chọn danh sách Subscriber cho campaign'
-      });
-      return;
-    }
+    // if (isEmpty(formVal.subscriberIds)){
+    //   this.notification.open({
+    //     type: 'error',
+    //     content: 'Vui lòng chọn danh sách Subscriber cho campaign'
+    //   });
+    //   return;
+    // }
 
     console.log('formVal', formVal)
     this.isLoadingSave = true;
@@ -191,7 +195,7 @@ export class CampaignFormComponent implements OnInit {
       description: [null],
       scheduledTime: [null, [ValidatorUtil.required('Scheduled Time không được để trống!')]],
       tagIds: [null, [ValidatorUtil.required('Tag không được để trống!')]],
-      subscriberIds: [null],
+      // subscriberIds: [null],
       htmlBody: [null, [ValidatorUtil.required('Nội dung không được để trống!')]],
     })
   }

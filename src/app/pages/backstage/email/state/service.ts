@@ -9,7 +9,7 @@ import {
   EmailCampaignDTO,
   EmailTemplateDTO,
   SaveEmailCampaignRequest,
-  SaveEmailTemplateRequest, SequenceDTO
+  SaveEmailTemplateRequest, SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO
 } from "../models";
 
 @Injectable({ providedIn: 'root' })
@@ -91,6 +91,26 @@ export class EmailService extends BaseApiService{
     return this.http.delete<ApiResponse<any>>(url);
   }
 
+
+  saveSequence(request: SaveSequenceRequest): Observable<any> {
+    if (request.id){
+      const url = this.buildUrl(`/sequences/${request.id}`);
+      return this.http.put<ApiResponse<any>>(url, request);
+    } else {
+      const url = this.buildUrl(`/sequences`);
+      return this.http.post<ApiResponse<any>>(url, request);
+    }
+  }
+
+  saveStepSequence(request: SaveStepSequenceRequest): Observable<any> {
+    if (request.id){
+      const url = this.buildUrl(`/sequences/steps/${request.id}`);
+      return this.http.put<ApiResponse<any>>(url, request);
+    } else {
+      const url = this.buildUrl(`/sequences/${request.sequenceId}/steps`);
+      return this.http.post<ApiResponse<any>>(url, request);
+    }
+  }
 
 
 

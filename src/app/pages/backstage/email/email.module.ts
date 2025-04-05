@@ -13,6 +13,8 @@ import {EmailStoreModule} from "./state/email-store.module";
 import {CampaignFormComponent} from "./pages/campaigns/campaign-form/campaign-form.component";
 import {SubscribersStoreModule} from "../subscribers/state/subscribers-store.module";
 import {CampaignDetailComponent} from "./pages/campaigns/campaign-detail/campaign-detail.component";
+import {SequenceFormComponent} from "./pages/sequences/sequence-form/sequence-form.component";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 const components = [
   TemplatesComponent,
@@ -23,6 +25,7 @@ const components = [
   CampaignDetailComponent,
 
   SequencesComponent,
+  SequenceFormComponent,
 ];
 
 @NgModule({
@@ -34,7 +37,8 @@ const components = [
     EmailRoutingModule,
     EmailStoreModule,
     SubscribersStoreModule,
-    SharedModule
+    SharedModule,
+    DragDropModule,
   ]
 })
 export class EmailModule { }

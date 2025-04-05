@@ -1,2 +1,7 @@
-<nz-switch [(ngModel)]="value" [nzControl]="true" (click)="clickSwitch()" [nzLoading]="loading"></nz-switch>
+<nz-switch [(ngModel)]="value"
+           [nzControl]="true"
+           (click)="clickSwitch()"
+           [nzCheckedChildren]="checkedLabel"
+           [nzUnCheckedChildren]="unCheckedLabel"
+           [nzLoading]="loading"></nz-switch>
 
