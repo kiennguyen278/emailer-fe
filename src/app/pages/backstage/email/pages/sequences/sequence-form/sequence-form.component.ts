@@ -144,7 +144,6 @@ export class SequenceFormComponent implements OnInit {
           } else {
             this.modalRef.destroy(true);
           }
-
         },
         error: ({error}) => {
           this.notification.open({
@@ -195,7 +194,7 @@ export class SequenceFormComponent implements OnInit {
         next: (res) => {
           this.notification.open({
             type: 'success',
-            content: res.message || stepSequenceValue?.id ? 'Cập nhật step sequence thành công' : 'Thêm step sequence mới thành công'
+            content: res?.message || (stepSequenceValue?.id ? 'Cập nhật step sequence thành công' : 'Thêm step sequence mới thành công')
           })
           this.isLoadingSave = false;
           this.modalRef.destroy(true);
