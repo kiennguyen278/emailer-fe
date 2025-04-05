@@ -12,3 +12,20 @@
   font-size: 20px;
   font-weight: bold;
 }
+
+
+.subscriber-detail-modal {
+  .header-info {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 12px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .detail-section {
+    margin-top: 24px;
+  }
+}

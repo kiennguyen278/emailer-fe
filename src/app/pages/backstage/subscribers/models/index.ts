@@ -70,6 +70,7 @@ export interface EmailStatsDTO {
 }
 
 export interface SubscriberDetailDTO {
+  status: string;
   userId: number;
   subscriberId: number;
   email: string;

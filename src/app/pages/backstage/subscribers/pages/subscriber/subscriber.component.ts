@@ -368,11 +368,12 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     this.modal.create({
       nzTitle: 'Chi tiết Subscriber',
       nzContent: this.modalViewSubscriber,
-      nzWidth: 1024,
+      nzWidth: 900,
+      nzFooter: null,
       nzBodyStyle: {
-        'min-height': '500px'
-      },
-      nzFooter: null
+        'min-height': '500px',
+        'padding': '24px'
+      }
     });
 
     //this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
@@ -381,6 +382,23 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   closeViewModal() {
     this.isViewModalVisible = false;
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'green';
+      case 'INACTIVE':
+        return 'default';
+      case 'UNSUBSCRIBED':
+        return 'orange';
+      case 'BOUNCED':
+        return 'red';
+      case 'COMPLAINED':
+        return 'volcano';
+      default:
+        return 'default';
+    }
   }
 
 
