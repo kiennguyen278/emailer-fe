@@ -52,6 +52,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   ]);
 
 
+  isImportModalVisible = false;
   form: FormGroup;
   formSearch: FormGroup;
   isLoadingSave = false;
@@ -137,10 +138,15 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       nzFooter: null,
       nzWidth: 600
     });
+
+    this.isImportModalVisible = true;
   }
 
-  closeImportModal() {
+  closeImportModal(): void {
+    this.isLoadingImport = false;
     this.formImport.reset();
+    this.selectedFile = null;
+    this.isImportModalVisible = false; // 🔑 Đây là điều kiện để modal đóng lại
   }
 
   onFileSelected(event: Event): void {
@@ -150,14 +156,18 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
-
   importSubscribers(): void {
+
     if (!this.selectedFile) {
-      this.message.warning('📎 Vui lòng chọn file CSV để import!');
+      this.message.error('Vui lòng chọn file CSV để import!');
+      return;
+    }
+    const tagId = this.formImport.get('tagId')?.value;
+    if (!tagId) {
+      this.message.error('Vui lòng chọn tag để import!');
       return;
     }
 
-    const tagId = this.formImport.get('tagId')?.value;
     this.isLoadingImport = true;
 
     this.subscribersService.importCSV(this.selectedFile, tagId).subscribe({
@@ -167,12 +177,14 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
           const totalLines: number = res.data?.totalLines || 0;
           const successCount = totalLines - errorLines.length;
 
-          // ✅ Hiển thị tổng quan kết quả import
-          this.message.success(`✅ Import thành công: ${successCount}/${totalLines} dòng hợp lệ`);
+          const msg = `✅ Import thành công: ${successCount}/${totalLines} dòng hợp lệ`
 
           // ✅ Nếu có lỗi, show bảng lỗi chi tiết
           if (errorLines.length > 0) {
-            this.showImportErrors(errorLines);
+            this.showImportErrors(errorLines, msg);
+          } else {
+            // ✅ Hiển thị tổng quan kết quả import
+            this.message.success(msg);
           }
 
           this.closeImportModal();
@@ -182,7 +194,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       },
       error: (err) => {
         console.error(err);
-        this.message.error('🚫 Lỗi kết nối hoặc định dạng không hợp lệ!');
+        this.message.error('Lỗi kết nối hoặc định dạng không hợp lệ!');
       },
       complete: () => {
         this.isLoadingImport = false;
@@ -190,13 +202,12 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     });
   }
 
-
-  showImportErrors(errorLines: string[]): void {
+  showImportErrors(errorLines: string[], msg: string): void {
     this.modal.create({
-      nzTitle: '⚠️ Một số dòng bị lỗi khi import',
+      nzTitle: msg,
       nzContent: `
       <div style="max-height: 300px; overflow-y: auto">
-        <ul style="padding-left: 1em">
+        <ul style="padding-left: 1em; margin-top: 10px">
           ${errorLines.map(line => `<li style="margin-bottom: 4px;">${line}</li>`).join('')}
         </ul>
       </div>
@@ -206,6 +217,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       nzWidth: 600
     });
   }
+
 
   showCreateModal(): void {
     this.openModal();
@@ -310,7 +322,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     // import form
     this.formImport = this.fb.group({
       file: [null, Validators.required],
-      tagId: [null],
+      tagId: [null, Validators.required]
     });
 
   }
