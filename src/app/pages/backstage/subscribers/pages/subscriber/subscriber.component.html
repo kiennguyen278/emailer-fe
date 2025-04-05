@@ -273,66 +273,6 @@
           </nz-table>
         </nz-tab>
 
-        <!-- TAB 3: WORKFLOW -->
-        <nz-tab nzTitle="Workflow">
-          <nz-table [nzData]="selectedSubscriber.workflows" [nzBordered]="true" [nzSize]="'small'">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Started At</th>
-              <th>Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let wf of selectedSubscriber.workflows">
-              <td>{{ wf.name }}</td>
-              <td>{{ wf.startedAt }}</td>
-              <td>{{ wf.status }}</td>
-            </tr>
-            </tbody>
-          </nz-table>
-        </nz-tab>
-
-        <!-- TAB 4: SEQUENCE -->
-        <nz-tab nzTitle="Sequence">
-          <nz-table [nzData]="selectedSubscriber.sequences" [nzBordered]="true" [nzSize]="'small'">
-            <thead>
-            <tr>
-              <th>Title</th>
-              <th>Step</th>
-              <th>Last Sent</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let seq of selectedSubscriber.sequences">
-              <td>{{ seq.title }}</td>
-              <td>{{ seq.step }}</td>
-              <td>{{ seq.lastSent }}</td>
-            </tr>
-            </tbody>
-          </nz-table>
-        </nz-tab>
-
-        <!-- TAB 5: CAMPAIGN -->
-        <nz-tab nzTitle="Campaign">
-          <nz-table [nzData]="selectedSubscriber.campaigns" [nzBordered]="true" [nzSize]="'small'">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Sent Date</th>
-              <th>Open Rate (%)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let camp of selectedSubscriber.campaigns">
-              <td>{{ camp.name }}</td>
-              <td>{{ camp.sentDate }}</td>
-              <td>{{ camp.openRate }}</td>
-            </tr>
-            </tbody>
-          </nz-table>
-        </nz-tab>
-
       </nz-tabset>
     </div>
 </ng-template>
