@@ -79,5 +79,23 @@ export interface SubscriberDetailDTO {
   createdAt: string;
   tags: TagDTO[];
   emailHistorys: EmailLog[];
+  campaigns: SubscriberCampaignDTO[];
+  sequences: SubscriberSequenceDTO[];
   stats: EmailStatsDTO;
+}
+
+export interface SubscriberCampaignDTO {
+  campaignId: number;
+  name: string;
+  subject: string;
+  status: string; // 'DRAFT' | 'SCHEDULED' | 'SENT' | 'CANCELLED'
+  scheduledTime: string; // ISO 8601 format
+  campaignCreatedAt: string;
+  sentTimeToSubscriber: string;
+}
+
+export interface SubscriberSequenceDTO {
+  sequenceId: number;
+  sequenceName: string;
+  sequenceStatus: 'ACTIVE' | 'INACTIVE';
 }

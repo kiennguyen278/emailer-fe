@@ -340,6 +340,69 @@
         </nz-table>
       </nz-tab>
 
+      <!-- TAB 3: CHIẾN DỊCH EMAIL -->
+      <nz-tab nzTitle="Chiến dịch Email">
+        <nz-table
+          [nzData]="selectedSubscriber.campaigns"
+          [nzBordered]="true"
+          [nzSize]="'small'"
+          [nzScroll]="{ x: '600px' }"
+          [nzPageSize]="10"
+          [nzShowSizeChanger]="true"
+          [nzPageSizeOptions]="[10, 20, 50]"
+        >
+          <thead>
+          <tr>
+            <th>Tên chiến dịch</th>
+            <th>Tiêu đề</th>
+            <th>Trạng thái</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let campaign of selectedSubscriber.campaigns">
+            <td>{{ campaign.name }}</td>
+            <td>{{ campaign.subject }}</td>
+            <td>
+              <nz-tag [nzColor]="getCampaignStatusColor(campaign.status)">
+                {{ campaign.status }}
+              </nz-tag>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+
+      <!-- TAB 4: CHUỖI EMAIL (SEQUENCES) -->
+      <nz-tab nzTitle="Chuỗi Email">
+        <nz-table
+          [nzData]="selectedSubscriber.sequences"
+          [nzBordered]="true"
+          [nzSize]="'small'"
+          [nzScroll]="{ x: '600px' }"
+          [nzPageSize]="10"
+          [nzShowSizeChanger]="true"
+          [nzPageSizeOptions]="[10, 20, 50]"
+        >
+          <thead>
+          <tr>
+            <th>Tên chuỗi</th>
+            <th>Trạng thái</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let seq of selectedSubscriber.sequences">
+            <td>{{ seq.sequenceName }}</td>
+            <td>
+              <nz-tag [nzColor]="seq.sequenceStatus === 'ACTIVE' ? 'green' : 'red'">
+                {{ seq.sequenceStatus }}
+              </nz-tag>
+            </td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+
+
     </nz-tabset>
 
   </div>

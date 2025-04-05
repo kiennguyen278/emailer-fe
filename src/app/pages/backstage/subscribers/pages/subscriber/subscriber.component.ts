@@ -480,6 +480,15 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
 
+  getCampaignStatusColor(status: string): string {
+    switch (status) {
+      case 'DRAFT': return 'default';
+      case 'SCHEDULED': return 'blue';
+      case 'SENT': return 'green';
+      case 'CANCELLED': return 'volcano';
+      default: return 'default';
+    }
+  }
 
 
 }
