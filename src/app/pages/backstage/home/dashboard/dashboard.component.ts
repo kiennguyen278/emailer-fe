@@ -178,8 +178,11 @@ export class DashboardComponent {
 
   getTrendAnalysisText(last: any): string[] {
     const result: string[] = [];
-    // Phân tích open rate
-    if (last.openTrend === 'UP') {
+
+    // 👉 Phân tích open rate
+    if (last.openRate === 0) {
+      result.push('Tỷ lệ mở bằng 0%. Cần kiểm tra lại tiêu đề, thời điểm gửi và danh sách người nhận.');
+    } else if (last.openTrend === 'UP') {
       result.push(`Tỷ lệ mở tăng lên ${last.openRate}%. Chủ đề email có vẻ đang thu hút tốt hơn.`);
     } else if (last.openTrend === 'DOWN') {
       result.push(`Tỷ lệ mở giảm còn ${last.openRate}%. Cần xem lại tiêu đề hoặc thời điểm gửi.`);
@@ -187,16 +190,20 @@ export class DashboardComponent {
       result.push(`Tỷ lệ mở ổn định ở mức ${last.openRate}%.`);
     }
 
-    // Phân tích click rate
-    if (last.clickTrend === 'UP') {
+    // 👉 Phân tích click rate
+    if (last.clickRate === 0) {
+      result.push('Tỷ lệ click bằng 0%. Nên cải thiện lời kêu gọi hành động và nội dung.');
+    } else if (last.clickTrend === 'UP') {
       result.push(`Tỷ lệ click tăng lên ${last.clickRate}%. Nội dung có thể đang hấp dẫn hơn.`);
     } else if (last.clickTrend === 'DOWN') {
       result.push(`Tỷ lệ click giảm còn ${last.clickRate}%. Cần cải thiện lời kêu gọi hành động.`);
     } else {
-      result.push(`Tỷ lệ click không thay đổi (${last.clickRate}%).`);
+      result.push(`Tỷ lệ click ổn định ở mức ${last.clickRate}%.`);
     }
+
     return result;
   }
+
 
   getTrendEmoji(trend: string): string {
     switch (trend) {
