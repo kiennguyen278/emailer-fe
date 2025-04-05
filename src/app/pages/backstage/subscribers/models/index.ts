@@ -76,6 +76,7 @@ export interface SubscriberDetailDTO {
   email: string;
   firstName: string;
   lastName: string;
+  createdAt: string;
   tags: TagDTO[];
   emailHistorys: EmailLog[];
   stats: EmailStatsDTO;

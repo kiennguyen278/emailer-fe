@@ -249,11 +249,15 @@
 
           <!-- 🔹 THÔNG TIN CÁ NHÂN -->
           <h4 class="section-title">👤 Thông tin Subscriber</h4>
-          <nz-descriptions [nzColumn]="2" nzBordered class="mb-4">
+          <nz-descriptions [nzColumn]="3" nzBordered class="mb-4">
             <nz-descriptions-item nzTitle="Trạng thái">
               <nz-tag [nzColor]="getStatusColor(selectedSubscriber.status)">
                 {{ selectedSubscriber.status }}
               </nz-tag>
+            </nz-descriptions-item>
+
+            <nz-descriptions-item nzTitle="Ngày tạo">
+              {{ selectedSubscriber.createdAt | date: 'dd/MM/yyyy HH:mm' }}
             </nz-descriptions-item>
 
             <nz-descriptions-item nzTitle="Tags">
