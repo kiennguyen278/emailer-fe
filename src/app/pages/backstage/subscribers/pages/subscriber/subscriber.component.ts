@@ -46,12 +46,13 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   tagOptions$: Observable<OptionModel<number>[]> = this.store.select(selectOptionsTagsList); // làm option select ở addnew/edit Subscriber
 
+  //  PENDING,ACTIVE, INACTIVE, UNSUBSCRIBED, BOUNCED
   subscriberStatusOptions$ = of([
     { label: 'Active', value: 'ACTIVE' },
     { label: 'Pending', value: 'PENDING' },
     { label: 'Inactive', value: 'INACTIVE' },
     { label: 'Unsubscribed', value: 'UNSUBSCRIBED' },
-    { label: 'Bounce', value: 'HARD_BOUNCE' }
+    { label: 'Bounced', value: 'BOUNCED' }
   ]);
 
   overviewStats: SubscriberStatsDTO | null = null;
@@ -459,7 +460,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
               },
               {
                 value: totalBounced,
-                name: 'Bounce',
+                name: 'Bounced',
                 itemStyle: { color: '#f5222d' }
               },
               {
