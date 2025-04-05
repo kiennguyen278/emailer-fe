@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import * as echarts from 'echarts';
+import { DatePipe } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
@@ -23,6 +24,7 @@ import {ZorroAntdModule} from '../../../shared/zorro-antd.module';
     HomeRoutingModule,
     NgxEchartsModule.forRoot({ echarts }),
     NzIconModule // ✅ THÊM VÀO ĐÂY
-  ]
+  ],
+  providers: [DatePipe]  // 👉 thêm dòng này
 })
 export class HomeModule { }

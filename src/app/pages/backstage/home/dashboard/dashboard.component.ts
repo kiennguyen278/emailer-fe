@@ -1,11 +1,12 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
+
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent {
 
@@ -37,7 +38,8 @@ export class DashboardComponent {
 
   analysisTexts: string[] = [];
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, private datePipe: DatePipe) {}
+
 
   ngOnInit() {
     this.loadSubscriberGrowth();
@@ -106,12 +108,32 @@ export class DashboardComponent {
 
 
   loadEmailTrend( range: string) {
+    const unit = range.endsWith('d') ? 'daily' : range.endsWith('w') ? 'weekly' : 'monthly';
     this.trendRange = range;
     this.dashboardService.getEmailTrend(range).subscribe((res) => {
 
       if (res.success) {
         const data = res.data;
-        const labels = data.map(item => 'Tuần ' + item.period);
+
+        // const labels = data.map(item => 'Tuần ' + item.period);
+        const labels = data.map(item => {
+          if (unit === 'daily') {
+            // item.period = '2025-04-04'
+            const date = new Date(item.period);
+            return this.datePipe.transform(date, 'dd/MM/yyyy');
+          } else if (unit === 'weekly') {
+            // item.period = '2025-13' → năm-tuần
+            const [year, week] = item.period.split('-');
+            return `Tuần ${week}/${year}`;
+          } else if (unit === 'monthly') {
+            // item.period = '2025-04'
+            const [year, month] = item.period.split('-');
+            return `${month}/${year}`;
+          } else {
+            return item.period; // fallback
+          }
+        });
+
         const openRates = data.map(item => item.openRate);
         const clickRates = data.map(item => item.clickRate);
 
