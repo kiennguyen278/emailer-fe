@@ -393,40 +393,98 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   setInteractionChartData(): void {
     const stats = this.selectedSubscriber?.stats;
     if (!stats) return;
-    const total = stats.totalSent;
-    if (total === 0) {
-      this.pieChartOptions = null; // hoặc set cờ để ẩn pie chart
-      return;
-    }
 
-    this.pieChartOptions = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{b}: {c} ({d}%)'
-      },
-      legend: { bottom: 0 },
-      series: [
-        {
-          name: 'Tương tác',
-          type: 'pie',
-          radius: '60%',
-          label: { show: true, formatter: '{b}: {c}' },
-          data: [
-            { value: stats.totalOpened, name: 'Đã mở' },
-            { value: stats.totalClicked, name: 'Đã click' },
-            { value: stats.totalBounced, name: 'Bounce' },
-            { value: stats.totalComplaint, name: 'Spam' },
-            { value: stats.totalUnsubscribed, name: 'Unsubscribed' }
-          ]
-        }
-      ]
-    };
+    const totalDelivered = stats.totalDelivered;
+    const totalOpened = stats.totalOpened;
+    const totalUnopened = stats.totalUnopened;
+    const totalClicked = stats.totalClicked;
+    const totalBounced = stats.totalBounced;
+    const totalComplaint = stats.totalComplaint;
+    const totalUnsubscribed = stats.totalUnsubscribed;
+
+    const isEmpty = totalDelivered + totalOpened + totalClicked + totalBounced + totalComplaint + totalUnsubscribed === 0;
+
+    if (isEmpty) {
+      this.pieChartOptions = {
+        title: {
+          text: 'Không có dữ liệu',
+          left: 'center',
+          top: 'middle',
+          textStyle: {
+            color: '#999',
+            fontSize: 14
+          }
+        },
+        series: [
+          {
+            name: 'Tương tác',
+            type: 'pie',
+            radius: '60%',
+            center: ['50%', '50%'],
+            data: [],
+            label: { show: false }
+          }
+        ]
+      };
+    } else {
+      this.pieChartOptions = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)'
+        },
+        legend: { bottom: 0 },
+        series: [
+          {
+            name: 'Tương tác',
+            type: 'pie',
+            radius: '60%',
+            center: ['50%', '50%'],
+            label: { show: true, formatter: '{b}: {c}' },
+            data: [
+              {
+                value: totalUnopened,
+                name: 'Chưa mở',
+                itemStyle: { color: '#d9d9d9' }
+              },
+              {
+                value: totalOpened,
+                name: 'Đã mở',
+                itemStyle: { color: '#1890ff' }
+              },
+              {
+                value: totalClicked,
+                name: 'Đã click',
+                itemStyle: { color: '#52c41a' }
+              },
+              {
+                value: totalBounced,
+                name: 'Bounce',
+                itemStyle: { color: '#f5222d' }
+              },
+              {
+                value: totalComplaint,
+                name: 'Spam',
+                itemStyle: { color: '#722ed1' }
+              },
+              {
+                value: totalUnsubscribed,
+                name: 'Unsubscribed',
+                itemStyle: { color: '#faad14' }
+              }
+            ]
+          }
+        ]
+      };
+
+    }
   }
+
 
   setProgressBarStats(): void {
     if (!this.selectedSubscriber) return;
     const s = this.selectedSubscriber.stats;
     this.progressData = [
+      { label: '👁️‍🗨️ Chưa mở', value: s.unOpenRate || 0, color: '#d9d9d9' },
       { label: '📬 Open Rate', value: s.openRate || 0, color: '#1890ff' },
       { label: '🔗 Click Rate', value: s.clickRate || 0, color: '#52c41a' },
       { label: '❌ Bounce Rate', value: s.bounceRate || 0, color: '#f5222d' },
