@@ -98,7 +98,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   isViewModalVisible = false;
 
-  selectedSubscriber: SubscriberDetailDTO;
+  selectedSubscriber: SubscriberDetailDTO | null = null;
 
   findItemsAction = getListSubscribers as (arg: { payload: any }) => any;
   selectItems = selectDataGetSubscriberList;
@@ -355,11 +355,31 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
-  showViewModal(subscriber: any) {
+  showViewModal(subscriber: any): void {
+    this.selectedSubscriber = null; // clear trước
+    this.isViewModalVisible = false;
+
     this.subscribersService.getSubscriberDetail(subscriber.id).subscribe({
       next: (res) => {
         if (res.success) {
           this.selectedSubscriber = res.data;
+
+          // ✅ Sau khi có dữ liệu, mới gọi hiển thị modal
+          this.modal.create({
+            nzTitle: 'Chi tiết Subscriber',
+            nzContent: this.modalViewSubscriber,
+            nzWidth: 900,
+            nzFooter: null,
+            nzBodyStyle: {
+              'min-height': '500px',
+              'padding': '24px'
+            }
+          });
+
+          // ✅ Sau khi có data → mới set biểu đồ
+          this.setInteractionChartData();
+          this.setProgressBarStats();
+
           this.isViewModalVisible = true;
         }
       },
@@ -367,36 +387,13 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
         this.message.error('Lỗi khi tải chi tiết subscriber!');
       }
     });
-
-    this.modal.create({
-      nzTitle: 'Chi tiết Subscriber',
-      nzContent: this.modalViewSubscriber,
-      nzWidth: 900,
-      nzFooter: null,
-      nzBodyStyle: {
-        'min-height': '500px',
-        'padding': '24px'
-      }
-    });
-
-    //this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
-    this.isViewModalVisible = true;
-
-    this.setInteractionChartData(); // 👈 Gọi hàm này sau khi có dữ liệu
-    this.setProgressBarStats(); // 👈 Gọi hàm này sau khi có dữ liệu
   }
+
 
   setInteractionChartData(): void {
     const stats = this.selectedSubscriber?.stats;
     if (!stats) return;
-
-    const total =
-      stats.totalOpened +
-      stats.totalClicked +
-      stats.totalBounced +
-      stats.totalComplaint +
-      stats.totalUnsubscribed;
-
+    const total = stats.totalSent;
     if (total === 0) {
       this.pieChartOptions = null; // hoặc set cờ để ẩn pie chart
       return;
@@ -426,8 +423,8 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     };
   }
 
-
   setProgressBarStats(): void {
+    if (!this.selectedSubscriber) return;
     const s = this.selectedSubscriber.stats;
     this.progressData = [
       { label: '📬 Open Rate', value: s.openRate || 0, color: '#1890ff' },
