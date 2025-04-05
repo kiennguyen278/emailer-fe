@@ -23,6 +23,7 @@ import {getListSubscribers, getListTags} from "../../state/actions";
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 
+
 @UntilDestroy()
 @Component({
   selector: 'app-subscriber',
@@ -161,16 +162,48 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
     this.subscribersService.importCSV(this.selectedFile, tagId).subscribe({
       next: (res) => {
-        this.message.success(res?.message || 'Import thành công!');
-        this.closeImportModal();
+        if (res.success) {
+          const errorLines: string[] = res.data?.errorLines || [];
+          const totalLines: number = res.data?.totalLines || 0;
+          const successCount = totalLines - errorLines.length;
+
+          // ✅ Hiển thị tổng quan kết quả import
+          this.message.success(`✅ Import thành công: ${successCount}/${totalLines} dòng hợp lệ`);
+
+          // ✅ Nếu có lỗi, show bảng lỗi chi tiết
+          if (errorLines.length > 0) {
+            this.showImportErrors(errorLines);
+          }
+
+          this.closeImportModal();
+        } else {
+          this.message.error(res.message || '❌ Import thất bại!');
+        }
       },
-      error: () => {
-        this.message.error('Import thất bại!');
-        this.isLoadingImport = false;
+      error: (err) => {
+        console.error(err);
+        this.message.error('🚫 Lỗi kết nối hoặc định dạng không hợp lệ!');
       },
       complete: () => {
         this.isLoadingImport = false;
       }
+    });
+  }
+
+
+  showImportErrors(errorLines: string[]): void {
+    this.modal.create({
+      nzTitle: '⚠️ Một số dòng bị lỗi khi import',
+      nzContent: `
+      <div style="max-height: 300px; overflow-y: auto">
+        <ul style="padding-left: 1em">
+          ${errorLines.map(line => `<li style="margin-bottom: 4px;">${line}</li>`).join('')}
+        </ul>
+      </div>
+    `,
+      nzClosable: true,
+      nzOkText: 'Đã hiểu',
+      nzWidth: 600
     });
   }
 
