@@ -60,11 +60,13 @@ export interface EmailTrendItem {
 
 export interface DashboardSubscriberQuality {
   totalSubscribers: number;
+  pendingSubscribers: number;
   activeSubscribers: number;
   inactiveSubscribers: number;
   unsubscribedSubscribers: number;
-  bouncedSubscribers: number;
-  complainedSubscribers: number;
+  unsubscribeRate: number;
+  bounceRate: number;
+  activeRate: number;
 }
 
 

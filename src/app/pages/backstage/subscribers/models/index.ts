@@ -99,3 +99,14 @@ export interface SubscriberSequenceDTO {
   sequenceName: string;
   sequenceStatus: 'ACTIVE' | 'INACTIVE';
 }
+
+export interface SubscriberStatsDTO {
+  totalSubscribers: number;
+  pendingSubscribers: number;
+  activeSubscribers: number;
+  inactiveSubscribers: number;
+  unsubscribedSubscribers: number;
+  unsubscribeRate: number;
+  bounceRate: number;
+  activeRate: number;
+}

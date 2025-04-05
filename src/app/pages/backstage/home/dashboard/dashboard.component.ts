@@ -249,15 +249,12 @@ export class DashboardComponent {
     this.dashboardService.getSubscriberQuality(period).subscribe(res => {
       if (res.success) {
         const s = res.data;
-        this.advancedStats.bounceRate = s.bouncedSubscribers;
-        this.advancedStats.unsubscribeRate = s.unsubscribedSubscribers;
-        this.advancedStats.complaintRate = s.complainedSubscribers;
-
-        this.advancedStats.activeRate = Math.max(0, 100 - (s.bouncedSubscribers + s.unsubscribedSubscribers + s.complainedSubscribers)
-        );
+        this.advancedStats.bounceRate = s.bounceRate;
+        this.advancedStats.unsubscribeRate = s.unsubscribeRate;
+        this.advancedStats.activeRate = s.activeRate;
+        this.updatePieChartOptions();
 
         this.listQualityAnalysis = this.analyzeListQuality(this.advancedStats);
-        this.updatePieChartOptions();
       }
     });
 
@@ -277,64 +274,96 @@ export class DashboardComponent {
 
   updatePieChartOptions() {
     const s = this.advancedStats;
-    this.listQualityChartOptions = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{b}: {d}%'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      },
-      series: [
-        {
-          name: 'Chất lượng danh sách',
-          type: 'pie',
-          radius: '70%',
-          data: [
-            {
-              value: s.bounceRate,
-              name: 'Bounce',
-              itemStyle: { color: '#f5222d' } // đỏ
-            },
-            {
-              value: s.unsubscribeRate,
-              name: 'Unsubscribe',
-              itemStyle: { color: '#faad14' } // vàng cam
-            },
-            {
-              value: s.complaintRate,
-              name: 'Spam',
-              itemStyle: { color: '#722ed1' } // tím
-            },
-            {
-              value: s.activeRate,
-              name: 'Active',
-              itemStyle: { color: '#1890ff' } // ✅ xanh dương
-            }
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+
+    const totalRate = s.bounceRate + s.unsubscribeRate + s.activeRate;
+
+    if (totalRate === 0) {
+      this.listQualityChartOptions = {
+        title: {
+          text: 'Không có dữ liệu',
+          left: 'center',
+          top: 'middle',
+          textStyle: {
+            color: '#999',
+            fontSize: 14,
+            fontWeight: 'normal'
+          }
+        },
+        series: [
+          {
+            name: 'Chất lượng danh sách',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '50%'],
+            data: [], // ✅ rỗng
+            label: { show: false }
+          }
+        ]
+      };
+    } else {
+      this.listQualityChartOptions = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {d}%'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: 'Chất lượng danh sách',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '50%'],
+            data: [
+              {
+                value: s.bounceRate,
+                name: 'Bounce',
+                itemStyle: { color: '#f5222d' }
+              },
+              {
+                value: s.unsubscribeRate,
+                name: 'Unsubscribe',
+                itemStyle: { color: '#faad14' }
+              },
+              {
+                value: s.activeRate,
+                name: 'Active',
+                itemStyle: { color: '#1890ff' }
+              }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
             }
           }
-        }
-      ]
-    };
+        ]
+      };
+    }
   }
 
-  analyzeListQuality(stats: any): string {
-    const totalBadRate = stats.bounceRate + stats.unsubscribeRate + stats.complaintRate;
 
-    if (totalBadRate < 5) {
-      return '✅ Danh sách rất tốt, tỷ lệ lỗi rất thấp.';
-    } else if (totalBadRate < 15) {
-      return '⚠️ Danh sách ổn định, cần tiếp tục lọc người nhận không tương tác.';
+  analyzeListQuality(stats: any): string {
+    const s = this.advancedStats;
+    const totalRate = s.bounceRate + s.unsubscribeRate + s.activeRate;
+
+    if (totalRate === 0) {
+      return '✅ Không có dữ liệu phân tích.';
     } else {
-      return '🚨 Danh sách có nhiều lỗi, nên kiểm tra lại nguồn dữ liệu và lọc lại subscriber.';
+      const totalBadRate = stats.bounceRate + stats.unsubscribeRate;
+      if (totalBadRate < 5) {
+        return '✅ Danh sách rất tốt, tỷ lệ lỗi rất thấp.';
+      } else if (totalBadRate < 15) {
+        return '⚠️ Danh sách ổn định, cần tiếp tục lọc người nhận không tương tác.';
+      } else {
+        return '🚨 Danh sách có nhiều lỗi, nên kiểm tra lại nguồn dữ liệu và lọc lại subscriber.';
+      }
     }
+
   }
 
   getContentPerformanceAnalysis(email: any): string {
