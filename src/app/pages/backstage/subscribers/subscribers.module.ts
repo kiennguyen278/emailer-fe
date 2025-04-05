@@ -6,6 +6,7 @@ import {SubscriberComponent} from "./pages/subscriber/subscriber.component";
 import {TagComponent} from "./pages/tag/tag.component";
 import {SubscribersRoutingModule} from "./subscribers-routing.module";
 import {SubscribersStoreModule} from "./state/subscribers-store.module";
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,9 @@ import {SubscribersStoreModule} from "./state/subscribers-store.module";
     SubscribersRoutingModule,
     SharedModule,
     SubscribersStoreModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
   ]
 })
 export class SubscribersModule {}

@@ -37,6 +37,9 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   @ViewChild('modalImportSubscriber') modalImportSubscriber!: TemplateRef<any>;
 
+  pieChartOptions: any;
+  progressData: { label: string; value: number; color: string }[] = [];
+
   formImport!: FormGroup;
   isLoadingImport = false;
   selectedFile: File | null = null;
@@ -378,11 +381,52 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
     //this.selectedSubscriber = this.selectedSubscriber; // hoặc load subscriber thực tế ở đây
     this.isViewModalVisible = true;
+
+    this.setInteractionChartData(); // 👈 Gọi hàm này sau khi có dữ liệu
+    this.setProgressBarStats(); // 👈 Gọi hàm này sau khi có dữ liệu
   }
 
-  closeViewModal() {
-    this.isViewModalVisible = false;
+  setInteractionChartData(): void {
+    const stats = this.selectedSubscriber?.stats;
+    if (!stats) return;
+
+    const total =
+      stats.totalOpened +
+      stats.totalClicked +
+      stats.totalBounced +
+      stats.totalComplaint +
+      stats.totalUnsubscribed;
+
+    if (total === 0) {
+      this.pieChartOptions = null; // hoặc set cờ để ẩn pie chart
+      return;
+    }
+
+    this.pieChartOptions = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}: {c} ({d}%)'
+      },
+      legend: { bottom: 0 },
+      series: [
+        {
+          name: 'Tương tác',
+          type: 'pie',
+          radius: '60%',
+          label: { show: true, formatter: '{b}: {c}' },
+          data: [
+            { value: stats.totalOpened, name: 'Đã mở' },
+            { value: stats.totalClicked, name: 'Đã click' },
+            { value: stats.totalBounced, name: 'Bounce' },
+            { value: stats.totalComplaint, name: 'Spam' },
+            { value: stats.totalUnsubscribed, name: 'Unsubscribed' }
+          ]
+        }
+      ]
+    };
   }
+
+
 
   getStatusColor(status: string): string {
     switch (status) {
@@ -400,6 +444,18 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
         return 'default';
     }
   }
+
+  setProgressBarStats(): void {
+    const s = this.selectedSubscriber.stats;
+    this.progressData = [
+      { label: '📬 Open Rate', value: s.openRate || 0, color: '#1890ff' },
+      { label: '🔗 Click Rate', value: s.clickRate || 0, color: '#52c41a' },
+      { label: '❌ Bounce Rate', value: s.bounceRate || 0, color: '#f5222d' },
+      { label: '🚫 Unsubscribe Rate', value: s.unsubscribeRate || 0, color: '#faad14' },
+      { label: '🛑 Complaint Rate', value: s.complaintRate || 0, color: '#722ed1' }
+    ];
+  }
+
 
 
 }

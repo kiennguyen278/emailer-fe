@@ -268,16 +268,38 @@
           </nz-descriptions>
 
           <!-- 🔹 THỐNG KÊ DỮ LIỆU EMAIL -->
-          <h4 class="section-title">📊 Thống kê tương tác Email</h4>
-          <nz-descriptions [nzColumn]="3" nzBordered>
-            <nz-descriptions-item nzTitle="Tổng gửi">{{ selectedSubscriber.stats.totalSent }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Đã mở">{{ selectedSubscriber.stats.totalOpened }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Đã click">{{ selectedSubscriber.stats.totalClicked }}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Open Rate">{{ selectedSubscriber.stats.openRate }}%</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Click Rate">{{ selectedSubscriber.stats.clickRate }}%</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Bounce Rate">{{ selectedSubscriber.stats.bounceRate }}%</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Unsubscribe Rate">{{ selectedSubscriber.stats.unsubscribeRate }}%</nz-descriptions-item>
-          </nz-descriptions>
+          <h4 class="section-title mt-4">
+            📊 Tỷ lệ tương tác Email
+            <span class="ml-2 text-muted">
+              (<strong>Tổng gửi: {{ selectedSubscriber.stats.totalSent }}</strong>,
+              <strong>Email đã nhận: {{ selectedSubscriber.stats.totalDelivered }}</strong>)
+            </span>
+          </h4>
+
+          <div *ngIf="pieChartOptions; else noData">
+            <div echarts [options]="pieChartOptions" style="height: 320px;"></div>
+          </div>
+          <h4 class="section-title mt-4">📈 Chi tiết tỷ lệ</h4>
+          <div *ngFor="let item of progressData" class="progress-row">
+            <div class="label">
+              {{ item.label }}
+              <span class="value">{{ item.value }}%</span>
+            </div>
+            <nz-progress
+              [nzPercent]="item.value"
+              [nzStrokeColor]="item.color"
+              [nzStrokeWidth]="12"
+              [nzShowInfo]="false"
+              [nzStatus]="'normal'"
+            ></nz-progress>
+          </div>
+
+          <ng-template #noData>
+            <div class="text-center text-muted py-4">
+              Không có dữ liệu tương tác để hiển thị biểu đồ.
+            </div>
+          </ng-template>
+
 
         </div>
       </nz-tab>
