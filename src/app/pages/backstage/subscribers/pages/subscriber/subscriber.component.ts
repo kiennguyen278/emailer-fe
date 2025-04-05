@@ -17,7 +17,7 @@ import {
   selectOptionsTagsList, selectTotalItemsGetSubscriberList
 } from "../../state/selectors";
 import {SubscribersService} from "../../state/service";
-import {SaveSubscriberRequest, SubscriberDetailDTO, SubscriberDTO} from "../../models";
+import {SaveSubscriberRequest, SubscriberDetailDTO, SubscriberDTO, SubscriberStatsDTO} from "../../models";
 import {ColumnConfig} from "@core/models/column-config.model";
 import {getListSubscribers, getListTags} from "../../state/actions";
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -48,12 +48,13 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   subscriberStatusOptions$ = of([
     { label: 'Active', value: 'ACTIVE' },
+    { label: 'Pending', value: 'PENDING' },
     { label: 'Inactive', value: 'INACTIVE' },
     { label: 'Unsubscribed', value: 'UNSUBSCRIBED' },
-    { label: 'Bounce', value: 'HARD_BOUNCE' },
-    { label: 'Complaint', value: 'COMPLAINT' }
+    { label: 'Bounce', value: 'HARD_BOUNCE' }
   ]);
 
+  overviewStats: SubscriberStatsDTO | null = null;
 
   isImportModalVisible = false;
   form: FormGroup;
@@ -124,6 +125,16 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   ngOnInit() {
     this.store.dispatch(getListTags());
     super.ngOnInit();
+    this.loadOverviewStats();
+  }
+
+
+  loadOverviewStats(): void {
+    this.subscribersService.getOverviewStats().subscribe(res => {
+      if (res.success) {
+        this.overviewStats = res.data;
+      }
+    });
   }
 
   openModal(item?: SubscriberDTO) {
@@ -234,15 +245,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   showEditModal(item: SubscriberDTO): void {
     this.openModal(item);
   }
-
-  summary = {
-    total: 1540,
-    openRate: 38.6,
-    clickRate: 12.4,
-    unsubscribed: 123,
-    complainRate: 1.2
-  };
-
 
   saveSubscriber(): void {
     FormUtil.validate(this.form);
@@ -389,7 +391,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     });
   }
 
-
   setInteractionChartData(): void {
     const stats = this.selectedSubscriber?.stats;
     if (!stats) return;
@@ -479,7 +480,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     }
   }
 
-
   setProgressBarStats(): void {
     if (!this.selectedSubscriber) return;
     const s = this.selectedSubscriber.stats;
@@ -492,7 +492,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       { label: '🛑 Complaint Rate', value: s.complaintRate || 0, color: '#722ed1' }
     ];
   }
-
 
   getStatusIcon(status: string): string {
     switch (status) {

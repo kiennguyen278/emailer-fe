@@ -64,6 +64,7 @@ export interface DashboardSubscriberQuality {
   activeSubscribers: number;
   inactiveSubscribers: number;
   unsubscribedSubscribers: number;
+  bouncedSubscribers: number;
   unsubscribeRate: number;
   bounceRate: number;
   activeRate: number;

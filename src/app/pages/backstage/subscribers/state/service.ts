@@ -6,7 +6,7 @@ import {
   SaveTagRequest,
   SubscriberDetailDTO,
   SubscriberResponseDTO,
-  SubscriberSearchDTO,
+  SubscriberSearchDTO, SubscriberStatsDTO,
   TagDTO
 } from '../models';
 import { omit } from 'lodash';
@@ -76,6 +76,11 @@ export class SubscribersService extends BaseApiService{
   getSubscriberDetail(id: number): Observable<ApiResponse<SubscriberDetailDTO>> {
     const url = this.buildUrl(`/subscribers/${id}`);
     return this.http.get<ApiResponse<SubscriberDetailDTO>>(url);
+  }
+
+  getOverviewStats(): Observable<ApiResponse<SubscriberStatsDTO>> {
+    const url = this.buildUrl(`/dashboard/subscriber-stats`);
+    return this.http.get<ApiResponse<SubscriberStatsDTO>>(url);
   }
 
 }

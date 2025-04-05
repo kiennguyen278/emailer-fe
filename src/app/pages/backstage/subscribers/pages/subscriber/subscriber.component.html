@@ -2,32 +2,41 @@
   <div nz-row [nzGutter]="16">
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
-        <div class="summary-title">Tổng số</div>
-        <div class="summary-value text-blue-600">{{ summary.total }}</div>
+        <div class="summary-title">Tổng số Subscribers</div>
+        <div class="summary-value text-blue-600">{{overviewStats?.totalSubscribers }}</div>
       </div>
     </div>
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
-        <div class="summary-title">Open rate</div>
-        <div class="summary-value text-green-600">{{ summary.openRate }}%</div>
+        <div class="summary-title">Tổng số Subscribers đang hoạt động</div>
+        <div class="summary-value text-green-600">{{overviewStats?.activeSubscribers }}</div>
+      </div>
+    </div>
+
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tổng số unsubscribed Subscribers</div>
+        <div class="summary-value text-green-600">{{overviewStats?.unsubscribedSubscribers }}</div>
+      </div>
+    </div>
+
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tổng số bounced Subscribers</div>
+        <div class="summary-value text-green-600">{{overviewStats?.bouncedSubscribers }}</div>
+      </div>
+    </div>
+
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Bounced Rate</div>
+        <div class="summary-value text-red-500">{{  overviewStats?.bounceRate }}%</div>
       </div>
     </div>
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
-        <div class="summary-title">Click rate</div>
-        <div class="summary-value text-green-600">{{ summary.clickRate }}%</div>
-      </div>
-    </div>
-    <div nz-col [nzSpan]="4">
-      <div class="summary-box">
-        <div class="summary-title">Unsubscribed</div>
-        <div class="summary-value text-red-500">{{ summary.unsubscribed }}</div>
-      </div>
-    </div>
-    <div nz-col [nzSpan]="4">
-      <div class="summary-box">
-        <div class="summary-title">Complain rate</div>
-        <div class="summary-value text-red-500">{{ summary.complainRate }}%</div>
+        <div class="summary-title">Unsubscribed rate</div>
+        <div class="summary-value text-red-500">{{  overviewStats?.unsubscribeRate }}%</div>
       </div>
     </div>
   </div>
