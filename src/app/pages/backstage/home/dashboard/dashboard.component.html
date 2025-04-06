@@ -181,7 +181,7 @@
 
           <!-- A. Chất lượng danh sách -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-            <div class="summary-box advanced-analysis-equal-height">
+            <div class="summary-box advanced-analysis-equal-height box-quality">
               <div class="summary-title">Chất lượng danh sách Subscriber</div>
 
               <div echarts [options]="listQualityChartOptions" class="chart-pie-container"></div>
@@ -194,10 +194,10 @@
             </div>
           </div>
 
-          <!-- B. Top khách hàng tiềm năng -->
+          <!-- B. Top Subscribers tiềm năng -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-            <div class="summary-box advanced-analysis-equal-height">
-              <div class="summary-title">Top khách hàng tiềm năng</div>
+            <div class="summary-box advanced-analysis-equal-height box-top-subs">
+              <div class="summary-title">Top Subscribers tiềm năng</div>
               <ul class="performance-list">
                 <li *ngFor="let sub of advancedStats.topSubscribers">
                   <strong>{{ sub.name }} ({{sub.email }})</strong><br />
@@ -219,8 +219,8 @@
 
           <!-- C. Hiệu suất nội dung -->
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
-            <div class="summary-box advanced-analysis-equal-height">
-              <div class="summary-title">Hiệu suất nội dung</div>
+            <div class="summary-box advanced-analysis-equal-height box-top-emails">
+              <div class="summary-title">Top emails nhiều tương tác</div>
 
               <ul class="performance-list">
                 <li *ngFor="let email of advancedStats.topEmails">
