@@ -142,7 +142,7 @@ export class SequenceFormComponent implements OnInit {
             this.onTabChange({index: 1});
             this.sequence = res.data;
           } else {
-            this.modalRef.destroy(true);
+            // this.modalRef.destroy(true);
           }
         },
         error: ({error}) => {
@@ -197,7 +197,7 @@ export class SequenceFormComponent implements OnInit {
             content: res?.message || (stepSequenceValue?.id ? 'Cập nhật step sequence thành công' : 'Thêm step sequence mới thành công')
           })
           this.isLoadingSave = false;
-          this.modalRef.destroy(true);
+          // this.modalRef.destroy(true);
         },
         error: ({error}) => {
           console.log('err saveStepSequence ===>', error);

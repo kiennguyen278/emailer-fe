@@ -115,7 +115,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
         sequence: item || null
       },
       nzFooter: null,
-      nzWidth: '1024px',
+      nzWidth: '1400px',
       nzMaskClosable: false
     });
 

@@ -65,30 +65,7 @@
         <form [formGroup]="formStep" (ngSubmit)="saveStepSequence()">
           <div class="mb-3">
             <div nz-row [nzGutter]="16">
-              <div nz-col [nzSpan]="6">
-                <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)">
-                <div *ngFor="let item of steps.controls; let index = index">
-                  <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
-                       (click)="editStep(index)"
-                       [formGroupName]="index" cdkDrag>
-                    <div class="whitespace-nowrap text-ellipsis">
-                      <div>{{formStep.controls['steps']?.value[index]?.subject}}</div>
-                      <ng-container *ngIf="!formStep.controls['steps']?.value[index]?.id">
-                        <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
-                      </ng-container>
-                    </div>
-                    <span class="leading-none">
-                      <i nz-icon nzType="icons:icon-bar"></i>
-                    </span>
-                  </div>
-                </div>
-                </div>
 
-                <button nz-button type="button"
-                        [disabled]="steps.length > 0 && !formStep.controls['steps']?.value[steps.length-1]?.id"
-                        nzType="default"
-                        (click)="addStep()">+ Thêm step</button>
-              </div>
 
               <div nz-col [nzSpan]="18">
                   <ng-container formArrayName="steps">
@@ -163,13 +140,37 @@
                           [nzLoading]="isLoadingSave"
                           class="ml-3"
                   >
-                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step Sequence' : 'Update Step Sequence'}}
-                    Save Step Sequence
+                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step' : 'Update Step'}}
                     </button>
                 </div>
 
 
 
+              </div>
+
+              <div nz-col [nzSpan]="6">
+                <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)">
+                  <div *ngFor="let item of steps.controls; let index = index">
+                    <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
+                         (click)="editStep(index)"
+                         [formGroupName]="index" cdkDrag>
+                      <div class="whitespace-nowrap text-ellipsis">
+                        <div>{{formStep.controls['steps']?.value[index]?.subject}}</div>
+                        <ng-container *ngIf="!formStep.controls['steps']?.value[index]?.id">
+                          <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
+                        </ng-container>
+                      </div>
+                      <span class="leading-none">
+                      <i nz-icon nzType="icons:icon-bar"></i>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button nz-button type="button"
+                        [disabled]="steps.length > 0 && !formStep.controls['steps']?.value[steps.length-1]?.id"
+                        nzType="default"
+                        (click)="addStep()">+ Thêm step</button>
               </div>
 
             </div>
