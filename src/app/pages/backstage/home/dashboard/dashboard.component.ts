@@ -172,10 +172,16 @@ export class DashboardComponent {
     });
   }
 
-
   getOverallTrendAnalysis(data: EmailTrendItem[]): { openTexts: string[], clickTexts: string[] } {
     const openTexts: string[] = [];
     const clickTexts: string[] = [];
+
+    if (!data || data.length < 2) {
+      return {
+        openTexts: ['Không đủ dữ liệu để phân tích xu hướng mở.'],
+        clickTexts: ['Không đủ dữ liệu để phân tích xu hướng click.']
+      };
+    }
 
     const openRates = data.map(item => item.openRate ?? 0);
     const clickRates = data.map(item => item.clickRate ?? 0);
@@ -183,39 +189,60 @@ export class DashboardComponent {
     const openEnd = openRates[openRates.length - 1];
     const clickStart = clickRates[0];
     const clickEnd = clickRates[clickRates.length - 1];
+    const threshold = 5;
 
-    // Tổng thể
-    if (openEnd > openStart) {
-      openTexts.push(`Tỷ lệ mở có xu hướng tăng từ ${openStart}% lên ${openEnd}%.`);
-    } else if (openEnd < openStart) {
-      openTexts.push(`Tỷ lệ mở giảm từ ${openStart}% xuống còn ${openEnd}%.`);
-    } else {
+    const totalOpen = openRates.reduce((sum, val) => sum + val, 0);
+    const totalClick = clickRates.reduce((sum, val) => sum + val, 0);
+
+    // Tổng thể OPEN
+    if (totalOpen === 0) {
+      openTexts.push("Không có lượt mở nào trong khoảng thời gian này.");
+    } else if (openStart === 0 && openEnd === 0 && totalOpen > 0) {
+      openTexts.push("Tỷ lệ mở có dao động trong kỳ, nhưng bắt đầu và kết thúc ở mức 0%.");
+    } else if (Math.abs(openEnd - openStart) < threshold) {
       openTexts.push(`Tỷ lệ mở ổn định quanh mức ${openStart}%.`);
-    }
-
-    if (clickEnd > clickStart) {
-      clickTexts.push(`Tỷ lệ click có xu hướng tăng từ ${clickStart}% lên ${clickEnd}%.`);
-    } else if (clickEnd < clickStart) {
-      clickTexts.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
+    } else if (openEnd > openStart) {
+      openTexts.push(`Tỷ lệ mở có xu hướng tăng từ ${openStart}% lên ${openEnd}%.`);
     } else {
-      clickTexts.push(`Tỷ lệ click ổn định ở mức ${clickStart}%.`);
+      openTexts.push(`Tỷ lệ mở giảm từ ${openStart}% xuống còn ${openEnd}%.`);
     }
 
-    // Đột biến Open
+    // Tổng thể CLICK
+    if (totalClick === 0) {
+      clickTexts.push("Không có lượt click nào trong khoảng thời gian này.");
+    } else if (clickStart === 0 && clickEnd === 0 && totalClick > 0) {
+      clickTexts.push("Tỷ lệ click có dao động trong kỳ, nhưng bắt đầu và kết thúc ở mức 0%.");
+    } else if (Math.abs(clickEnd - clickStart) < threshold) {
+      clickTexts.push(`Tỷ lệ click ổn định quanh mức ${clickStart}%.`);
+    } else if (clickEnd > clickStart) {
+      clickTexts.push(`Tỷ lệ click có xu hướng tăng từ ${clickStart}% lên ${clickEnd}%.`);
+    } else {
+      clickTexts.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
+    }
+
+    // Đột biến OPEN (top 3)
+    const openDiffs = [];
     for (let i = 1; i < openRates.length; i++) {
       const diff = Math.abs(openRates[i] - openRates[i - 1]);
       if (diff >= 15) {
-        openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
+        openDiffs.push({ index: i, diff });
       }
     }
+    openDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
+      openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff}% vào <strong>${data[index].period}</strong>.`);
+    });
 
-    // Đột biến Click
+    // Đột biến CLICK (top 3)
+    const clickDiffs = [];
     for (let i = 1; i < clickRates.length; i++) {
       const diff = Math.abs(clickRates[i] - clickRates[i - 1]);
       if (diff >= 15) {
-        clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff}% vào <strong>${data[i].period}</strong>.`);
+        clickDiffs.push({ index: i, diff });
       }
     }
+    clickDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
+      clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff}% vào <strong>${data[index].period}</strong>.`);
+    });
 
     return { openTexts, clickTexts };
   }
