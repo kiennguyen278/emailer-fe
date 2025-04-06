@@ -3,7 +3,6 @@ import {QuillEditorComponent} from "ngx-quill";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {OptionModel} from "@core/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
-import {ModuleQuill} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
 import {EmailTemplateDTO, SaveEmailTemplateRequest} from "../../../models";
@@ -38,8 +37,6 @@ export class TemplateFormComponent implements OnInit {
   }
 
   contentPreviewHTML: any; // Dùng cho Quill
-  showPreview = false;
-  moduleQuill = ModuleQuill;
   isLoadingSave = false
 
   form: FormGroup;
@@ -78,18 +75,18 @@ export class TemplateFormComponent implements OnInit {
 
     this.emailService.saveMailTemplate(request).pipe()
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.notification.open({
             type: 'success',
-            content: this.mailTemplate.id ? 'Cập nhật email template thành công' : 'Thêm email template mới thành công'
+            content: res?.message || (this.mailTemplate.id ? 'Cập nhật email template thành công' : 'Thêm email template mới thành công')
           })
           this.isLoadingSave = false;
           this.modalRef.destroy(true);
         },
-        error: () => {
+        error: ({error}) => {
           this.notification.open({
             type: 'error',
-            content: 'Thao tác thất bại'
+            content: error?.message || 'Thao tác thất bại'
           });
           this.isLoadingSave = false;
         }
@@ -126,25 +123,6 @@ export class TemplateFormComponent implements OnInit {
 
   closeModal(){
     this.modalRef.destroy();
-  }
-
-  onChangeContent(content: string) {
-    let result = content;
-    if (this.form.controls['type'].value === 'HTML') {
-      result = content && content.replace(/{{\s*subscriber\.first_name\s*}}/g, '{{ contact.first_name }}');
-    }
-    this.contentPreviewHTML = this.sanitizer.bypassSecurityTrustHtml(result || '');
-  }
-
-  insertPlaceholder(text: string) {
-    const editor = this.quillEditorComponent?.quillEditor;
-    const selection = editor?.getSelection(true);
-
-    if (selection) {
-      editor.insertText(selection.index, text);
-      // @ts-ignore
-      editor.setSelection(selection.index + text.length);
-    }
   }
 
 }

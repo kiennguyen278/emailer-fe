@@ -3,7 +3,7 @@ import {QuillEditorComponent} from "ngx-quill";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ColumnConfig, OptionModel, TableQueryParams} from "@core/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
-import {DATE_TIME_FORMAT, ModuleQuill} from "@core/constants";
+import {DATE_TIME_FORMAT} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
 import {EmailCampaignDTO, SaveEmailCampaignRequest, SaveEmailTemplateRequest} from "../../../models";
@@ -84,9 +84,6 @@ export class CampaignFormComponent implements OnInit {
     return this.modalData.emailCampaign;
   }
 
-  contentPreviewHTML= ''; // Dùng cho Quill
-  showPreview = false;
-  moduleQuill = ModuleQuill;
   isLoadingSave = false
 
   form: FormGroup;

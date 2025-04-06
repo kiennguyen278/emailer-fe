@@ -52,41 +52,29 @@
           <div class="flex-[1_0_0]">
             <ng-container *ngIf="form.controls['type'].value == 'HTML'; else controlArea">
 
-              <div class="space-x-2 text-sm text-gray-600 mb-2 flex justify-between">
-                <div>
-                  <span>🔖 Chèn Placeholder:</span>
-                  <button
-                    type="button"
-                    class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
-                    (click)="insertPlaceholder('{{ contact.first_name }}')">
-                    Tên
-                  </button>
-                  <button
-                    type="button"
-                    class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
-                    (click)="insertPlaceholder('{{ contact.email }}')">
-                    Email
-                  </button>
-                </div>
+                <app-form-control>
+                  <app-richtext-email
+                    formControlName="htmlBody"
+                    [extraTpl]="extraTpl"></app-richtext-email>
+                </app-form-control>
 
-                <button
-                  type="button"
-                  class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
-                  (click)="showPreview = !showPreview">
-                  {{showPreview ? "Ẩn xem trước" : "Xem trước"}}
-                </button>
-              </div>
+                <ng-template #extraTpl>
+<!--                  <button-->
+<!--                    type="button"-->
+<!--                    (click)="openModalSelectTemplate()"-->
+<!--                    class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2">-->
+<!--                    Chọn template-->
+<!--                  </button>-->
+                </ng-template>
 
-              <app-form-control>
-                <quill-editor
-                  #quillEditor
-                  formControlName="htmlBody"
-                  [styles]="{height: '300px'}"
-                  [modules]="moduleQuill"
-                  (ngModelChange)="onChangeContent($event)"
-                  class="bg-white rounded">
-                </quill-editor>
-              </app-form-control>
+<!--                <quill-editor-->
+<!--                  #quillEditor-->
+<!--                  formControlName="htmlBody"-->
+<!--                  [styles]="{height: '300px'}"-->
+<!--                  [modules]="moduleQuill"-->
+<!--                  (ngModelChange)="onChangeContent($event)"-->
+<!--                  class="bg-white rounded">-->
+<!--                </quill-editor>-->
             </ng-container>
 
             <ng-template #controlArea>
@@ -114,12 +102,4 @@
   </form>
 </div>
 
-<!-- Chèn Placeholder -->
-<div *ngIf="showPreview" class="p-3 border rounded bg-gray-50 mt-4">
-  <div class="text-sm font-semibold mb-2">👁️ Xem trước nội dung email:</div>
-  <iframe [srcdoc]='contentPreviewHTML' width="100%;" height="auto">
-    <!--    <div [innerHTML]="contentPreviewHTML" class="prose max-w-none"></div>-->
-  </iframe>
-
-</div>
 

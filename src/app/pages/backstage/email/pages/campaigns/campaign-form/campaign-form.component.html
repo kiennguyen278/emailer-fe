@@ -80,38 +80,9 @@
               <label class="mr-2">Content:</label>
               <div class="flex-[1_0_0]">
 
-                <!--              <div class="space-x-2 text-sm text-gray-600 mb-2 flex justify-between">-->
-                <!--                <div>-->
-                <!--                  <span>🔖 Chèn Placeholder:</span>-->
-                <!--                  <button-->
-                <!--                    type="button"-->
-                <!--                    class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"-->
-                <!--                    (click)="insertPlaceholder('{{ contact.first_name }}')">-->
-                <!--                    Tên-->
-                <!--                  </button>-->
-                <!--                  <button-->
-                <!--                    type="button"-->
-                <!--                    class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"-->
-                <!--                    (click)="insertPlaceholder('{{ contact.email }}')">-->
-                <!--                    Email-->
-                <!--                  </button>-->
-                <!--                </div>-->
-
-                <!--                <button-->
-                <!--                  type="button"-->
-                <!--                  class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"-->
-                <!--                  (click)="showPreview = !showPreview">-->
-                <!--                  {{showPreview ? "Ẩn xem trước" : "Xem trước"}}-->
-                <!--                </button>-->
-
-                <!--              </div>-->
-
                 <app-form-control>
-                  <quill-editor
-                    formControlName="htmlBody"
-                    [styles]="{height: '300px'}"
-                    [modules]="moduleQuill">
-                  </quill-editor>
+                  <app-richtext-email
+                    formControlName="htmlBody"></app-richtext-email>
                 </app-form-control>
 
               </div>
@@ -134,14 +105,5 @@
       >Save</button>
     </div>
   </form>
-</div>
-
-<!-- Chèn Placeholder -->
-<div *ngIf="showPreview" class="p-3 border rounded bg-gray-50 mt-4">
-  <div class="text-sm font-semibold mb-2">👁️ Xem trước nội dung email:</div>
-  <iframe [srcdoc]="contentPreviewHTML" width="100%;" height="auto">
-<!--    <div [innerHTML]="contentPreviewHTML" class="prose max-w-none"></div>-->
-  </iframe>
-
 </div>
 

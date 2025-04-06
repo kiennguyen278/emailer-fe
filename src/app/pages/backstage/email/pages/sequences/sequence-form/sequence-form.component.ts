@@ -1,9 +1,8 @@
 import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {QuillEditorComponent} from "ngx-quill";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
-import {ColumnConfig, OptionModel, TableQueryParams} from "@core/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
-import {DATE_TIME_FORMAT, ModuleQuill} from "@core/constants";
+import {DATE_TIME_FORMAT} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
 import {
@@ -272,7 +271,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     });
 
     this.modalSelectTemplateRef.afterClose.subscribe((templates: EmailTemplateDTO[]) => {
-      console.log('template modalSelectTemplateRef', templates)
       if(templates){
         let contentHTML = '';
         templates.map((item: EmailTemplateDTO) => {
