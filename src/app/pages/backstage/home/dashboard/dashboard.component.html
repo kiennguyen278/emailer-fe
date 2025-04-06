@@ -200,11 +200,17 @@
               <div class="summary-title">Top khách hàng tiềm năng</div>
               <ul class="performance-list">
                 <li *ngFor="let sub of advancedStats.topSubscribers">
-                  <strong>{{ sub.name || sub.email }}</strong><br />
-                  Mở: {{ sub.openCount }} – Click: {{ sub.clickCount }}<br />
-                  🔥 <span class="text-bold text-orange-600">Điểm tương tác: {{ sub.score }}</span>
+                  <strong>{{ sub.name }} ({{sub.email }})</strong><br />
+                  Open count: {{ sub.openCount }} – Click count: {{ sub.clickCount }}<br />
+                  🔥 <span class="text-bold text-orange-600">Điểm tương tác: {{ sub.engagementScore }}</span>
                 </li>
               </ul>
+              <p>
+                Điểm tương tác = (openCount × openWeight) + (clickCount × clickWeight)
+              </p>
+              <p>
+                Trong đó: Mỗi lần mở email sẽ tính openWeight = 1 điểm, click vào link trong email tính clickWeight = 3 điểm.
+              </p>
               <p class="time-note">
                 📆 Dữ liệu trong vòng <strong>{{ getPeriodText(advancedRange) }}</strong> gần nhất
               </p>

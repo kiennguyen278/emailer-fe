@@ -258,7 +258,21 @@ export class DashboardComponent {
       }
     });
 
-    // 2. Top email theo tương tác
+    // 2. Top subcriber theo tương tác
+    this.dashboardService.getPotentialSubscribers(period).subscribe(res => {
+      if (res.success) {
+        // @ts-ignore
+        this.advancedStats.topSubscribers = res.data.map(e => ({
+          name: e.name,
+          email: e.email,
+          openCount: e.openCount,
+          clickCount: e.clickCount,
+          engagementScore: e.engagementScore
+        }));
+      }
+    });
+
+    // 3. Top email theo tương tác
     this.dashboardService.getEmailEngagementReport(period).subscribe(res => {
       if (res.success) {
         // @ts-ignore
