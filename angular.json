@@ -44,6 +44,7 @@
               "src/styles/styles.scss"
             ],
             "scripts": [
+              "node_modules/quill/dist/quill.min.js",
               "node_modules/@antv/g2/dist/g2.min.js",
               "node_modules/@antv/data-set/dist/data-set.min.js"
             ]

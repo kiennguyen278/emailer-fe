@@ -1,4 +1,8 @@
-import Quill from 'quill';
+import * as QuillNamespace from 'quill';
+let Quill: any = QuillNamespace;
+import ImageResize from 'quill-image-resize-module';
+Quill.register('modules/imageResize', ImageResize);
+
 
 export const SORT_DIRECTION = { ascend: 'asc', descend: 'desc' };
 
@@ -73,8 +77,8 @@ export const ModuleQuill = {
       ['link', 'image', 'video'], // link and image, video
       ['emoji'],
     ],
-    imageResize: {
-      modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
-    }
   },
+  imageResize: {
+    modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
+  }
 };

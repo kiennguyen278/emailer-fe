@@ -6,6 +6,9 @@
 // @import "tailwindcss/components";
 // @import "tailwindcss/utilities";
 
+img{
+  display: initial;
+}
 
 .ant-btn-primary {
   border-color: var(--primary);
