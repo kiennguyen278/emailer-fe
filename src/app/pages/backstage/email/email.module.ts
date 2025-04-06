@@ -15,10 +15,12 @@ import {SubscribersStoreModule} from "../subscribers/state/subscribers-store.mod
 import {CampaignDetailComponent} from "./pages/campaigns/campaign-detail/campaign-detail.component";
 import {SequenceFormComponent} from "./pages/sequences/sequence-form/sequence-form.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {SelectTemplateModalComponent} from "./components/select-template-modal/select-template-modal.component";
 
 const components = [
   TemplatesComponent,
   TemplateFormComponent,
+  SelectTemplateModalComponent,
 
   CampaignsComponent,
   CampaignFormComponent,

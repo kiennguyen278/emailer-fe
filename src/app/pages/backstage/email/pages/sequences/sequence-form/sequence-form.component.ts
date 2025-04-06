@@ -1,12 +1,18 @@
-import {ChangeDetectorRef, Component, inject, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {QuillEditorComponent} from "ngx-quill";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {ColumnConfig, OptionModel, TableQueryParams} from "@core/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
 import {DATE_TIME_FORMAT, ModuleQuill} from "@core/constants";
-import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
+import {NZ_MODAL_DATA, NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
-import {SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO, StepSequenceDTO} from "../../../models";
+import {
+  EmailTemplateDTO,
+  SaveSequenceRequest,
+  SaveStepSequenceRequest,
+  SequenceDTO,
+  StepSequenceDTO
+} from "../../../models";
 import {EmailService} from "../../../state/service";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {NotificationService} from "@core/services/notification.service";
@@ -14,23 +20,27 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import {Store} from "@ngrx/store";
 import {OptionDelayDate, Status} from "@core/options";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import {TemplateFormComponent} from "../../templates/template-form/template-form.component";
+import {SelectTemplateModalComponent} from "../../../components/select-template-modal/select-template-modal.component";
 
 @UntilDestroy()
 @Component({
   selector: 'app-sequence-form',
   templateUrl: './sequence-form.component.html',
 })
-export class SequenceFormComponent implements OnInit {
+export class SequenceFormComponent implements OnInit, OnDestroy {
   @ViewChild('quillEditor') quillEditorComponent!: QuillEditorComponent;
 
   readonly modalData: {sequence: SequenceDTO} = inject(NZ_MODAL_DATA);
 
+  modalSelectTemplateRef: NzModalRef;
 
   constructor(
     private fb: FormBuilder,
     private modalRef: NzModalRef,
     private cdr: ChangeDetectorRef,
     private store: Store,
+    private modal: NzModalService,
     private emailService: EmailService,
     private notification: NotificationService,
   ) {
@@ -250,6 +260,34 @@ export class SequenceFormComponent implements OnInit {
 
   onTabChange(e: any): void {
     this.selectedTabIndex = e.index;
+  }
+
+  openModalSelectTemplate(){
+    this.modalSelectTemplateRef = this.modal.create({
+      nzTitle: 'Danh sách template email',
+      nzContent: SelectTemplateModalComponent,
+      nzFooter: null,
+      nzWidth: '1100px',
+      nzMaskClosable: false
+    });
+
+    this.modalSelectTemplateRef.afterClose.subscribe((templates: EmailTemplateDTO[]) => {
+      console.log('template modalSelectTemplateRef', templates)
+      if(templates){
+        let contentHTML = '';
+        templates.map((item: EmailTemplateDTO) => {
+          contentHTML = contentHTML + item.htmlBody
+        });
+        const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
+        currentStepControl.patchValue({htmlBody: contentHTML})
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.modalSelectTemplateRef){
+      this.modalSelectTemplateRef.destroy();
+    }
   }
 
 }

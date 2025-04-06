@@ -1,0 +1,31 @@
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <app-table
+        [columns]="columns"
+        [items]="items"
+        [scrollX]="'900px'"
+        [loading]="isLoading$ | async"
+        [showPagination]="false"
+        [showCheckbox]="true"
+        (itemSelected)="onSelectedItem($event)"
+      >
+        <ng-template [appCellTemplate]="'createdAt'" let-item>
+          {{item.createdAt | date: DATE_TIME_FORMAT}}
+        </ng-template>
+      </app-table>
+    </div>
+    <div class="btn-group text-right mt-3">
+      <button nz-button
+              nzType="primary"
+              type="button"
+              class="ml-3"
+              (click)="selectTemplate()"
+              [disabled]="selectedTemplates.length == 0"
+      >
+        Select template
+      </button>
+    </div>
+  </div>
+
+
