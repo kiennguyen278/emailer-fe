@@ -1,0 +1,13 @@
+
+.ant-modal-wrap.previewEmail{
+  .ant-modal{
+    height: 90vh;
+    top: 10vh;
+    .ant-modal-content{
+      height: 100%;
+    }
+    .ant-modal-body{
+      height: calc(100% - 50px);
+    }
+  }
+}
