@@ -65,6 +65,7 @@ export class RichtextEmailComponent implements ControlValueAccessor {
 
   writeValue(obj: any): void {
     this.value = obj;
+    this.contentPreviewHTML = this.sanitizer.bypassSecurityTrustHtml(this.value);
   }
 
   registerOnChange(fn: any): void {
