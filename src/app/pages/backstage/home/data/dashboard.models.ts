@@ -99,6 +99,11 @@ export interface EmailEngagement {
   openCount: number;
   clickCount: number;
   engagementScore: number;
+
+  totalSent: number;
+  openRate: number;
+  clickRate: number;
+
 }
 
 

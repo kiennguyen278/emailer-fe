@@ -221,15 +221,17 @@
           <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
             <div class="summary-box">
               <div class="summary-title">Hiệu suất nội dung</div>
+
               <ul class="performance-list">
                 <li *ngFor="let email of advancedStats.topEmails">
                   <strong>{{ email.subject }}</strong><br />
-                  Mở: {{ email.openCount }}% – Click: {{ email.clickCount }}%<br />
-                  <span [ngClass]="getContentPerformanceClass(email)">
-              {{ getContentPerformanceAnalysis(email) }}
-            </span>
+                  Total sent: {{ email.totalSent }} –
+                  Open rate: {{ email.openRate }}% ({{ email.openCount }}) –
+                  Click rate: {{ email.clickRate }}% ({{ email.clickCount }})<br />
+                  🔥 <span class="text-bold text-orange-600">Điểm tương tác: {{ email.engagementScore }}</span>
                 </li>
               </ul>
+
               <p class="time-note">
                 📆 Dữ liệu trong vòng <strong>{{ getPeriodText(advancedRange) }}</strong> gần nhất
               </p>

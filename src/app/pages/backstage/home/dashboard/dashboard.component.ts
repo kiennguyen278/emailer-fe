@@ -324,9 +324,14 @@ export class DashboardComponent {
       if (res.success) {
         // @ts-ignore
         this.advancedStats.topEmails = res.data.map(e => ({
+          campaignName: e.campaignName,
+          sequenceName: e.sequenceName,
           subject: e.subject,
+          totalSent: e.totalSent,
           openCount: e.openCount,
           clickCount: e.clickCount,
+          openRate: e.openRate,
+          clickRate: e.clickRate,
           engagementScore: e.engagementScore
         }));
       }
