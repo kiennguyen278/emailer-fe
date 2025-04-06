@@ -91,10 +91,15 @@ export class CampaignFormComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.emailCampaign)
     this.store.dispatch(getListTags());
 
     this.getSubscriberList();
     this.selectSubscribeStore();
+
+    if (this.emailCampaign) {
+      this.getDetailCampaign(this.emailCampaign.id)
+    }
   }
 
 
@@ -118,9 +123,9 @@ export class CampaignFormComponent implements OnInit {
   }
 
 
-  getDetailCampaign() {
+  getDetailCampaign(id: number) {
     if (this.emailCampaign){
-      this.emailService.getDetailCampaignsById(this.emailCampaign.id)
+      this.emailService.getDetailCampaignsById(id)
         .pipe(untilDestroyed(this))
         .subscribe((item) => {
           this.form.patchValue(item.data);
@@ -150,34 +155,24 @@ export class CampaignFormComponent implements OnInit {
 
     FormUtil.validate(this.form);
 
-    // if (isEmpty(formVal.subscriberIds)){
-    //   this.notification.open({
-    //     type: 'error',
-    //     content: 'Vui lòng chọn danh sách Subscriber cho campaign'
-    //   });
-    //   return;
-    // }
-
-    console.log('formVal', formVal)
     this.isLoadingSave = true;
 
     const request: SaveEmailCampaignRequest = this.emailCampaign?.id ? {id: this.emailCampaign.id, ...formVal} : formVal;
 
     this.emailService.saveMailCampaign(request).pipe()
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.notification.open({
             type: 'success',
-            content: this.emailCampaign?.id ? 'Cập nhật campaign thành công' : 'Thêm campaign mới thành công'
+            content: res?.message || (this.emailCampaign?.id ? 'Cập nhật campaign thành công' : 'Thêm campaign mới thành công')
           })
           this.isLoadingSave = false;
           this.modalRef.destroy(true);
         },
-        error: (err) => {
-          console.log('err', err);
+        error: ({error}) => {
           this.notification.open({
             type: 'error',
-            content: 'Thao tác thất bại'
+            content: error?.message ||'Thao tác thất bại'
           });
           this.isLoadingSave = false;
         }
