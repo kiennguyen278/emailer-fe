@@ -164,7 +164,7 @@ export class DashboardComponent {
         };
 
         // Phân tích
-        const { openTexts, clickTexts } = this.getOverallTrendAnalysis(data);
+        const { openTexts, clickTexts } = this.getOverallTrendAnalysis(data, range);
         this.openTrendTexts = openTexts;
         this.clickTrendTexts = clickTexts;
       }
@@ -172,14 +172,16 @@ export class DashboardComponent {
     });
   }
 
-  getOverallTrendAnalysis(data: EmailTrendItem[]): { openTexts: string[], clickTexts: string[] } {
+  getOverallTrendAnalysis(data: EmailTrendItem[], range: string): { openTexts: string[], clickTexts: string[] } {
     const openTexts: string[] = [];
     const clickTexts: string[] = [];
+
+    const unit = range.endsWith('d') ? 'daily' : range.endsWith('w') ? 'weekly' : 'monthly';
 
     if (!data || data.length < 2) {
       return {
         openTexts: ['Không đủ dữ liệu để phân tích xu hướng mở.'],
-        clickTexts: ['Không đủ dữ liệu để phân tích xu hướng click.']
+        clickTexts: ['Không đủ dữ liệu để phân tích click.']
       };
     }
 
@@ -220,6 +222,23 @@ export class DashboardComponent {
       clickTexts.push(`Tỷ lệ click giảm từ ${clickStart}% xuống còn ${clickEnd}%.`);
     }
 
+    // Hàm format period
+    const formatPeriod = (period: string): string => {
+      if (unit === 'daily') {
+        const [y, m, d] = period.split('-');
+        return `${d}/${m}/${y}`;
+      }
+      if (unit === 'weekly') {
+        const [y, w] = period.split('-');
+        return `Tuần ${w} năm ${y}`;
+      }
+      if (unit === 'monthly') {
+        const [y, m] = period.split('-');
+        return `Tháng ${m}/${y}`;
+      }
+      return period;
+    };
+
     // Đột biến OPEN (top 3)
     const openDiffs = [];
     for (let i = 1; i < openRates.length; i++) {
@@ -229,7 +248,7 @@ export class DashboardComponent {
       }
     }
     openDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
-      openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff}% vào <strong>${data[index].period}</strong>.`);
+      openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff.toFixed(1)}% vào <strong>${formatPeriod(data[index].period)}</strong>.`);
     });
 
     // Đột biến CLICK (top 3)
@@ -241,11 +260,12 @@ export class DashboardComponent {
       }
     }
     clickDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
-      clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff}% vào <strong>${data[index].period}</strong>.`);
+      clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff.toFixed(1)}% vào <strong>${formatPeriod(data[index].period)}</strong>.`);
     });
 
     return { openTexts, clickTexts };
   }
+
 
 
   getPeriodText(range: string): string {
