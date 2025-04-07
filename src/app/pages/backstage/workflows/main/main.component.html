@@ -18,7 +18,6 @@
     <tbody>
     <tr *ngFor="let wf of workflows">
       <td>{{ wf.name }}</td>
-      <td>{{ wf.description }}</td>
       <td>{{ wf.status }}</td>
       <td>
         <button class="action-btn" [routerLink]="['/workflows/builder', wf.id]">🛠️ Sửa</button>

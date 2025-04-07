@@ -13,7 +13,6 @@ export class WorkflowService {
       id: 1,
       userId: 1,
       name: 'Welcome Sequence',
-      description: 'Gửi email chào mừng',
       status: 'ACTIVE',
       triggerConditions: [
         {
@@ -45,7 +44,6 @@ export class WorkflowService {
       id: 2,
       userId: 1,
       name: 'Upsell Workflow',
-      description: 'Gửi chuỗi upsell sau khi mua hàng',
       status: 'DRAFT',
       triggerConditions: [
         {
