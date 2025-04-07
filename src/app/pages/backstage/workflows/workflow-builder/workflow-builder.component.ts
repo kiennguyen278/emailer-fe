@@ -21,11 +21,21 @@ export class WorkflowBuilderComponent implements OnInit {
   workflowName: string = '';
   errorMessage: string = '';
 
-  tags = [
-    { id: 101, name: 'Khách VIP' },
-    { id: 202, name: 'Khách mới' },
-    { id: 303, name: 'Đã mua hàng' }
+  emailTemplates = [
+    { id: 1, name: 'Welcome Email' },
+    { id: 2, name: 'Product Introduction' }
   ];
+
+  tags = [
+    { id: 101, name: 'Khách hàng mới' },
+    { id: 102, name: 'Tiềm năng' }
+  ];
+
+  sequences = [
+    { id: 201, name: 'Chuỗi onboarding' },
+    { id: 202, name: 'Giữ chân khách hàng' }
+  ];
+
 
   triggerTypes = [
     {
@@ -157,19 +167,62 @@ export class WorkflowBuilderComponent implements OnInit {
     return this.triggerConditions.length > 0;
   }
 
+  isStepModalOpen = false;
+  selectedStepType = '';
+  stepData: any = {};
+
 
   addNode(type: string) {
-    const data = { label: type };
+    this.openStepModal(type);
+  }
+  openStepModal(type: string) {
+    this.selectedStepType = type;
+    this.stepData = {}; // reset data mỗi lần mở
+    this.isStepModalOpen = true;
+  }
+
+  confirmAddStep() {
+    const label = this.getStepLabel(this.selectedStepType, this.stepData);
+    const data = {
+      label,
+      stepData: { ...this.stepData }
+    };
+
     this.editor.addNode(
-      type,
+      this.selectedStepType,
       1,
       1,
       100 + Math.floor(Math.random() * 400),
       100 + Math.floor(Math.random() * 200),
-      type,
+      this.selectedStepType,
       data,
-      `<div class='node'>${type}</div>`
+      `<div class='node'>${label}</div>`
     );
+
+    this.isStepModalOpen = false;
   }
+
+  getStepLabel(type: string, data: any): string {
+    switch (type) {
+      case 'SEND_EMAIL':
+        const email = this.emailTemplates.find(t => t.id === data.email_template_id);
+        return `📧 ${email?.name || 'Email'}`;
+      case 'WAIT':
+        return `⏱️ Chờ ${data.days} ngày`;
+      case 'ADD_TAG':
+        const tag1 = this.tags.find(t => t.id === data.tag_id);
+        return `➕ Tag: ${tag1?.name || 'tag'}`;
+      case 'REMOVE_TAG':
+        const tag2 = this.tags.find(t => t.id === data.tag_id);
+        return `➖ Tag: ${tag2?.name || 'tag'}`;
+      case 'ADD_TO_SEQUENCE':
+        const seq = this.sequences.find(s => s.id === data.sequence_id);
+        return `🔁 Chuỗi: ${seq?.name || 'sequence'}`;
+      default:
+        return type;
+    }
+  }
+
+
 
 }
