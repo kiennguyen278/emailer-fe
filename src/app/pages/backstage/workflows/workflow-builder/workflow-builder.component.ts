@@ -3,6 +3,8 @@ import Drawflow from 'drawflow';
 import {TriggerConditionDTO, WorkflowDTO, WorkflowStepDTO} from "../data/workflow.dto";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {WorkflowService} from "../data/workflow.service";
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workflow-builder',
@@ -65,18 +67,90 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   ];
 
+
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private message: NzMessageService,
     private workflowService: WorkflowService
   ) {
 
   }
 
+  workflowId: number | null = null;
+
   ngOnInit(): void {
-    //load data
+    this.workflowId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadWorkflowData();
 
+    if (this.workflowId) {
+      this.workflowService.getWorkflowDetail(this.workflowId).subscribe({
+        next: (res) => {
+          if (res.success && res.data) {
+            localStorage.setItem('workflow_draft', JSON.stringify(res.data));
+            this.loadFromLocalStorage(); // 🔁 bước build lại trigger và step
+          }
+        },
+        error: () => {
+          console.error('❌ Lỗi khi load workflow');
+        }
+      });
+    } else {
+      this.loadFromLocalStorage(); // với trường hợp tạo mới
+    }
   }
+
+  loadFromLocalStorage(): void {
+    const saved = localStorage.getItem('workflow_draft');
+    if (!saved) return;
+
+    const wf: WorkflowDTO = JSON.parse(saved);
+
+    this.workflowName = wf.name;
+    this.triggerConditions = wf.triggerConditions.map(tc => ({
+      conditionType: tc.conditionType,
+      value: JSON.parse(tc.conditionData),
+      logicOperator: tc.logicOperator
+    }));
+
+    setTimeout(() => {
+      if (this.editor && wf.steps.length > 0) {
+        const importJson = this.buildDrawflowFromSteps(wf.steps);
+        this.editor.import(importJson);
+      }
+    }, 0);
+  }
+
+  buildDrawflowFromSteps(steps: WorkflowStepDTO[]): any {
+    const data: any = {};
+    steps.forEach((step, index) => {
+      const id = (index + 1).toString();
+      const stepData = JSON.parse(step.stepData);
+      const label = this.getStepLabel(step.stepType, stepData);
+
+      data[id] = {
+        id: Number(id),
+        name: step.stepType,
+        data: { label, stepData },
+        class: step.stepType,
+        html: `<div class='node'>${label}</div>`,
+        typenode: step.stepType,
+        pos_x: 150 + index * 60,
+        pos_y: 100 + index * 40,
+        inputs: {},
+        outputs: {}
+      };
+    });
+
+    return {
+      drawflow: {
+        Home: {
+          data
+        }
+      }
+    };
+  }
+
 
   loadWorkflowData(): void {
     this.workflowService.getAllTags().subscribe({
@@ -157,8 +231,9 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   }
 
-  nextTab() {
+  nextTab(): void {
     this.errorMessage = '';
+
     if (!this.workflowName || this.workflowName.trim() === '') {
       this.errorMessage = 'Vui lòng nhập tên workflow.';
       return;
@@ -178,8 +253,19 @@ export class WorkflowBuilderComponent implements OnInit {
         this.editor.reroute = true;
         this.editor.start();
       }
+
+      // Nếu là chế độ EDIT, và chưa có node nào trên editor
+      if (this.workflowId && this.editor && Object.keys(this.editor.drawflow?.Home?.data || {}).length === 0) {
+        const saved = localStorage.getItem('workflow_draft');
+        if (saved) {
+          const wf: WorkflowDTO = JSON.parse(saved);
+          const importJson = this.buildDrawflowFromSteps(wf.steps);
+          this.editor.import(importJson);
+        }
+      }
     }, 0);
   }
+
 
   isTriggerValid(): boolean {
     if (!this.selectedTriggerType) return false;
@@ -250,7 +336,7 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   }
 
-  submitWorkflow() {
+  submitWorkflow(): void {
     const dto = this.buildWorkflowDTO();
 
     if (!dto.name || dto.triggerConditions.length === 0 || dto.steps.length === 0) {
@@ -258,22 +344,40 @@ export class WorkflowBuilderComponent implements OnInit {
       return;
     }
 
-    this.workflowService.createWorkflow(dto).subscribe({
-      next: (res) => {
-        if (res.success) {
-          alert('✅ Tạo workflow thành công!');
-          localStorage.removeItem('workflow_draft');
-        } else {
-          alert('❌ Tạo thất bại: ' + res.message);
+    if (this.workflowId) {
+      // 👉 UPDATE
+      this.workflowService.updateWorkflow(this.workflowId, dto).subscribe({
+        next: (res) => {
+          if (res.success) {
+            alert('✅ Cập nhật workflow thành công!');
+            localStorage.removeItem('workflow_draft');
+            this.router.navigate(['/workflows']); // 👉 điều hướng về danh sách
+          } else {
+            alert('❌ Cập nhật thất bại: ' + res.message);
+          }
+        },
+        error: () => {
+          alert('❌ Có lỗi xảy ra khi cập nhật workflow');
         }
-      },
-      error: (err) => {
-        console.error(err);
-        alert('❌ Có lỗi xảy ra khi tạo workflow');
-      }
-    });
+      });
+    } else {
+      // 👉 CREATE
+      this.workflowService.createWorkflow(dto).subscribe({
+        next: (res) => {
+          if (res.success && res.data) {
+            alert('✅ Tạo workflow thành công!');
+            localStorage.removeItem('workflow_draft');
+            this.router.navigate(['/workflows', res.data]); // 👉 hoặc chuyển sang chi tiết
+          } else {
+            alert('❌ Tạo thất bại: ' + res.message);
+          }
+        },
+        error: () => {
+          alert('❌ Có lỗi xảy ra khi tạo workflow');
+        }
+      });
+    }
   }
-
 
   buildWorkflowDTO(): WorkflowDTO {
     const triggerConditions: TriggerConditionDTO[] = this.triggerConditions.map((c, index) => ({

@@ -37,4 +37,25 @@ export class MainComponent implements OnInit {
       }
     });
   }
+
+  confirmDelete(id: number): void {
+    const confirmed = confirm('❗Bạn có chắc muốn xoá workflow này không?');
+    if (!confirmed) return;
+
+    this.workflowService.deleteWorkflow(id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert('🗑️ Đã xoá workflow');
+          this.loadWorkflows(); // reload danh sách
+        } else {
+          alert('❌ Xoá thất bại: ' + res.message);
+        }
+      },
+      error: () => {
+        alert('❌ Lỗi khi xoá workflow');
+      }
+    });
+  }
+
+
 }
