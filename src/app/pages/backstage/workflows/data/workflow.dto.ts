@@ -19,3 +19,19 @@ export interface WorkflowStepDTO {
   stepData: string;
   position: number;
 }
+
+
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+export interface SequenceDTO {
+  id: number,
+  name: string
+}
+
+export interface EmailTemplateDTO {
+  id: number;
+  name: string;
+}

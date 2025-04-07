@@ -1,13 +1,8 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import Drawflow from 'drawflow';
 import {TriggerConditionDTO, WorkflowDTO, WorkflowStepDTO} from "../data/workflow.dto";
-import {Store} from "@ngrx/store";
-import {ActivatedRoute} from "@angular/router";
-import {SubscribersService} from "../../subscribers/state/service";
-import {NotificationService} from "@core/services/notification.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {FormBuilder} from "@angular/forms";
 import {NzMessageService} from "ng-zorro-antd/message";
+import {WorkflowService} from "../data/workflow.service";
 
 @Component({
   selector: 'app-workflow-builder',
@@ -29,21 +24,9 @@ export class WorkflowBuilderComponent implements OnInit {
   workflowName: string = '';
   errorMessage: string = '';
 
-  emailTemplates = [
-    { id: 1, name: 'Welcome Email' },
-    { id: 2, name: 'Product Introduction' }
-  ];
-
-  tags = [
-    { id: 101, name: 'Khách hàng mới' },
-    { id: 102, name: 'Tiềm năng' }
-  ];
-
-  sequences = [
-    { id: 201, name: 'Chuỗi onboarding' },
-    { id: 202, name: 'Giữ chân khách hàng' }
-  ];
-
+  tags: { id: number; name: string }[] = [];
+  emailTemplates: { id: number; name: string }[] = [];
+  sequences: { id: number; name: string }[] = [];
 
   triggerTypes = [
     {
@@ -84,16 +67,44 @@ export class WorkflowBuilderComponent implements OnInit {
 
   constructor(
     private message: NzMessageService,
+    private workflowService: WorkflowService
   ) {
 
   }
 
   ngOnInit(): void {
-    const savedTriggers = localStorage.getItem('workflow_triggers');
-    if (savedTriggers) {
-      this.triggerConditions = JSON.parse(savedTriggers);
-    }
+    //load data
+    this.loadWorkflowData();
 
+  }
+
+  loadWorkflowData(): void {
+    this.workflowService.getAllTags().subscribe({
+      next: (res) => {
+        this.tags = res.success ? res.data : [];
+      },
+      error: () => {
+        this.tags = [];
+      }
+    });
+
+    this.workflowService.getEmailTemplates().subscribe({
+      next: (res) => {
+        this.emailTemplates = res.success ? res.data : [];
+      },
+      error: () => {
+        this.emailTemplates = [];
+      }
+    });
+
+    this.workflowService.getEmailSequences().subscribe({
+      next: (res) => {
+        this.sequences = res.success ? res.data : [];
+      },
+      error: () => {
+        this.sequences = [];
+      }
+    });
   }
 
   get selectedTriggerType() {
@@ -241,11 +252,28 @@ export class WorkflowBuilderComponent implements OnInit {
 
   submitWorkflow() {
     const dto = this.buildWorkflowDTO();
-    console.log('🎯 WorkflowDTO:', dto);
-    this.message.success("Tạo workflow thành công!");
 
-    // call API
+    if (!dto.name || dto.triggerConditions.length === 0 || dto.steps.length === 0) {
+      alert('❌ Vui lòng nhập đầy đủ tên workflow, điều kiện trigger và ít nhất 1 bước!');
+      return;
+    }
+
+    this.workflowService.createWorkflow(dto).subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert('✅ Tạo workflow thành công!');
+          localStorage.removeItem('workflow_draft');
+        } else {
+          alert('❌ Tạo thất bại: ' + res.message);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        alert('❌ Có lỗi xảy ra khi tạo workflow');
+      }
+    });
   }
+
 
   buildWorkflowDTO(): WorkflowDTO {
     const triggerConditions: TriggerConditionDTO[] = this.triggerConditions.map((c, index) => ({
@@ -275,7 +303,7 @@ export class WorkflowBuilderComponent implements OnInit {
 
   saveToLocal() {
     const dto = this.buildWorkflowDTO();
-    localStorage.setItem('workflow_data', JSON.stringify(dto));
+    localStorage.setItem('workflow_draft', JSON.stringify(dto));
   }
 
 }

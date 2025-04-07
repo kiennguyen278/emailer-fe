@@ -1,118 +1,49 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { WorkflowDTO } from './workflow.dto';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {WorkflowDTO, Tag, EmailTemplateDTO,SequenceDTO} from './workflow.dto';
+import {BaseApiService} from "@core/services/base-api.service";
+import {ApiResponse} from "@core/models";
+import {HttpParams} from "@angular/common/http";
 
-@Injectable()
-export class WorkflowService {
-  constructor(private http: HttpClient) {}
+@Injectable({ providedIn: 'root' })
+export class WorkflowService extends BaseApiService {
+  private readonly BASE_URL = this.buildUrl('/workflows');
 
-
-  private workflows: WorkflowDTO[] = [
-    {
-      id: 1,
-      userId: 1,
-      name: 'Welcome Sequence',
-      status: 'ACTIVE',
-      triggerConditions: [
-        {
-          conditionType: 'TAG',
-          conditionData: JSON.stringify({ tag_id: 101 }),
-          logicOperator: 'AND',
-          position: 1
-        }
-      ],
-      steps: [
-        {
-          stepType: 'SEND_EMAIL',
-          stepData: JSON.stringify({ email_template_id: 12 }),
-          position: 1
-        },
-        {
-          stepType: 'WAIT',
-          stepData: JSON.stringify({ days: 2 }),
-          position: 2
-        },
-        {
-          stepType: 'ADD_TAG',
-          stepData: JSON.stringify({ tag_id: 202 }),
-          position: 3
-        }
-      ]
-    },
-    {
-      id: 2,
-      userId: 1,
-      name: 'Upsell Workflow',
-      status: 'DRAFT',
-      triggerConditions: [
-        {
-          conditionType: 'INTERACTION',
-          conditionData: JSON.stringify({ action: 'CLICK' }),
-          logicOperator: 'AND',
-          position: 1
-        }
-      ],
-      steps: [
-        {
-          stepType: 'SEND_EMAIL',
-          stepData: JSON.stringify({ email_template_id: 15 }),
-          position: 1
-        },
-        {
-          stepType: 'ADD_TO_SEQUENCE',
-          stepData: JSON.stringify({ sequence_id: 7 }),
-          position: 2
-        }
-      ]
-    }
-  ];
-
-
-  getAllWorkflows(): Observable<WorkflowDTO[]> {
-    return of(this.workflows);
+  createWorkflow(workflow: WorkflowDTO): Observable<{ success: boolean; message: string; data: number }> {
+    return this.http.post<{ success: boolean; message: string; data: number }>(this.BASE_URL, workflow);
   }
 
-  getWorkflowById(id: number): Observable<WorkflowDTO | undefined> {
-    const workflow = this.workflows.find(w => (w as any).id === id);
-    return of(workflow);
+  updateWorkflow(id: number, workflow: WorkflowDTO): Observable<{ success: boolean; message: string }> {
+    return this.http.put<{ success: boolean; message: string }>(`${this.BASE_URL}/${id}`, workflow);
   }
 
-  createWorkflow(workflow: WorkflowDTO): Observable<WorkflowDTO> {
-    this.workflows.push(workflow);
-    return of(workflow);
+  deleteWorkflow(id: number): Observable<any> {
+    return this.http.delete(`${this.BASE_URL}/${id}`);
   }
 
-  updateWorkflow(updated: WorkflowDTO): Observable<WorkflowDTO> {
-    const index = this.workflows.findIndex(w => w.name === updated.name);
-    if (index !== -1) this.workflows[index] = updated;
-    return of(updated);
+  updateWorkflowStatus(id: number, status: string): Observable<any> {
+    return this.http.put(`${this.BASE_URL}/${id}/status`, { status });
   }
 
-  deleteWorkflow(name: string): Observable<boolean> {
-    this.workflows = this.workflows.filter(w => w.name !== name);
-    return of(true);
+  getWorkflowDetail(id: number): Observable<{ success: boolean; data: WorkflowDTO }> {
+    return this.http.get<{ success: boolean; data: WorkflowDTO }>(`${this.BASE_URL}/${id}`);
   }
 
-  getAllTags(): Observable<{ id: number; name: string }[]> {
-    return of([
-      { id: 1, name: 'LEAD' },
-      { id: 2, name: 'BUYER' }
-    ]);
+  getWorkflowList(): Observable<ApiResponse<WorkflowDTO[]>> {
+    const params = new HttpParams();
+    return this.http.get<ApiResponse<WorkflowDTO[]>>(`${this.BASE_URL}`);
   }
 
-  getAllEmails(): Observable<{ id: number; name: string }[]> {
-    return of([
-      { id: 1, name: 'Chào mừng' },
-      { id: 2, name: 'Cảm ơn' }
-    ]);
+  getAllTags(): Observable<ApiResponse<Tag[]>> {
+    return this.http.get<ApiResponse<Tag[]>>(`${this.buildUrl('/tags')}`);
   }
 
-  getAllSequences(): Observable<{ id: number; name: string }[]> {
-    return of([
-      { id: 1, name: 'Welcome Series' },
-      { id: 2, name: 'Upsell Series' }
-    ]);
+  getEmailTemplates(): Observable<ApiResponse<EmailTemplateDTO[]>> {
+    return this.http.get<ApiResponse<EmailTemplateDTO[]>>(`${this.buildUrl('/email-templates')}`);
+  }
+
+  getEmailSequences(): Observable<ApiResponse<SequenceDTO[]>> {
+    return this.http.get<ApiResponse<SequenceDTO[]>>(`${this.buildUrl('/sequences')}`);
   }
 
 }

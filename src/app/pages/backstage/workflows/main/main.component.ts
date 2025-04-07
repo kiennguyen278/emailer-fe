@@ -9,18 +9,31 @@ import { WorkflowDTO } from '../data/workflow.dto';
 })
 export class MainComponent implements OnInit {
   workflows: WorkflowDTO[] = [];
-  loading = true;
+  loading = false;
 
   constructor(private workflowService: WorkflowService) {}
 
   ngOnInit(): void {
-    this.workflowService.getAllWorkflows().subscribe({
-      next: (data) => {
-        this.workflows = data;
+    this.loadWorkflows();
+  }
+
+  loadWorkflows(): void {
+    this.loading = true;
+
+    this.workflowService.getWorkflowList().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.workflows = res.data;
+        } else {
+          console.warn('⚠️ API trả về lỗi:', res.message);
+          this.workflows = [];
+        }
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('❌ Lỗi khi gọi API:', err);
         this.loading = false;
+        this.workflows = [];
       }
     });
   }
