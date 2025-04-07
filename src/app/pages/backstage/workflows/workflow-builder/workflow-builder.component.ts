@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import Drawflow from 'drawflow';
+import {TriggerConditionDTO, WorkflowDTO, WorkflowStepDTO} from "../data/workflow.dto";
+import {Store} from "@ngrx/store";
+import {ActivatedRoute} from "@angular/router";
+import {SubscribersService} from "../../subscribers/state/service";
+import {NotificationService} from "@core/services/notification.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormBuilder} from "@angular/forms";
+import {NzMessageService} from "ng-zorro-antd/message";
 
 @Component({
   selector: 'app-workflow-builder',
@@ -74,6 +82,12 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   ];
 
+  constructor(
+    private message: NzMessageService,
+  ) {
+
+  }
+
   ngOnInit(): void {
     const savedTriggers = localStorage.getItem('workflow_triggers');
     if (savedTriggers) {
@@ -102,8 +116,9 @@ export class WorkflowBuilderComponent implements OnInit {
       this.triggerConditions.push({ ...this.newTrigger });
     }
     this.newTrigger = { conditionType: '', logicOperator: 'AND', value: {} };
-    // this.selectedTriggerType = null;
-    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
+
+    //save
+    this.saveToLocal();
   }
 
   editTrigger(index: number) {
@@ -113,7 +128,8 @@ export class WorkflowBuilderComponent implements OnInit {
 
   removeTrigger(index: number) {
     this.triggerConditions.splice(index, 1);
-    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
+
+    this.saveToLocal();
   }
 
   getTriggerLabel(trigger: any): string {
@@ -143,8 +159,6 @@ export class WorkflowBuilderComponent implements OnInit {
     }
 
     this.tab = 2;
-    //save
-    localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
 
     setTimeout(() => {
       const container = document.getElementById('drawflow');
@@ -200,6 +214,8 @@ export class WorkflowBuilderComponent implements OnInit {
     );
 
     this.isStepModalOpen = false;
+
+    this.saveToLocal();
   }
 
   getStepLabel(type: string, data: any): string {
@@ -223,6 +239,43 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   }
 
+  submitWorkflow() {
+    const dto = this.buildWorkflowDTO();
+    console.log('🎯 WorkflowDTO:', dto);
+    this.message.success("Tạo workflow thành công!");
 
+    // call API
+  }
+
+  buildWorkflowDTO(): WorkflowDTO {
+    const triggerConditions: TriggerConditionDTO[] = this.triggerConditions.map((c, index) => ({
+      conditionType: c.conditionType,
+      conditionData: JSON.stringify(c.value),
+      logicOperator: c.logicOperator,
+      position: index
+    }));
+
+    const exported = this.editor?.export();
+    const steps: WorkflowStepDTO[] = Object.values(exported?.drawflow?.Home?.data || {}).map((node: any, index: number) => ({
+      stepType: node.name,
+      stepData: JSON.stringify(node.data.stepData || {}),
+      position: index
+    }));
+
+    return {
+      id: 0,
+      userId: 1,
+      name: this.workflowName,
+      status: 'DRAFT',
+      triggerConditions: triggerConditions,
+      steps: steps
+    };
+  }
+
+
+  saveToLocal() {
+    const dto = this.buildWorkflowDTO();
+    localStorage.setItem('workflow_data', JSON.stringify(dto));
+  }
 
 }
