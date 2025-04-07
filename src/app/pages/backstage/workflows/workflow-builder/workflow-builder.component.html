@@ -7,6 +7,12 @@
 
 <!-- Step 1: Trigger Builder -->
 <div *ngIf="tab === 1" class="max-w-3xl mx-auto px-4">
+
+  <div class="bg-white p-6 rounded shadow mb-6">
+    <label class="block mb-2 font-semibold">📝 Tên workflow</label>
+    <input class="w-full border p-2 rounded mb-4" [(ngModel)]="workflowName" placeholder="Nhập tên workflow..." />
+  </div>
+
   <div class="bg-white p-6 rounded shadow mb-6">
     <h3 class="text-lg font-semibold mb-4">➕ Thêm điều kiện</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -62,6 +68,9 @@
 
   <div class="text-center mt-6">
     <button class="mt-4 px-6 py-2 bg-blue-600 text-white rounded" [disabled]="triggerConditions.length === 0" (click)="nextTab()">✅ Tiếp tục</button>
+  </div>
+  <div class="text-center mt-2 text-red-600" *ngIf="errorMessage">
+    {{ errorMessage }}
   </div>
 </div>
 

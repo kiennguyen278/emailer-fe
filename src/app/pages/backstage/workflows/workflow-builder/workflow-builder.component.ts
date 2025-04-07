@@ -18,6 +18,9 @@ export class WorkflowBuilderComponent implements OnInit {
   triggerConditions: any[] = [];
   editIndex: number | null = null;
 
+  workflowName: string = '';
+  errorMessage: string = '';
+
   tags = [
     { id: 101, name: 'Khách VIP' },
     { id: 202, name: 'Khách mới' },
@@ -62,7 +65,6 @@ export class WorkflowBuilderComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-
     const savedTriggers = localStorage.getItem('workflow_triggers');
     if (savedTriggers) {
       this.triggerConditions = JSON.parse(savedTriggers);
@@ -119,10 +121,17 @@ export class WorkflowBuilderComponent implements OnInit {
   }
 
   nextTab() {
-    if (this.triggerConditions.length === 0) {
-      alert('Bạn cần thêm ít nhất 1 điều kiện');
+    this.errorMessage = '';
+    if (!this.workflowName || this.workflowName.trim() === '') {
+      this.errorMessage = 'Vui lòng nhập tên workflow.';
       return;
     }
+
+    if (this.triggerConditions.length === 0) {
+      this.errorMessage = 'Vui lòng thêm ít nhất một điều kiện trigger.';
+      return;
+    }
+
     this.tab = 2;
     //save
     localStorage.setItem('workflow_triggers', JSON.stringify(this.triggerConditions));
