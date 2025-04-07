@@ -68,6 +68,11 @@ export class WorkflowBuilderComponent implements OnInit {
   ];
 
 
+  isStepModalOpen = false;
+  selectedStepType = '';
+  stepData: any = {};
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -150,7 +155,6 @@ export class WorkflowBuilderComponent implements OnInit {
       }
     };
   }
-
 
   loadWorkflowData(): void {
     this.workflowService.getAllTags().subscribe({
@@ -278,11 +282,6 @@ export class WorkflowBuilderComponent implements OnInit {
     return this.triggerConditions.length > 0;
   }
 
-  isStepModalOpen = false;
-  selectedStepType = '';
-  stepData: any = {};
-
-
   addNode(type: string) {
     this.openStepModal(type);
   }
@@ -396,7 +395,7 @@ export class WorkflowBuilderComponent implements OnInit {
 
     return {
       id: 0,
-      userId: 1,
+      userId: 0,
       name: this.workflowName,
       status: 'DRAFT',
       triggerConditions: triggerConditions,
