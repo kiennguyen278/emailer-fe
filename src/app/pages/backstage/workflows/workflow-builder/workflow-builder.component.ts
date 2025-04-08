@@ -358,6 +358,7 @@ export class WorkflowBuilderComponent implements OnInit {
 
   submitWorkflow(): void {
     const dto = this.buildWorkflowDTO();
+    console.log("Calling API with data: ", dto);
 
     if (!dto.name || dto.triggerConditions.length === 0 || dto.steps.length === 0) {
       alert('❌ Vui lòng nhập đầy đủ tên workflow, điều kiện trigger và ít nhất 1 bước!');
@@ -423,7 +424,6 @@ export class WorkflowBuilderComponent implements OnInit {
       steps: steps
     };
   }
-
 
   saveToLocal() {
     const dto = this.buildWorkflowDTO();
