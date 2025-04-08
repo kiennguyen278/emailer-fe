@@ -32,16 +32,16 @@ export class CampaignDetailComponent implements OnInit {
   itemsSubscriber: SubscriberDTO[] = [];
   columnsSubscriber: ColumnConfig[] = [
     {
-      key: 'email',
-      header: 'Email',
-      tdClass: 'text-center',
-      nzWidth: '200px',
-    },
-    {
       key: 'firstName',
       header: 'Name',
       tdClass: 'text-center',
       nzWidth: '150px',
+    },
+    {
+      key: 'email',
+      header: 'Email',
+      tdClass: 'text-center',
+      nzWidth: '200px',
     },
     {
       key: 'status',
@@ -73,12 +73,8 @@ export class CampaignDetailComponent implements OnInit {
     }
   }
 
-
-
   closeModal(){
     this.modalRef.destroy();
   }
-
-
 
 }

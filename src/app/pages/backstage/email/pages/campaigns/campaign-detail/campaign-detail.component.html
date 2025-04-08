@@ -1,109 +1,81 @@
+<div class="p-4">
 
-
-
-<div>
-
-  <div>
-    <div nz-row [nzGutter]="16">
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Total Sent</div>
-          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalSent}}</div>
-        </div>
+  <!-- HÀNG 1: Thông tin chiến dịch -->
+  <div nz-row [nzGutter]="16" class="mb-4">
+    <div nz-col [nzSpan]="12">
+      <div class="field-item mb-3 flex">
+        <label class="mr-2 font-medium w-40">Tên chiến dịch:</label>
+        <div>{{detailCampaign?.name}}</div>
       </div>
 
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Delivered</div>
-          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalDelivered}}</div>
-        </div>
+      <div class="field-item mb-3 flex">
+        <label class="mr-2 font-medium w-40">Chủ đề:</label>
+        <div>{{detailCampaign?.subject}}</div>
       </div>
 
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Opened</div>
-          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalOpened}} - {{detailCampaign?.stats?.openRate}}%</div>
-        </div>
+      <div class="field-item mb-3 flex">
+        <label class="mr-2 font-medium w-40">Thời gian gửi:</label>
+        <div>{{detailCampaign?.scheduledTime | date: DATE_TIME_FORMAT}}</div>
       </div>
-
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Clicked</div>
-          <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalClicked}} - {{detailCampaign?.stats?.clickRate}}%</div>
-        </div>
-      </div>
-
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Complaint</div>
-          <div class="summary-value text-red-600">{{detailCampaign?.stats?.totalComplaint}}</div>
-        </div>
-      </div>
-
-      <div nz-col [nzSpan]="4">
-        <div class="summary-box">
-          <div class="summary-title">Unsubscribed</div>
-          <div class="summary-value text-red-600">{{detailCampaign?.stats?.totalUnsubscribed}} - {{detailCampaign?.stats?.unsubscribeRate}}%</div>
-        </div>
-      </div>
+    </div>
   </div>
 
-    <nz-tabset>
+  <!-- HÀNG 2: Thống kê tổng quan -->
+  <div nz-row [nzGutter]="16" class="mb-5">
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tổng số email đã gửi</div>
+        <div class="summary-value text-green-600">{{detailCampaign?.stats?.totalSent}}</div>
+      </div>
+    </div>
 
-      <!-- TAB 1: DETAIL -->
-      <nz-tab nzTitle="Thông tin campaign">
-        <div nz-row [nzGutter]="10">
-
-          <div nz-col [nzSpan]="11">
-            <div class="field-item mb-3 flex">
-              <label class="mr-2 font-medium">Tên campaign:</label>
-              <div class="flex-[1_0_0]">
-                {{detailCampaign?.name}}
-              </div>
-            </div>
-
-
-            <div class="field-item mb-3 flex">
-              <label class="mr-2 font-medium">Subject:</label>
-              <div class="flex-[1_0_0]">
-                {{detailCampaign?.subject}}
-              </div>
-            </div>
-
-            <div class="field-item mb-3 flex">
-              <label class="mr-2 font-medium">Scheduled Time:</label>
-              <div class="flex-[1_0_0]">
-                {{detailCampaign?.scheduledTime | date: DATE_TIME_FORMAT}}
-              </div>
-            </div>
-
-          </div>
-
-          <div nz-col [nzSpan]="13">
-            <div class="field-item mb-3">
-              <label class="mr-2 font-medium">Content:</label>
-              <div class="flex-[1_0_0]">
-                <div [innerHTML]="detailCampaign?.htmlBody"></div>
-              </div>
-            </div>
-          </div>
-
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ mở email</div>
+        <div class="summary-value text-green-600">
+          {{detailCampaign?.stats?.openRate}}% ({{detailCampaign?.stats?.totalOpened}})
         </div>
-      </nz-tab>
+      </div>
+    </div>
 
-      <nz-tab nzTitle="DS Subscriber">
-        <div class="mb-3">
-          <app-table
-            [columns]="columnsSubscriber"
-            [items]="itemsSubscriber"
-            [showPagination]="false"
-            [scrollY]="'70vh'"
-          ></app-table>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ click email</div>
+        <div class="summary-value text-green-600">
+          {{detailCampaign?.stats?.clickRate}}% ({{detailCampaign?.stats?.totalClicked}})
         </div>
+      </div>
+    </div>
 
-      </nz-tab>
-    </nz-tabset>
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ Spam</div>
+        <div class="summary-value text-red-600">
+          {{detailCampaign?.stats?.complaintRate}}% ({{detailCampaign?.stats?.totalComplaint}})
+        </div>
+      </div>
+    </div>
 
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ hủy đăng ký</div>
+        <div class="summary-value text-red-600">
+          {{detailCampaign?.stats?.unsubscribeRate}}% ({{detailCampaign?.stats?.totalUnsubscribed}})
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HÀNG 3: Danh sách Subscribers -->
+  <div>
+    <div class="text-base font-semibold mb-2">Danh sách subscribers trong chiến dịch</div>
+    <app-table
+      [columns]="columnsSubscriber"
+      [items]="itemsSubscriber"
+      [showPagination]="true"
+      [scrollY]="'900px'"
+    ></app-table>
+
+  </div>
 
 </div>
-

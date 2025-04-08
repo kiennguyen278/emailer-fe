@@ -146,13 +146,14 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   showViewModal(item: EmailCampaignDTO) {
     this.modal.create({
-      nzTitle: 'Xem chi tiết Campaign',
+      nzTitle: 'Xem chi tiết chiến dịch',
       nzContent: CampaignDetailComponent,
       nzData: {
         emailCampaign: item
       },
       nzFooter: null,
       nzWidth: 1200,
+      nzClassName: 'custom-campaign-modal',
       nzMaskClosable: false
     });
   }
