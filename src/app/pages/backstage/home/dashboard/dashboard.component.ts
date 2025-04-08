@@ -152,16 +152,29 @@ export class DashboardComponent {
               name: 'Open Rate',
               type: 'line',
               data: openRates,
-              smooth: true
+              smooth: true,
+              label: {
+                show: true,
+                formatter: '{c}%',
+                position: 'top',
+                fontSize: 12
+              }
             },
             {
               name: 'Click Rate',
               type: 'line',
               data: clickRates,
-              smooth: true
+              smooth: true,
+              label: {
+                show: true,
+                formatter: '{c}%',
+                position: 'top',
+                fontSize: 12
+              }
             }
           ]
         };
+
 
         // Phân tích
         const { openTexts, clickTexts } = this.getOverallTrendAnalysis(data, range);
