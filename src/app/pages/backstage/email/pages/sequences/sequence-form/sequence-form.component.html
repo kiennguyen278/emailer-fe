@@ -1,6 +1,3 @@
-
-
-
 <div>
 
     <nz-tabset (nzSelectChange)="onTabChange($event)" [nzSelectedIndex]="selectedTabIndex">
@@ -141,7 +138,8 @@
                           [nzLoading]="isLoadingSave"
                           class="ml-3"
                   >
-                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step' : 'Update Step'}}
+                    Save
+<!--                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step' : 'Update Step'}}-->
                     </button>
                 </div>
 
@@ -171,7 +169,7 @@
                 <button nz-button type="button"
                         [disabled]="steps.length > 0 && !formStep.controls['steps']?.value[steps.length-1]?.id"
                         nzType="default"
-                        (click)="addStep()">+ Add step</button>
+                        (click)="addStep()">+ Add Email</button>
               </div>
 
             </div>
