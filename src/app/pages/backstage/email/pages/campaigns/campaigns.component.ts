@@ -44,22 +44,19 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   columns: ColumnConfig[] = [
     {
       key: 'name',
-      header: 'Tên Campaign',
-      nzWidth: '200px',
-    },
-    {
-      key: 'description',
-      header: 'Mô tả',
+      header: 'Tên chiến dịch',
+      tdClass: 'text-center',
       nzWidth: '200px',
     },
     {
       key: 'subject',
-      header: 'Subject',
+      header: 'Tiêu đề',
+      tdClass: 'text-center',
       nzWidth: '200px',
     },
     {
       key: 'scheduledTime',
-      header: 'Scheduled Time',
+      header: 'Thời gian gửi',
       nzWidth: '100px',
       tdClass: 'text-center',
       pipe: 'template',
@@ -146,7 +143,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   showViewModal(item: EmailCampaignDTO) {
     this.modal.create({
-      nzTitle: 'Xem chi tiết chiến dịch',
+      nzTitle: 'Chi tiết chiến dịch',
       nzContent: CampaignDetailComponent,
       nzData: {
         emailCampaign: item
