@@ -1,27 +1,26 @@
 import {ChangeDetectorRef, Component, inject, OnInit, ViewChild} from '@angular/core';
 import {QuillEditorComponent} from "ngx-quill";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ColumnConfig, OptionModel, TableQueryParams} from "@core/models";
+import {OptionModel, TableQueryParams} from "@core/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
 import {DATE_TIME_FORMAT} from "@core/constants";
-import {NZ_MODAL_DATA, NzModalRef} from "ng-zorro-antd/modal";
+import {NZ_MODAL_DATA, NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
-import {EmailCampaignDTO, SaveEmailCampaignRequest, SaveEmailTemplateRequest} from "../../../models";
+import {EmailCampaignDTO, EmailTemplateDTO, SaveEmailCampaignRequest} from "../../../models";
 import {EmailService} from "../../../state/service";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {NotificationService} from "@core/services/notification.service";
 import {Observable} from "rxjs";
 import {
   selectDataGetSubscriberList,
-  selectLoadingGetSubscriberList,
   selectOptionsTagsList,
   selectTotalItemsGetSubscriberList
 } from "../../../../subscribers/state/selectors";
 import {Store} from "@ngrx/store";
 import {getListSubscribers, getListTags} from "../../../../subscribers/state/actions";
 import {SubscriberDTO} from "../../../../subscribers/models";
-import {isEmpty} from "lodash";
 import {differenceInCalendarDays} from "date-fns";
+import {SelectTemplateModalComponent} from "../../../components/select-template-modal/select-template-modal.component";
 
 @UntilDestroy()
 @Component({
@@ -33,9 +32,9 @@ export class CampaignFormComponent implements OnInit {
 
   readonly modalData: {emailCampaign: EmailCampaignDTO} = inject(NZ_MODAL_DATA);
 
+  modalSelectTemplateRef: NzModalRef;
 
   tagOptions$: Observable<OptionModel<number>[]> = this.store.select(selectOptionsTagsList); // làm option select ở addnew/edit Subscriber
-  loadingGetSubscriber$: Observable<boolean> = this.store.select(selectLoadingGetSubscriberList);
 
   constructor(
     private fb: FormBuilder,
@@ -43,40 +42,13 @@ export class CampaignFormComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private store: Store,
     private emailService: EmailService,
+    private modal: NzModalService,
     private notification: NotificationService,
   ) {
     this.buildForm();
   }
 
   disabledDate = (current: Date): boolean => (differenceInCalendarDays(current, new Date()) < 0);
-
-
-  itemsSubscriber: SubscriberDTO[] = [];
-  columnsSubscriber: ColumnConfig[] = [
-    {
-      key: 'email',
-      header: 'Email',
-      tdClass: 'text-center',
-      nzWidth: '200px',
-    },
-
-    {
-      key: 'firstName',
-      header: 'Name',
-      tdClass: 'text-center',
-      nzWidth: '150px',
-    },
-    {
-      key: 'status',
-      header: 'Trạng thái',
-      nzWidth: '100px',
-      tdClass: 'text-center',
-    },
-  ];
-  paginationSubscriber = {index: 1, size: 30, total: 0};
-
-  selectedKeys: number[] | string[] = [];
-
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
 
@@ -94,33 +66,11 @@ export class CampaignFormComponent implements OnInit {
     console.log(this.emailCampaign)
     this.store.dispatch(getListTags());
 
-    this.getSubscriberList();
-    this.selectSubscribeStore();
-
     if (this.emailCampaign) {
       this.getDetailCampaign(this.emailCampaign.id)
     }
   }
 
-
-  selectSubscribeStore(){
-    this.store.select(selectTotalItemsGetSubscriberList)
-      .pipe(untilDestroyed(this))
-      .subscribe((total) => (this.paginationSubscriber = { ...this.paginationSubscriber, total }));
-
-    this.store.select(selectDataGetSubscriberList)
-      .pipe(untilDestroyed(this))
-      .subscribe((items) => {
-        this.itemsSubscriber = items;
-        this.cdr.detectChanges();
-      });
-  }
-
-
-  getSubscriberList() {
-    const request = {page: this.paginationSubscriber.index, size: this.paginationSubscriber.size};
-    this.store.dispatch(getListSubscribers({payload: request}))
-  }
 
 
   getDetailCampaign(id: number) {
@@ -134,20 +84,24 @@ export class CampaignFormComponent implements OnInit {
   }
 
 
-  onSelectKeysChange(keys: string[] | number[]){
-    console.log(keys);
-    this.selectedKeys = keys;
-    this.form.patchValue({subscriberIds: keys});
-  }
+  openModalSelectTemplate(){
+    this.modalSelectTemplateRef = this.modal.create({
+      nzTitle: 'Danh sách template email',
+      nzContent: SelectTemplateModalComponent,
+      nzFooter: null,
+      nzWidth: '1100px',
+      nzMaskClosable: false
+    });
 
-  onQueryParams(params: TableQueryParams) {
-    if (params.pageIndex){
-      this.paginationSubscriber.index = params.pageIndex;
-    }
-    if (params.pageSize){
-      this.paginationSubscriber.size = params.pageSize;
-    }
-    this.getSubscriberList();
+    this.modalSelectTemplateRef.afterClose.subscribe((templates: EmailTemplateDTO[]) => {
+      if(templates){
+        let contentHTML = '';
+        templates.map((item: EmailTemplateDTO) => {
+          contentHTML = contentHTML + item.htmlBody
+        });
+        this.form.patchValue({htmlBody: contentHTML})
+      }
+    });
   }
 
   saveCampaign() {
@@ -184,7 +138,7 @@ export class CampaignFormComponent implements OnInit {
     this.form = this.fb.group({
       name: [null, [ValidatorUtil.required('Tên campaign không được để trống!')]],
       subject: [null, [ValidatorUtil.required('Subject không được để trống!')]],
-      description: [null],
+      // description: [null],
       scheduledTime: [null, [ValidatorUtil.required('Scheduled Time không được để trống!')]],
       tagIds: [null, [ValidatorUtil.required('Tag không được để trống!')]],
       // subscriberIds: [null],

@@ -10,7 +10,7 @@
 <!--      <nz-tab nzTitle="Thông tin campaign">-->
         <div nz-row [nzGutter]="10">
 
-          <div nz-col [nzSpan]="11">
+          <div nz-col [nzSpan]="8">
             <div class="field-item mb-3">
               <label class="mr-2">Tên campaign:</label>
               <div class="flex-[1_0_0]">
@@ -30,17 +30,6 @@
                   <app-input formControlName="subject"
                              [allowClear]="true"
                              placeholder="Subject"></app-input>
-                </app-form-control>
-              </div>
-            </div>
-
-            <div class="field-item mb-3">
-              <label class="mr-2">Mô tả:</label>
-              <div class="flex-[1_0_0]">
-                <app-form-control>
-                  <app-textarea formControlName="description"
-                                [rows]="4"
-                                [maxHeight]="'240px'"></app-textarea>
                 </app-form-control>
               </div>
             </div>
@@ -75,15 +64,24 @@
 
           </div>
 
-          <div nz-col [nzSpan]="13">
+          <div nz-col [nzSpan]="16">
             <div class="field-item mb-3">
               <label class="mr-2">Content:</label>
               <div class="flex-[1_0_0]">
 
                 <app-form-control>
                   <app-richtext-email
-                    formControlName="htmlBody"></app-richtext-email>
+                    formControlName="htmlBody" [extraTpl]="extraTpl"></app-richtext-email>
                 </app-form-control>
+
+                <ng-template #extraTpl>
+                  <button
+                    type="button"
+                    (click)="openModalSelectTemplate()"
+                    class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2">
+                    Chọn template
+                  </button>
+                </ng-template>
 
               </div>
             </div>
