@@ -44,19 +44,13 @@ export class TemplatesComponent implements OnInit, OnDestroy {
 
   columns: ColumnConfig[] = [
     {
-      key: 'id',
-      header: 'ID',
-      nzWidth: '100px',
-      tdClass: 'text-center',
-    },
-    {
       key: 'name',
-      header: 'Tên Email Template',
+      header: 'Tên email template',
       nzWidth: '200px',
     },
     {
       key: 'subject',
-      header: 'Subject',
+      header: 'Tiêu đề',
       nzWidth: '200px',
     },
     {

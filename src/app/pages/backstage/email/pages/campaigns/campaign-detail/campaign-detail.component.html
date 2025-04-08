@@ -74,7 +74,13 @@
       [items]="itemsSubscriber"
       [showPagination]="true"
       [scrollY]="'900px'"
-    ></app-table>
+    >
+
+      <ng-template [appCellTemplate]="'emailSentTime'" let-item>
+        {{item.emailSentTime | date: DATE_TIME_FORMAT}}
+      </ng-template>
+
+    </app-table>
 
   </div>
 

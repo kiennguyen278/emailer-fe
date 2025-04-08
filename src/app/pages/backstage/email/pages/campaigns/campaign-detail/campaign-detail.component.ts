@@ -53,8 +53,7 @@ export class CampaignDetailComponent implements OnInit {
       key: 'emailSentTime',
       header: 'Ngày gửi',
       nzWidth: '100px',
-      tdClass: 'text-center',
-      template: 'emailSentTpl'
+      tdClass: 'text-center'
     }
   ];
 

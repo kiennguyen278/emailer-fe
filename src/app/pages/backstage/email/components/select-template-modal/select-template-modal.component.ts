@@ -42,12 +42,14 @@ export class SelectTemplateModalComponent implements OnInit, OnDestroy {
   columns: ColumnConfig[] = [
     {
       key: 'name',
-      header: 'Tên Email Template',
+      header: 'Tên email template',
+      tdClass: 'text-center',
       nzWidth: '200px',
     },
     {
       key: 'subject',
       header: 'Subject',
+      tdClass: 'text-center',
       nzWidth: '200px',
     },
     {
