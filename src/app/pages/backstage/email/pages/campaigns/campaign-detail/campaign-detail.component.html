@@ -21,7 +21,7 @@
   </div>
 
   <!-- HÀNG 2: Thống kê tổng quan -->
-  <div nz-row [nzGutter]="16" class="mb-5">
+  <div nz-row [nzGutter]="24" class="mb-5">
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
         <div class="summary-title">Tổng số email đã gửi</div>
@@ -31,16 +31,25 @@
 
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
-        <div class="summary-title">Tỉ lệ mở email</div>
+        <div class="summary-title">Tỉ lệ chưa mở</div>
         <div class="summary-value text-green-600">
-          {{detailCampaign?.stats?.openRate}}% ({{detailCampaign?.stats?.totalOpened}})
+          {{detailCampaign?.stats?.unOpenRate}}% ({{detailCampaign?.stats?.totalUnopened}})
         </div>
       </div>
     </div>
 
+<!--    <div nz-col [nzSpan]="3">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ mở</div>
+        <div class="summary-value text-green-600">
+          {{detailCampaign?.stats?.openRate}}% ({{detailCampaign?.stats?.totalOpened}})
+        </div>
+      </div>
+    </div>-->
+
     <div nz-col [nzSpan]="4">
       <div class="summary-box">
-        <div class="summary-title">Tỉ lệ click email</div>
+        <div class="summary-title">Tỉ lệ click</div>
         <div class="summary-value text-green-600">
           {{detailCampaign?.stats?.clickRate}}% ({{detailCampaign?.stats?.totalClicked}})
         </div>
@@ -52,6 +61,15 @@
         <div class="summary-title">Tỉ lệ vào Spam</div>
         <div class="summary-value text-red-600">
           {{detailCampaign?.stats?.complaintRate}}% ({{detailCampaign?.stats?.totalComplaint}})
+        </div>
+      </div>
+    </div>
+
+    <div nz-col [nzSpan]="4">
+      <div class="summary-box">
+        <div class="summary-title">Tỉ lệ Bounced</div>
+        <div class="summary-value text-red-600">
+          {{detailCampaign?.stats?.bounceRate}}% ({{detailCampaign?.stats?.totalBounced}})
         </div>
       </div>
     </div>
