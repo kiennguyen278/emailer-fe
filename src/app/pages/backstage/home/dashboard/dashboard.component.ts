@@ -399,6 +399,12 @@ export class DashboardComponent {
                 itemStyle: { color: '#1890ff' }
               }
             ],
+            // ✅ Thêm phần này để luôn hiển thị phần trăm
+            label: {
+              show: true,
+              formatter: '{b}: {d}%',
+              fontSize: 14
+            },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
