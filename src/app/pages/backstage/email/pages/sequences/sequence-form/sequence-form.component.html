@@ -150,7 +150,7 @@
               </div>
 
               <div nz-col [nzSpan]="6">
-                <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)">
+                <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)" class="max-h-[55vh] overflow-y-auto">
                   <div *ngFor="let item of steps.controls; let index = index">
                     <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
                          (click)="editStep(index)"
@@ -171,7 +171,7 @@
                 <button nz-button type="button"
                         [disabled]="steps.length > 0 && !formStep.controls['steps']?.value[steps.length-1]?.id"
                         nzType="default"
-                        (click)="addStep()">+ Thêm step</button>
+                        (click)="addStep()">+ Add step</button>
               </div>
 
             </div>

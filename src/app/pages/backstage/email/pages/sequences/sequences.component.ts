@@ -49,12 +49,6 @@ export class SequencesComponent implements OnInit, OnDestroy {
       nzWidth: '200px',
     },
     {
-      key: 'description',
-      header: 'Mô tả',
-      nzWidth: '200px',
-    },
-
-    {
       key: 'createdAt',
       header: 'Ngày tạo',
       nzWidth: '100px',
