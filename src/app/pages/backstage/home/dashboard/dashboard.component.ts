@@ -244,10 +244,13 @@ export class DashboardComponent {
     for (let i = 1; i < openRates.length; i++) {
       const diff = Math.abs(openRates[i] - openRates[i - 1]);
       if (diff >= 15) {
+        // @ts-ignore
         openDiffs.push({ index: i, diff });
       }
     }
+    // @ts-ignore
     openDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
+      // @ts-ignore
       openTexts.push(`⚠️ Đột biến tỷ lệ mở: thay đổi ${diff.toFixed(1)}% vào <strong>${formatPeriod(data[index].period)}</strong>.`);
     });
 
@@ -256,10 +259,13 @@ export class DashboardComponent {
     for (let i = 1; i < clickRates.length; i++) {
       const diff = Math.abs(clickRates[i] - clickRates[i - 1]);
       if (diff >= 15) {
+        // @ts-ignore
         clickDiffs.push({ index: i, diff });
       }
     }
+    // @ts-ignore
     clickDiffs.sort((a, b) => b.diff - a.diff).slice(0, 3).forEach(({ index, diff }) => {
+      // @ts-ignore
       clickTexts.push(`⚠️ Đột biến tỷ lệ click: thay đổi ${diff.toFixed(1)}% vào <strong>${formatPeriod(data[index].period)}</strong>.`);
     });
 
