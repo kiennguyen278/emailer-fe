@@ -103,7 +103,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
         if (error){
           this.notification.open({
             type: 'error',
-            content: error || 'Không thể tải danh sách email campaign'
+            content: error || 'Không thể tải danh sách chiến dịch'
           });
         }
       });
@@ -116,7 +116,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   openModal(item?: EmailCampaignDTO) {
 
     this.modalRef = this.modal.create({
-      nzTitle: item?.id ? `Cập nhật email campaign "${item.name}"` : 'Thêm mới email campaign',
+      nzTitle: item?.id ? `Cập nhật chiến dịch "${item.name}"` : 'Thêm mới chiến dịch',
       nzContent: CampaignFormComponent,
       nzData: {
         emailCampaign: item || null
@@ -158,7 +158,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
 
   confirmDelete(item: EmailCampaignDTO) {
     this.modal.confirm({
-      nzTitle: `Bạn có chắc muốn xoá email campaign "${item.name}"?`,
+      nzTitle: `Bạn có chắc muốn xoá chiến dịch "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
       nzOnOk: () => this.deleteEmailTemplate(item.id)
@@ -170,14 +170,14 @@ export class CampaignsComponent implements OnInit, OnDestroy {
       next: () => {
         this.notification.open({
           type: 'success',
-          content: 'Đã xoá email campaign'
+          content: 'Đã xoá chiến dịch email thành công'
         });
         this.loadItems();
       },
       error: () => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá email campaign thất bại'
+          content: 'Xoá chiến dịch email thất bại'
         });
       }
     });
