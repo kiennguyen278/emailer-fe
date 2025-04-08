@@ -81,10 +81,6 @@ export interface CampaignDetailDTO {
   subscribers: CampaignSubscriberEmail[];
 }
 
-
-
-
-
 export interface SequenceDTO {
   id: number,
   userId: number,

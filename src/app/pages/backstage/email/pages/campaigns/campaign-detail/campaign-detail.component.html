@@ -79,3 +79,7 @@
   </div>
 
 </div>
+
+<ng-template #emailSentTpl let-item>
+  {{ item.emailSentTime | date: 'dd/MM/yyyy HH:mm' }}
+</ng-template>

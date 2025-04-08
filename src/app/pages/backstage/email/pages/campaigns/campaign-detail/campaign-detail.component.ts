@@ -54,6 +54,7 @@ export class CampaignDetailComponent implements OnInit {
       header: 'Ngày gửi',
       nzWidth: '100px',
       tdClass: 'text-center',
+      template: 'emailSentTpl'
     }
   ];
 

@@ -22,4 +22,5 @@ export interface ColumnConfig {
   nzWidth?: string;
   isDefault?: boolean;
   alwaysShow?: boolean;
+  template?: string; // 👈 thêm dòng này
 }
