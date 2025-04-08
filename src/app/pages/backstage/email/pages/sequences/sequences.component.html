@@ -1,7 +1,7 @@
-<nz-card nzTitle="Danh sách Sequence" [nzSize]="'small'" [nzExtra]="extraTemplate">
+<nz-card nzTitle="Danh sách email sequences" [nzSize]="'small'" [nzExtra]="extraTemplate">
 
   <ng-template #extraTemplate>
-    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Sequence</button>
+    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm mới</button>
   </ng-template>
 
   <div class="table-list pt-3">
@@ -23,11 +23,11 @@
           </button>
 
           <button nz-button nzType="text" nzShape="circle" (click)="showEditModal(item)" class="cursor-pointer">
-            <i nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Sửa Sequence"></i>
+            <i nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Sửa email sequence"></i>
           </button>
 
           <button nz-button nzType="text" nzShape="circle" (click)="confirmDelete(item)" class="cursor-pointer">
-            <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa Sequence"></i>
+            <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa email sequence"></i>
           </button>
         </ng-template>
 

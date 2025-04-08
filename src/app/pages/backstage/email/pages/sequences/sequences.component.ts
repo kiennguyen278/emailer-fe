@@ -45,15 +45,9 @@ export class SequencesComponent implements OnInit, OnDestroy {
   columns: ColumnConfig[] = [
     {
       key: 'name',
-      header: 'Tên Sequence',
-      nzWidth: '200px',
-    },
-    {
-      key: 'createdAt',
-      header: 'Ngày tạo',
-      nzWidth: '100px',
+      header: 'Tên email sequence',
       tdClass: 'text-center',
-      pipe: 'template',
+      nzWidth: '100px',
     },
     {
       key: 'status',
@@ -64,6 +58,13 @@ export class SequencesComponent implements OnInit, OnDestroy {
         type: 'select',
         options: OptionScheduledStatus,
       }
+    },
+    {
+      key: 'createdAt',
+      header: 'Ngày tạo',
+      nzWidth: '100px',
+      tdClass: 'text-center',
+      pipe: 'template',
     },
     {
       key: 'actions',
@@ -90,7 +91,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
         if (error){
           this.notification.open({
             type: 'error',
-            content: error || 'Không thể tải danh sách sequence'
+            content: error || 'Không thể tải danh sách email sequence'
           });
         }
       });
@@ -103,7 +104,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
   openModal(item?: SequenceDTO) {
 
     this.modalRef = this.modal.create({
-      nzTitle: item?.id ? `Cập nhật sequence "${item.name}"` : 'Thêm mới sequence',
+      nzTitle: item?.id ? `Cập nhật chuỗi email sequence  "${item.name}"` : 'Thêm mới',
       nzContent: SequenceFormComponent,
       nzData: {
         sequence: item || null
@@ -135,7 +136,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
     return;
 
     this.modal.create({
-      nzTitle: 'Xem chi tiết sequence',
+      nzTitle: 'Xem chi tiết chuỗi email sequence',
       nzContent: CampaignDetailComponent,
       nzData: {
         emailCampaign: item
@@ -149,7 +150,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
 
   confirmDelete(item: SequenceDTO) {
     this.modal.confirm({
-      nzTitle: `Bạn có chắc muốn xoá sequence "${item.name}"?`,
+      nzTitle: `Bạn có chắc muốn xoá chuỗi email sequence "${item.name}"?`,
       nzOkText: 'Xoá',
       nzOkDanger: true,
       nzOnOk: () => this.deleteSequence(item.id)
@@ -161,14 +162,14 @@ export class SequencesComponent implements OnInit, OnDestroy {
       next: () => {
         this.notification.open({
           type: 'success',
-          content: 'Đã xoá sequence'
+          content: 'Đã xoá email sequence'
         });
         this.loadItems();
       },
       error: () => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá sequence thất bại'
+          content: 'Xoá email sequence thất bại'
         });
       }
     });
