@@ -1,4 +1,4 @@
-import {SubscriberDTO} from "../../subscribers/models";
+import {CampaignSubscriberEmail, SubscriberDTO} from "../../subscribers/models";
 
 export interface EmailTemplateDTO {
   id: number;
@@ -21,9 +21,6 @@ export interface SaveEmailTemplateRequest {
   htmlBody: string,
   textBody: string,
 }
-
-
-
 
 export interface EmailCampaignDTO {
   id: number,
@@ -81,7 +78,7 @@ export interface CampaignDetailDTO {
     complaintRate: number;
     unsubscribeRate: number;
   },
-  subscribers: SubscriberDTO[];
+  subscribers: CampaignSubscriberEmail[];
 }
 
 

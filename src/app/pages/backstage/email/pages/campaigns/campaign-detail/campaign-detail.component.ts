@@ -38,7 +38,7 @@ export class CampaignDetailComponent implements OnInit {
       nzWidth: '150px',
     },
     {
-      key: 'email',
+      key: 'subscriberEmail',
       header: 'Email',
       tdClass: 'text-center',
       nzWidth: '200px',
@@ -49,6 +49,12 @@ export class CampaignDetailComponent implements OnInit {
       nzWidth: '100px',
       tdClass: 'text-center',
     },
+    {
+      key: 'emailSentTime',
+      header: 'Ngày gửi',
+      nzWidth: '100px',
+      tdClass: 'text-center',
+    }
   ];
 
   detailCampaign: CampaignDetailDTO;

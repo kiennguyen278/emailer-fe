@@ -30,6 +30,21 @@ export interface SubscriberDTO {
   createdAt: string
 }
 
+export interface CampaignSubscriberEmail {
+  campaignId: number;
+  campaignName: string;
+
+  subscriberId: number;
+  subscriberEmail: string;
+  firstName?: string;
+  lastName?: string;
+
+  subject?: string;
+  status?: string;
+  emailSentTime?: string; // ISO string dạng "2025-03-30T20:56:00"
+}
+
+
 
 export interface SubscriberResponseDTO {
   content: SubscriberDTO[],
