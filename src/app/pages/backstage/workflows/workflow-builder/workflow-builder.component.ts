@@ -5,6 +5,7 @@ import {NzMessageService} from "ng-zorro-antd/message";
 import {WorkflowService} from "../data/workflow.service";
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import {omit} from "lodash";
 
 @Component({
   selector: 'app-workflow-builder',
@@ -383,7 +384,8 @@ export class WorkflowBuilderComponent implements OnInit {
       });
     } else {
       // 👉 CREATE
-      this.workflowService.createWorkflow(dto).subscribe({
+      const request = omit(dto, ['status'])
+      this.workflowService.createWorkflow(request).subscribe({
         next: (res) => {
           if (res.success && res.data) {
             alert('✅ Tạo workflow thành công!');
