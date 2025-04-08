@@ -135,7 +135,10 @@ export interface StepSequenceDTO {
   createdAt: string;
 }
 
-
+export interface ReOrderStepsSequenceRequest {
+  stepIds: number[];
+  sequenceId: number
+}
 
 
 

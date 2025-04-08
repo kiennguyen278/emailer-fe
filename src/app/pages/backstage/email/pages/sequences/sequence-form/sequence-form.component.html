@@ -167,7 +167,6 @@
                 </div>
 
                 <button nz-button type="button"
-                        [disabled]="steps.length > 0 && !formStep.controls['steps']?.value[steps.length-1]?.id"
                         nzType="default"
                         (click)="addStep()">+ Add Email</button>
               </div>

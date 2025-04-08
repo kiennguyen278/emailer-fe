@@ -8,6 +8,8 @@
         [loading]="isLoading$ | async"
         [showPagination]="false"
         [showCheckbox]="true"
+        [selectOnlyOne]="true"
+        [disableAllCheck]="true"
         (itemSelected)="onSelectedItem($event)"
       >
         <ng-template [appCellTemplate]="'createdAt'" let-item>

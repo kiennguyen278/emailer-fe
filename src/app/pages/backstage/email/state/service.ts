@@ -7,7 +7,7 @@ import {ApiResponse} from "@core/models/response.model";
 import {
   CampaignDetailDTO,
   EmailCampaignDTO,
-  EmailTemplateDTO,
+  EmailTemplateDTO, ReOrderStepsSequenceRequest,
   SaveEmailCampaignRequest,
   SaveEmailTemplateRequest, SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO, StepSequenceDTO
 } from "../models";
@@ -119,6 +119,13 @@ export class EmailService extends BaseApiService{
   getAllStepInSequence(sequenceId: number): Observable<any> {
     const url = this.buildUrl(`sequences/${sequenceId}/steps`);
     return this.http.get<ApiResponse<StepSequenceDTO[]>>(url);
+  }
+
+
+
+  saveOrderStepSequence(request: ReOrderStepsSequenceRequest): Observable<any> {
+      const url = this.buildUrl(`/sequences/${request.sequenceId}/reorder-steps`);
+      return this.http.put<ApiResponse<any>>(url, {stepIds: request.stepIds});
   }
 
 

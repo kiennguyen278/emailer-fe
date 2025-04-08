@@ -6,7 +6,7 @@ import {DATE_TIME_FORMAT} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
 import {
-  EmailTemplateDTO,
+  EmailTemplateDTO, ReOrderStepsSequenceRequest,
   SaveSequenceRequest,
   SaveStepSequenceRequest,
   SequenceDTO,
@@ -21,6 +21,7 @@ import {OptionDelayDate, Status} from "@core/options";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
 import {TemplateFormComponent} from "../../templates/template-form/template-form.component";
 import {SelectTemplateModalComponent} from "../../../components/select-template-modal/select-template-modal.component";
+import {isEmpty} from "lodash";
 
 @UntilDestroy()
 @Component({
@@ -102,7 +103,9 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
       this.emailService.getAllStepInSequence(sequenceId)
         .pipe(untilDestroyed(this))
         .subscribe((item) => {
-          this.setValueSteps(item.data)
+          if (!isEmpty(item)) {
+            this.setValueSteps(item.data)
+          }
         })
     }
   }
@@ -206,6 +209,10 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
             content: res?.message || (stepSequenceValue?.id ? 'Cập nhật step sequence thành công' : 'Thêm step sequence mới thành công')
           })
           this.isLoadingSave = false;
+          if (!stepSequenceValue?.id){
+            currentStepControl.patchValue(res.data); // set id cho step trong formSteps để bỏ trạng thái DRAFT
+          }
+
           // this.modalRef.destroy(true);
         },
         error: ({error}) => {
@@ -217,8 +224,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
           this.isLoadingSave = false;
         }
       });
-
-
   }
 
 
@@ -249,7 +254,36 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     console.log('steps', steps)
     this.formStep.setControl('steps', this.fb.array(steps));
     this.crrStep = event.currentIndex;
+
+    const stepIds: number[] = this.steps.getRawValue().map(item => item.id).filter(item => item);
+    this.saveOrderSteps(stepIds);
     this.cdr.detectChanges();
+
+  }
+
+  saveOrderSteps(stepIds: number[]) {
+
+    const request: ReOrderStepsSequenceRequest = {
+      stepIds: stepIds,
+      sequenceId: this.sequence.id,
+    }
+    this.emailService.saveOrderStepSequence(request)
+      .pipe(untilDestroyed(this))
+      .subscribe({
+        next: (res) => {
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Re-order steps successfully',
+          })
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Re-order steps failed',
+          });
+        }
+      });
+
 
   }
 
@@ -269,6 +303,8 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
       nzWidth: '1100px',
       nzMaskClosable: false
     });
+
+    this.cdr.detectChanges();
 
     this.modalSelectTemplateRef.afterClose.subscribe((templates: EmailTemplateDTO[]) => {
       if(templates){
