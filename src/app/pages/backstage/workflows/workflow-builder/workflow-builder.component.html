@@ -45,7 +45,7 @@
       </ng-container>
     </div>
     <div class="mt-4 text-right">
-      <button class="px-4 py-2 bg-green-600 text-white rounded" [disabled]="!isTriggerValid()" (click)="addOrUpdateTrigger()">
+      <button class="px-4 py-2 bg-green-600 text-white rounded" (click)="addOrUpdateTrigger()">
         {{ editIndex !== null ? '✏️ Cập nhật' : '➕ Thêm điều kiện' }}
       </button>
     </div>
