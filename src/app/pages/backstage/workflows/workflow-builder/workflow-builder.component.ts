@@ -101,7 +101,8 @@ export class WorkflowBuilderComponent implements OnInit {
         }
       });
     } else {
-      this.loadFromLocalStorage(); // với trường hợp tạo mới
+      // với trường hợp tạo mới
+      this.resetWorkflow();
     }
   }
 
@@ -123,7 +124,7 @@ export class WorkflowBuilderComponent implements OnInit {
         const importJson = this.buildDrawflowFromSteps(wf.steps);
         this.editor.import(importJson);
       }
-    }, 0);
+    }, 300);
   }
 
   buildDrawflowFromSteps(steps: WorkflowStepDTO[]): any {
@@ -267,19 +268,39 @@ export class WorkflowBuilderComponent implements OnInit {
           this.editor.import(importJson);
         }
       }
-    }, 0);
-  }
-
-
-  isTriggerValid(): boolean {
-    if (!this.selectedTriggerType) return false;
-    return this.selectedTriggerType.fields.every((field: any) => {
-      return this.newTrigger.value[field.key] !== undefined && this.newTrigger.value[field.key] !== '';
-    });
+    }, 200);
   }
 
   canProceedToNextTab(): boolean {
-    return this.triggerConditions.length > 0;
+    if (!this.workflowName || this.triggerConditions.length === 0) {
+      this.errorMessage = 'Vui lòng nhập tên workflow và thêm ít nhất một điều kiện.';
+      return false;
+    }
+    this.errorMessage = '';  // Reset error message if valid
+    return true;
+  }
+
+  resetWorkflow(): void {
+    // Reset tab về tab 1
+    this.tab = 1;
+    this.workflowName = ''; // Reset tên workflow
+    this.workflowId = null;
+
+    this.newTrigger = {
+      conditionType: '',
+      logicOperator: 'AND',
+      value: {}
+    };
+    this.editIndex = null;
+    this.triggerConditions = []; // Xóa danh sách trigger conditions
+    this.isStepModalOpen = false;
+
+    // Đặt lại các bước trong workflow
+    this.selectedStepType = ''; // Xóa bước đã chọn
+    this.stepData = {}; // Reset dữ liệu bước
+
+    // Đảm bảo không có lỗi hiển thị
+    this.errorMessage = '';
   }
 
   addNode(type: string) {
