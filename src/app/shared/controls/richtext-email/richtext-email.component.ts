@@ -12,6 +12,7 @@ import { ModuleQuill } from '@core/constants';
 import {QuillEditorComponent} from "ngx-quill";
 import {DomSanitizer} from "@angular/platform-browser";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {NotificationService} from "@core/services/notification.service";
 
 @Component({
   selector: 'app-richtext-email',
@@ -44,6 +45,7 @@ export class RichtextEmailComponent implements ControlValueAccessor {
   constructor(
     private sanitizer: DomSanitizer,
     private modal: NzModalService,
+    private notification: NotificationService,
   ) {}
 
   value!: string;
@@ -94,6 +96,14 @@ export class RichtextEmailComponent implements ControlValueAccessor {
   }
 
   showPreview(){
+    if (!this.contentPreviewHTML || !this.contentPreviewHTML?.changingThisBreaksApplicationSecurity) {
+      this.notification.open({
+        type: 'info',
+        content: 'Nội dung xem trước hiện đang trống!'
+      });
+      return;
+    }
+
     this.modal.create({
       nzTitle: 'Xem trước nội dung email',
       nzWrapClassName: 'previewEmail',
