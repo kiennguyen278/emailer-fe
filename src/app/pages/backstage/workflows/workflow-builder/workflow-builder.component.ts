@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import Drawflow from 'drawflow';
 import {TriggerConditionDTO, WorkflowDTO, WorkflowStepDTO} from "../data/workflow.dto";
 import {NzMessageService} from "ng-zorro-antd/message";
@@ -13,6 +13,9 @@ import {omit} from "lodash";
   styleUrls: ['./workflow-builder.component.less']
 })
 export class WorkflowBuilderComponent implements OnInit {
+
+  @ViewChild('drawflowEl') drawflowEl!: ElementRef;
+
   tab = 1;
   editor: any;
 
@@ -95,6 +98,7 @@ export class WorkflowBuilderComponent implements OnInit {
           if (res.success && res.data) {
             localStorage.setItem('workflow_draft', JSON.stringify(res.data));
             this.loadFromLocalStorage(); // 🔁 bước build lại trigger và step
+            console.log('vào đây', res)
           }
         },
         error: () => {
@@ -120,12 +124,13 @@ export class WorkflowBuilderComponent implements OnInit {
       logicOperator: tc.logicOperator
     }));
 
-    setTimeout(() => {
-      if (this.editor && wf.steps.length > 0) {
-        const importJson = this.buildDrawflowFromSteps(wf.steps);
-        this.editor.import(importJson);
-      }
-    }, 300);
+    // setTimeout(() => {
+    //   if (this.editor && wf.steps.length > 0) {
+    //     const importJson = this.buildDrawflowFromSteps(wf.steps);
+    //     console.log('importJson', importJson)
+    //     this.editor.import(importJson);
+    //   }
+    // }, 300);
   }
 
   buildDrawflowFromSteps(steps: WorkflowStepDTO[]): any {
@@ -141,7 +146,7 @@ export class WorkflowBuilderComponent implements OnInit {
         data: { label, stepData },
         class: step.stepType,
         html: `<div class='node'>${label}</div>`,
-        typenode: step.stepType,
+        typenode: false,
         pos_x: 150 + index * 60,
         pos_y: 100 + index * 40,
         inputs: {},
@@ -237,6 +242,35 @@ export class WorkflowBuilderComponent implements OnInit {
     }
   }
 
+
+  buildTreeWorkflow(): void {
+    const saved = localStorage.getItem('workflow_draft');
+    if (!saved) return;
+
+    const wf: WorkflowDTO = JSON.parse(saved);
+
+    console.log('this.editor', this.editor)
+
+    if (this.editor && wf.steps.length > 0) {
+      const importJson = this.buildDrawflowFromSteps(wf.steps);
+      console.log('importJson', importJson)
+      this.editor.import(importJson);
+    }
+  }
+
+
+  buildContainerWorkflow(): void {
+    const container: HTMLElement = this.drawflowEl.nativeElement;
+
+    if (container && !this.editor) {
+      this.editor = new Drawflow(container);
+      this.editor.reroute = true;
+      this.editor.start();
+    }
+  }
+
+
+
   nextTab(): void {
     this.errorMessage = '';
 
@@ -252,24 +286,32 @@ export class WorkflowBuilderComponent implements OnInit {
 
     this.tab = 2;
 
-    setTimeout(() => {
-      const container = document.getElementById('drawflow');
-      if (container && !this.editor) {
-        this.editor = new Drawflow(container);
-        this.editor.reroute = true;
-        this.editor.start();
-      }
+    this.buildContainerWorkflow();
 
-      // Nếu là chế độ EDIT, và chưa có node nào trên editor
-      if (this.workflowId && this.editor && Object.keys(this.editor.drawflow?.Home?.data || {}).length === 0) {
-        const saved = localStorage.getItem('workflow_draft');
-        if (saved) {
-          const wf: WorkflowDTO = JSON.parse(saved);
-          const importJson = this.buildDrawflowFromSteps(wf.steps);
-          this.editor.import(importJson);
-        }
-      }
-    }, 200);
+    if (this.workflowId){
+      this.buildTreeWorkflow();
+    }
+
+    // setTimeout(() => {
+    //   const container = document.getElementById('drawflow');
+    //   if (container && !this.editor) {
+    //     this.editor = new Drawflow(container);
+    //     this.editor.reroute = true;
+    //     this.editor.start();
+    //   }
+    //
+    //   console.log('this.editor', this.editor)
+    //
+    //   // Nếu là chế độ EDIT, và chưa có node nào trên editor
+    //   // if (this.workflowId && this.editor && Object.keys(this.editor.drawflow?.Home?.data || {}).length === 0) {
+    //   //   const saved = localStorage.getItem('workflow_draft');
+    //   //   if (saved) {
+    //   //     const wf: WorkflowDTO = JSON.parse(saved);
+    //   //     const importJson = this.buildDrawflowFromSteps(wf.steps);
+    //   //     this.editor.import(importJson);
+    //   //   }
+    //   // }
+    // }, 200);
   }
 
   canProceedToNextTab(): boolean {
@@ -411,11 +453,13 @@ export class WorkflowBuilderComponent implements OnInit {
     }));
 
     const exported = this.editor?.export();
+    console.log('exported', exported)
     const steps: WorkflowStepDTO[] = Object.values(exported?.drawflow?.Home?.data || {}).map((node: any, index: number) => ({
       stepType: node.name,
       stepData: JSON.stringify(node.data.stepData || {}),
       position: index
     }));
+
 
     return {
       id: 0,
