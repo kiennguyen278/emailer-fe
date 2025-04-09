@@ -1,10 +1,11 @@
 export interface WorkflowDTO {
-  id: number;
+  id?: number;
   userId?: number;
   name: string;
   status?: 'DRAFT' | 'ACTIVE' | 'INACTIVE';
   triggerConditions: TriggerConditionDTO[];
   steps: WorkflowStepDTO[];
+  drawflowJson: string;
 }
 
 export interface TriggerConditionDTO {
