@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {BaseApiService} from "@core/services/base-api.service";
-import {UserDTO} from "./admin.dto";
+import {BusinessInfoDTO, UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
+import {BaseApiService} from "@core/services/base-api.service";
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,18 +21,9 @@ export class AdminService extends BaseApiService {
     return this.http.get<ApiResponse<UserDTO>>(`${this.BASE_URL}/users/${userId}`);
   }
 
-  /**
-   * Tìm kiếm người dùng với các tham số lọc
-   * @param email - Email người dùng
-   * @param status - Trạng thái người dùng
-   * @param businessEmailStatus - Trạng thái email doanh nghiệp
-   * @param page - Trang tìm kiếm
-   * @param size - Kích thước trang
-   * @returns Observable chứa danh sách người dùng
-   */
-  searchUsers(
+  getUsers(
     email: string | null,
-    status: 'ACTIVE' | 'PENDING' | 'INACTIVE' | null,
+    status: string | null,
     page: number = 0,
     size: number = 10
   ): Observable<ApiResponse<any>> {
@@ -39,7 +31,6 @@ export class AdminService extends BaseApiService {
     const params: any = {
       email: email || '', // Nếu email null, thì gán là chuỗi rỗng
       status: status || '', // Nếu status null, thì gán là chuỗi rỗng
-      businessEmailStatus: '', // Nếu businessEmailStatus null, thì gán là chuỗi rỗng
       page: page.toString(),
       size: size.toString()
     };
@@ -51,7 +42,7 @@ export class AdminService extends BaseApiService {
   /**
    * Đăng ký người dùng mới
    */
-  registerUser(userDTO: UserDTO): Observable<ApiResponse<string>> {
+  createUser(userDTO: UserDTO): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(`${this.BASE_URL}/users/register`, userDTO, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -59,4 +50,19 @@ export class AdminService extends BaseApiService {
     });
   }
 
+  updateBusinessProfile(id: number, businessInfoDTO: BusinessInfoDTO) {
+    return this.http.put<ApiResponse<string>>(`${this.BASE_URL}/users/${id}/updateBusinessProfile`, businessInfoDTO, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  updateUserStatus(id: number, active: boolean) {
+    return this.http.put(`${this.BASE_URL}/users/${id}/status`, { active });
+  }
+
+  updateBusinessStatus(id: number, active: boolean) {
+    return this.http.put(`${this.BASE_URL}/users/${id}/business-status`, { active });
+  }
 }

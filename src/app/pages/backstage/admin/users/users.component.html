@@ -1,1 +1,142 @@
-<p>users works!</p>
+<nz-card nzTitle="Quản lý Users" [nzSize]="'small'" [nzExtra]="extraTemplate">
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm User</button>
+  </ng-template>
+
+  <!-- Bộ lọc -->
+  <div class="mb-3 flex gap-4">
+    <input
+      type="text"
+      nz-input
+      placeholder="Tìm theo email..."
+      [(ngModel)]="filter.email"
+      (ngModelChange)="onFilterChange()"
+    />
+
+    <select
+      nz-select
+      [(ngModel)]="filter.status"
+      (ngModelChange)="onFilterChange()"
+      class="w-[200px]"
+    >
+      <nz-option [nzValue]="''" nzLabel="Tất cả trạng thái"></nz-option>
+      <nz-option [nzValue]="'ACTIVE'" nzLabel="Hoạt động"></nz-option>
+      <nz-option [nzValue]="'PENDING'" nzLabel="Chưa kích hoạt"></nz-option>
+      <nz-option [nzValue]="'INACTIVE'" nzLabel="Vô hiệu"></nz-option>
+    </select>
+  </div>
+
+  <!-- Danh sách users -->
+  <div class="table-list pt-3 flex justify-center">
+    <div class="w-full max-w-[900px]">
+      <app-table
+        [columns]="columns"
+        [items]="users"
+        [showPagination]="true"
+      >
+        <ng-template [appCellTemplate]="'actions'" let-item>
+          <button nz-button nzType="text" (click)="showEditModal(item)">
+            <i nz-icon nzType="edit" nzTooltipTitle="Sửa user"></i>
+          </button>
+        </ng-template>
+      </app-table>
+    </div>
+  </div>
+</nz-card>
+
+
+<!-- Modal tạo/sửa -->
+
+<!-- Modal tạo/sửa -->
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  [nzTitle]="modalTitle"
+  (nzOnCancel)="closeModal()"
+  [nzFooter]="null"
+>
+  <form [formGroup]="userForm" (ngSubmit)="submitUserForm()">
+    <!-- Email -->
+    <div class="mb-3">
+      <label>Email:</label>
+      <app-form-control>
+        <app-input formControlName="email" placeholder="Nhập email user" />
+      </app-form-control>
+    </div>
+
+    <!-- Chỉ hiển thị khi EDIT -->
+    <ng-container *ngIf="isEditMode">
+      <!-- Trạng thái -->
+      <div class="mb-3">
+        <label>Trạng thái:</label>
+        <app-form-control>
+          <nz-radio-group formControlName="active">
+            <label nz-radio [nzValue]="true">Hoạt động</label>
+            <label nz-radio [nzValue]="false" class="ml-4">Vô hiệu</label>
+          </nz-radio-group>
+        </app-form-control>
+      </div>
+
+      <!-- Thông tin doanh nghiệp -->
+      <div class="mb-3 mt-4">
+        <label class="font-semibold">Thông tin doanh nghiệp</label>
+      </div>
+
+      <div formGroupName="businessInfo">
+        <div class="mb-3">
+          <label>Tên doanh nghiệp:</label>
+          <app-form-control>
+            <app-input formControlName="businessName"></app-input>
+          </app-form-control>
+        </div>
+
+        <div class="mb-3">
+          <label>Email doanh nghiệp:</label>
+          <app-form-control>
+            <app-input formControlName="businessEmail"></app-input>
+          </app-form-control>
+        </div>
+
+        <div class="mb-3">
+          <label>Domain:</label>
+          <app-form-control>
+            <app-input formControlName="businessDomain"></app-input>
+          </app-form-control>
+        </div>
+
+        <div class="mb-3">
+          <label>Trạng thái xác minh:</label>
+          <app-form-control>
+            <div class="pl-2 pt-1 text-gray-700">
+              {{ userForm.get('businessInfo.isVerified')?.value ? 'Đã xác minh' : 'Chưa xác minh' }}
+            </div>
+          </app-form-control>
+        </div>
+
+        <div class="mb-3">
+          <label>Sử dụng Custom SMTP:</label>
+          <app-form-control>
+            <nz-checkbox formControlName="useCustomSmtp">
+              Bật Custom SMTP
+            </nz-checkbox>
+          </app-form-control>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Nút hành động -->
+    <div class="btn-group text-center mt-4">
+      <button nz-button nzType="default" (click)="closeModal()">Hủy</button>
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="isSaving"
+        type="submit"
+        class="ml-3"
+      >
+        Lưu
+      </button>
+    </div>
+  </form>
+</nz-modal>
+
+
