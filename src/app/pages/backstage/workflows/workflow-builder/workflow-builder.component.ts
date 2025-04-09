@@ -460,12 +460,14 @@ export class WorkflowBuilderComponent implements OnInit {
       position: index
     }));
 
+    const  drawflowJson = JSON.stringify(this.editor?.export());
 
     return {
       id: 0,
       userId: 0,
       name: this.workflowName,
       status: 'DRAFT',
+      drawflowJson:drawflowJson,
       triggerConditions: triggerConditions,
       steps: steps
     };
