@@ -6,7 +6,7 @@ import { UsersComponent } from './users/users.component'; // Import UsersCompone
 
 const routes: Routes = [
   { path: '', component: MainComponent, data: { title: 'Admin', reuse: true } },
-  { path: 'users', component: UsersComponent, data: { title: 'Admin/Users' } },
+  { path: 'users', component: UsersComponent, data: { title: 'Users' } },
 ];
 
 @NgModule({
