@@ -432,7 +432,7 @@ export class WorkflowBuilderComponent implements OnInit {
           if (res.success && res.data) {
             alert('✅ Tạo workflow thành công!');
             localStorage.removeItem('workflow_draft');
-            this.router.navigate(['/workflows', res.data]); // 👉 hoặc chuyển sang chi tiết
+            this.router.navigate([`/workflows/builder/${res.data}`, ]); // 👉 hoặc chuyển sang chi tiết
           } else {
             alert('❌ Tạo thất bại: ' + res.message);
           }
@@ -453,14 +453,13 @@ export class WorkflowBuilderComponent implements OnInit {
     }));
 
     const exported = this.editor?.export();
-    console.log('exported', exported)
     const steps: WorkflowStepDTO[] = Object.values(exported?.drawflow?.Home?.data || {}).map((node: any, index: number) => ({
       stepType: node.name,
       stepData: JSON.stringify(node.data.stepData || {}),
       position: index
     }));
 
-    const  drawflowJson = JSON.stringify(this.editor?.export());
+    const  drawflowJson = JSON.stringify(exported);
 
     return {
       id: 0,
