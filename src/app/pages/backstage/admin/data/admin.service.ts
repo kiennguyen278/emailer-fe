@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {BusinessInfoDTO, UserDTO} from "./admin.dto";
+import {UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
 
@@ -50,8 +50,8 @@ export class AdminService extends BaseApiService {
     });
   }
 
-  updateBusinessProfile(id: number, businessInfoDTO: BusinessInfoDTO) {
-    return this.http.put<ApiResponse<string>>(`${this.BASE_URL}/users/${id}/updateBusinessProfile`, businessInfoDTO, {
+  updateBusinessProfile(id: number, userDTO: UserDTO) {
+    return this.http.put<ApiResponse<string>>(`${this.BASE_URL}/users/${id}/updateBusinessProfile`, userDTO, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })

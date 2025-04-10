@@ -58,15 +58,18 @@ export class UsersComponent implements OnInit {
     this.columns = [
       { title: 'ID', key: 'id' },
       { title: 'Email', key: 'email' },
-      { title: 'Vai trò', key: 'role' },
+      { title: 'Role', key: 'role' },
       {
         title: 'Trạng thái',
-        key: 'active',
-        render: (value: boolean) => (value ? 'Hoạt động' : 'Vô hiệu')
+        key: 'status'
       },
       { title: 'Ngày tạo', key: 'createdAt' },
-      { title: 'Hành động', key: 'actions', type: 'template' }
+      { title: 'Actions', key: 'actions', type: 'template' }
     ];
+  }
+
+  onSearch(): void {
+    this.loadUsers();
   }
 
   loadUsers(): void {

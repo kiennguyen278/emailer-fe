@@ -12,13 +12,3 @@ export interface UserDTO {
   useCustomSmtp?: boolean; // true | false
 
 }
-
-
-export interface BusinessInfoDTO {
-  businessName?: string;
-  businessEmail?: string;
-  businessDomain?: string;
-  isVerified?: boolean;
-  useCustomSmtp?: boolean;
-}
-

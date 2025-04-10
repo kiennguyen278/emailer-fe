@@ -4,31 +4,10 @@
   </ng-template>
 
   <!-- Bộ lọc -->
-  <div class="mb-3 flex gap-4">
-    <input
-      type="text"
-      nz-input
-      placeholder="Tìm theo email..."
-      [(ngModel)]="filter.email"
-      (ngModelChange)="onFilterChange()"
-    />
-
-    <select
-      nz-select
-      [(ngModel)]="filter.status"
-      (ngModelChange)="onFilterChange()"
-      class="w-[200px]"
-    >
-      <nz-option [nzValue]="''" nzLabel="Tất cả trạng thái"></nz-option>
-      <nz-option [nzValue]="'ACTIVE'" nzLabel="Hoạt động"></nz-option>
-      <nz-option [nzValue]="'PENDING'" nzLabel="Chưa kích hoạt"></nz-option>
-      <nz-option [nzValue]="'INACTIVE'" nzLabel="Vô hiệu"></nz-option>
-    </select>
-  </div>
 
   <!-- Danh sách users -->
   <div class="table-list pt-3 flex justify-center">
-    <div class="w-full max-w-[900px]">
+    <div class="w-full]">
       <app-table
         [columns]="columns"
         [items]="users"
@@ -66,15 +45,6 @@
     <!-- Chỉ hiển thị khi EDIT -->
     <ng-container *ngIf="isEditMode">
       <!-- Trạng thái -->
-      <div class="mb-3">
-        <label>Trạng thái:</label>
-        <app-form-control>
-          <nz-radio-group formControlName="active">
-            <label nz-radio [nzValue]="true">Hoạt động</label>
-            <label nz-radio [nzValue]="false" class="ml-4">Vô hiệu</label>
-          </nz-radio-group>
-        </app-form-control>
-      </div>
 
       <!-- Thông tin doanh nghiệp -->
       <div class="mb-3 mt-4">
@@ -114,11 +84,6 @@
 
         <div class="mb-3">
           <label>Sử dụng Custom SMTP:</label>
-          <app-form-control>
-            <nz-checkbox formControlName="useCustomSmtp">
-              Bật Custom SMTP
-            </nz-checkbox>
-          </app-form-control>
         </div>
       </div>
     </ng-container>
