@@ -1,1 +1,80 @@
-users
+<nz-card nzTitle="Quản lý Users" [nzSize]="'small'" [nzExtra]="extraTemplate">
+  <ng-template #extraTemplate>
+    <button nz-button type="button" nzType="primary" (click)="showCreateModal()">+ Thêm mới</button>
+  </ng-template>
+
+  <!-- 🔍 FORM TÌM KIẾM -->
+  <form [formGroup]="formSearch" (ngSubmit)="onSearch()" class="search-form mb-3">
+    <div nz-row [nzGutter]="12">
+      <div nz-col [nzSpan]="4">
+        <label>Status:</label>
+        <app-form-control>
+          <app-select formControlName="status" [options]="statusOptions"></app-select>
+        </app-form-control>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <label>Email:</label>
+        <app-form-control>
+          <app-input formControlName="email" placeholder="Tìm theo email" [allowClear]="true"></app-input>
+        </app-form-control>
+      </div>
+      <div nz-col [nzSpan]="4">
+        <div class="btn-group mt-4">
+          <button nz-button nzType="primary" [nzLoading]="loading$ | async" type="submit">Tìm kiếm</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- 📋 BẢNG DANH SÁCH USERS -->
+  <app-table
+    [columns]="columns"
+    [items]="pagedItems"
+    [scrollX]="'800px'"
+    [loading]="loading$ | async"
+    (queryParams)="onQueryParams($event)"
+  >
+    <ng-template [appCellTemplate]="'actions'" let-item>
+      <button nz-button nzType="text" (click)="showViewModal(item)">
+        <i nz-icon nzType="eye" nz-tooltip nzTooltipTitle="Xem chi tiết"></i>
+      </button>
+      <button nz-button nzType="text" (click)="showEditModal(item)">
+        <i nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Chỉnh sửa"></i>
+      </button>
+      <button nz-button nzType="text" (click)="confirmDelete(item)">
+        <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xoá"></i>
+      </button>
+    </ng-template>
+  </app-table>
+</nz-card>
+
+
+<ng-template #modalUserForm>
+  <form [formGroup]="formUser" (ngSubmit)="saveUser()">
+    <div nz-row [nzGutter]="16">
+      <div nz-col [nzSpan]="12">
+        <label>Email:</label>
+        <app-form-control>
+          <app-input formControlName="email"></app-input>
+        </app-form-control>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <label>Status:</label>
+        <app-form-control>
+          <app-select formControlName="status" [options]="statusOptions"></app-select>
+        </app-form-control>
+      </div>
+    </div>
+    <div class="btn-group text-center mt-4">
+      <button nz-button type="button" nzType="default" (click)="closeModal()">Hủy</button>
+      <button nz-button nzType="primary" type="submit" [nzLoading]="isSaving" class="ml-3">Lưu</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #modalViewUser>
+  <nz-descriptions nzTitle="Thông tin User" [nzColumn]="1" nzBordered *ngIf="selectedUser">
+    <nz-descriptions-item nzTitle="Email">{{ selectedUser.email }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Trạng thái">{{ selectedUser.status }}</nz-descriptions-item>
+  </nz-descriptions>
+</ng-template>

@@ -21,18 +21,10 @@ export class AdminService extends BaseApiService {
     return this.http.get<ApiResponse<UserDTO>>(`${this.BASE_URL}/users/${userId}`);
   }
 
-  getUsers(
-    email: string | null,
-    status: string | null
-  ): Observable<ApiResponse<UserDTO>> {
-    // Xây dựng params (query string)
-    const params: any = {
-      email: email || '', // Nếu email null, thì gán là chuỗi rỗng
-      status: status || ''
-    };
-
+  getAllUsers(
+  ): Observable<ApiResponse<UserDTO[]>> {
     // Gửi request GET với query string được cấu hình
-    return this.http.get<ApiResponse<any>>(`${this.BASE_URL}/users/search`, { params });
+    return this.http.get<ApiResponse<any>>(`${this.BASE_URL}/users/search`);
   }
 
   /**
