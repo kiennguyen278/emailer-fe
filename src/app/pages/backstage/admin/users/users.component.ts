@@ -38,27 +38,25 @@ export class UsersComponent implements OnInit {
       title: 'Email',
       header: 'Email',
       key: 'email',
-      tdClass: '',
-      show: true
+      tdClass: 'text-center',
+      nzWidth: '200px'
     },
     {
       title: 'Trạng thái',
       header: 'Trạng thái',
       key: 'status',
-      tdClass: '',
-      show: true
+      tdClass: 'text-center',
+      nzWidth: '200px'
     },
     {
       title: 'Thao tác',
       header: 'Actions',
       key: 'actions',
-      tdClass: '',
-      show: true,
+      tdClass: 'text-center',
+      nzWidth: '200px',
       type: 'action' // ⬅️ bắt buộc phải có dòng này
     }
   ];
-
-
 
   constructor(
     private fb: FormBuilder,
