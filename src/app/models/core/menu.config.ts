@@ -85,14 +85,14 @@ export const MENU_ITEMS: MenuItem[] = [
     children: [
       {
         module: '/admin',
-        label: 'Admin Dashboard',
-        icon: 'home',
+        label: 'Settings',
+        icon: 'setting',
         isOpen: false,
         children: []
       },
       {
         module: '/admin/users',
-        label: 'Users Management',
+        label: 'Users',
         icon: 'user',
         isOpen: false,
         children: []
