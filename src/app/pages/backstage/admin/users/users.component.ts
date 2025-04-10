@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AdminService } from '../data/admin.service';
 import { UserDTO } from '../data/admin.dto';
@@ -7,9 +7,11 @@ import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.component.html'
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+  @ViewChild('modalUserForm', { static: true }) modalUserFormTpl!: TemplateRef<any>;
   formSearch: FormGroup;
   formUser: FormGroup;
 
@@ -47,14 +49,15 @@ export class UsersComponent implements OnInit {
       show: true
     },
     {
-      title: 'Actions',
+      title: 'Thao tác',
       header: 'Actions',
       key: 'actions',
       tdClass: '',
       show: true,
-      type: 'action'
+      type: 'action' // ⬅️ bắt buộc phải có dòng này
     }
   ];
+
 
 
   constructor(
@@ -71,8 +74,8 @@ export class UsersComponent implements OnInit {
 
     this.formUser = this.fb.group({
       id: [null],
-      email: [''],
-      status: ['ACTIVE']
+      email: ['', [Validators.required, Validators.email]],
+      status: ['ACTIVE', Validators.required]
     });
 
     this.loadAllUsers();
@@ -126,7 +129,7 @@ export class UsersComponent implements OnInit {
     this.formUser.reset({ status: 'ACTIVE' });
     this.modal.create({
       nzTitle: 'Thêm User mới',
-      nzContent: 'modalUserForm',
+      nzContent: this.modalUserFormTpl, // ✅ dùng TemplateRef
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: false
@@ -138,7 +141,7 @@ export class UsersComponent implements OnInit {
     this.formUser.patchValue(user);
     this.modal.create({
       nzTitle: 'Chỉnh sửa User',
-      nzContent: 'modalUserForm',
+      nzContent: this.modalUserFormTpl, // ✅ dùng TemplateRef
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: false

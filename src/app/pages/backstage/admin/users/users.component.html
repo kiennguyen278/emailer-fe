@@ -12,7 +12,7 @@
           <app-select formControlName="status" [options]="statusOptions"></app-select>
         </app-form-control>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div nz-col [nzSpan]="4">
         <label>Email:</label>
         <app-form-control>
           <app-input formControlName="email" placeholder="Tìm theo email" [allowClear]="true"></app-input>
@@ -56,6 +56,14 @@
         <label>Email:</label>
         <app-form-control>
           <app-input formControlName="email"></app-input>
+          <ng-container *ngIf="formUser.get('email')?.touched && formUser.get('email')?.invalid">
+            <div class="text-red-500 text-xs mt-1" *ngIf="formUser.get('email')?.errors?.['required']">
+              Email là bắt buộc
+            </div>
+            <div class="text-red-500 text-xs mt-1" *ngIf="formUser.get('email')?.errors?.['email']">
+              Email không đúng định dạng
+            </div>
+          </ng-container>
         </app-form-control>
       </div>
       <div nz-col [nzSpan]="12">
