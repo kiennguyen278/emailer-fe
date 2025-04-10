@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import Drawflow from 'drawflow';
 import {TriggerConditionDTO, WorkflowDTO, WorkflowStepDTO} from "../data/workflow.dto";
 import {NzMessageService} from "ng-zorro-antd/message";
@@ -81,7 +81,8 @@ export class WorkflowBuilderComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
-    private workflowService: WorkflowService
+    private workflowService: WorkflowService,
+    private cdr: ChangeDetectorRef,
   ) {
 
   }
@@ -98,7 +99,6 @@ export class WorkflowBuilderComponent implements OnInit {
           if (res.success && res.data) {
             localStorage.setItem('workflow_draft', JSON.stringify(res.data));
             this.loadFromLocalStorage(); // 🔁 bước build lại trigger và step
-            console.log('vào đây', res)
           }
         },
         error: () => {
@@ -123,44 +123,6 @@ export class WorkflowBuilderComponent implements OnInit {
       value: JSON.parse(tc.conditionData),
       logicOperator: tc.logicOperator
     }));
-
-    // setTimeout(() => {
-    //   if (this.editor && wf.steps.length > 0) {
-    //     const importJson = this.buildDrawflowFromSteps(wf.steps);
-    //     console.log('importJson', importJson)
-    //     this.editor.import(importJson);
-    //   }
-    // }, 300);
-  }
-
-  buildDrawflowFromSteps(steps: WorkflowStepDTO[]): any {
-    const data: any = {};
-    steps.forEach((step, index) => {
-      const id = (index + 1).toString();
-      const stepData = JSON.parse(step.stepData);
-      const label = this.getStepLabel(step.stepType, stepData);
-
-      data[id] = {
-        id: Number(id),
-        name: step.stepType,
-        data: { label, stepData },
-        class: step.stepType,
-        html: `<div class='node'>${label}</div>`,
-        typenode: false,
-        pos_x: 150 + index * 60,
-        pos_y: 100 + index * 40,
-        inputs: {},
-        outputs: {}
-      };
-    });
-
-    return {
-      drawflow: {
-        Home: {
-          data
-        }
-      }
-    };
   }
 
   loadWorkflowData(): void {
@@ -249,12 +211,44 @@ export class WorkflowBuilderComponent implements OnInit {
 
     const wf: WorkflowDTO = JSON.parse(saved);
 
-    console.log('this.editor', this.editor)
+    if (this.editor && wf.drawflowJson) {
+      const importJson = JSON.parse(wf.drawflowJson);
+      const drawflow = JSON.parse(wf.drawflowJson);
+      const dataStep = Object.values(drawflow?.drawflow?.Home?.data) || [];
 
-    if (this.editor && wf.steps.length > 0) {
-      const importJson = this.buildDrawflowFromSteps(wf.steps);
-      console.log('importJson', importJson)
-      this.editor.import(importJson);
+      let ObjDataStepFinal = {};
+      dataStep.forEach((item: any) => {
+        const lblItem = this.getStepLabel(item.name, item.data.stepData)
+
+        ObjDataStepFinal[item.id] = {
+          ...item,
+          data: {
+            ...item.data,
+            label: lblItem
+          }
+        }
+      })
+
+      const finalDataImport = {
+        drawflow: {
+          Home: {
+            data: ObjDataStepFinal
+          }
+        }
+      }
+
+
+
+      this.editor.import(finalDataImport);
+
+      Object.values(ObjDataStepFinal).forEach((item: any) => {
+        this.editor.updateConnectionNodes(item.id);
+      })
+
+
+      setTimeout(() => {
+        this.editor.updateConnectionNodes('all');
+      }, 1000);
     }
   }
 
@@ -290,28 +284,9 @@ export class WorkflowBuilderComponent implements OnInit {
 
     if (this.workflowId){
       this.buildTreeWorkflow();
+      this.cdr.detectChanges();
     }
 
-    // setTimeout(() => {
-    //   const container = document.getElementById('drawflow');
-    //   if (container && !this.editor) {
-    //     this.editor = new Drawflow(container);
-    //     this.editor.reroute = true;
-    //     this.editor.start();
-    //   }
-    //
-    //   console.log('this.editor', this.editor)
-    //
-    //   // Nếu là chế độ EDIT, và chưa có node nào trên editor
-    //   // if (this.workflowId && this.editor && Object.keys(this.editor.drawflow?.Home?.data || {}).length === 0) {
-    //   //   const saved = localStorage.getItem('workflow_draft');
-    //   //   if (saved) {
-    //   //     const wf: WorkflowDTO = JSON.parse(saved);
-    //   //     const importJson = this.buildDrawflowFromSteps(wf.steps);
-    //   //     this.editor.import(importJson);
-    //   //   }
-    //   // }
-    // }, 200);
   }
 
   canProceedToNextTab(): boolean {
@@ -381,18 +356,18 @@ export class WorkflowBuilderComponent implements OnInit {
   getStepLabel(type: string, data: any): string {
     switch (type) {
       case 'SEND_EMAIL':
-        const email = this.emailTemplates.find(t => t.id === data.email_template_id);
+        const email = this.emailTemplates.find(t => Number(t.id) === Number(data.email_template_id));
         return `📧 ${email?.name || 'Email'}`;
       case 'WAIT':
         return `⏱️ Chờ ${data.days} ngày`;
       case 'ADD_TAG':
-        const tag1 = this.tags.find(t => t.id === data.tag_id);
+        const tag1 = this.tags.find(t => Number(t.id) === Number(data.tag_id));
         return `➕ Tag: ${tag1?.name || 'tag'}`;
       case 'REMOVE_TAG':
-        const tag2 = this.tags.find(t => t.id === data.tag_id);
+        const tag2 = this.tags.find(t => Number(t.id) === Number(data.tag_id));
         return `➖ Tag: ${tag2?.name || 'tag'}`;
       case 'ADD_TO_SEQUENCE':
-        const seq = this.sequences.find(s => s.id === data.sequence_id);
+        const seq = this.sequences.find(s => Number(s.id) === Number(data.sequence_id));
         return `🔁 Chuỗi: ${seq?.name || 'sequence'}`;
       default:
         return type;
@@ -408,9 +383,11 @@ export class WorkflowBuilderComponent implements OnInit {
       return;
     }
 
+    const request = omit(dto, ['status']);
+
     if (this.workflowId) {
       // 👉 UPDATE
-      this.workflowService.updateWorkflow(this.workflowId, dto).subscribe({
+      this.workflowService.updateWorkflow(this.workflowId, request).subscribe({
         next: (res) => {
           if (res.success) {
             alert('✅ Cập nhật workflow thành công!');
@@ -426,7 +403,6 @@ export class WorkflowBuilderComponent implements OnInit {
       });
     } else {
       // 👉 CREATE
-      const request = omit(dto, ['status'])
       this.workflowService.createWorkflow(request).subscribe({
         next: (res) => {
           if (res.success && res.data) {
