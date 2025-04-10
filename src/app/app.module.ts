@@ -21,6 +21,7 @@ import {SharedModule} from "./shared/shared.module";
 import {CoreModule} from "@core/core.module";
 import {globalbarFeatureKey, SidebarReducer} from "./state/sidebar/reducer";
 import {metaReducers} from "./state/sidebar/meta-reducers";
+import { AdminModule } from './pages/backstage/admin/admin.module';
 
 registerLocaleData(en);
 
@@ -42,6 +43,7 @@ registerLocaleData(en);
     StoreModule.forRoot({[globalbarFeatureKey]: SidebarReducer}, { metaReducers }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    AdminModule,
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

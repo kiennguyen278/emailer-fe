@@ -75,5 +75,28 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: 'setting',
     isOpen: false,
     children: []
+  },
+
+  {
+    module: '/admin',
+    label: 'Admin',
+    icon: 'user',
+    isOpen: false,
+    children: [
+      {
+        module: '/admin',
+        label: 'Admin Dashboard',
+        icon: 'home',
+        isOpen: false,
+        children: []
+      },
+      {
+        module: '/admin/users',
+        label: 'Users Management',
+        icon: 'user',
+        isOpen: false,
+        children: []
+      }
+    ]
   }
 ];

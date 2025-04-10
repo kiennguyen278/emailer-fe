@@ -52,6 +52,11 @@ const routes: Routes = [
       },
 
       {
+        path: 'admin',
+        loadChildren: () => import('./pages/backstage/admin/admin.module').then((m) => m.AdminModule)
+      },
+
+      {
         path: 'exception',
         loadChildren: () => import('./pages/commons/exception/exception.module').then((m) => m.ExceptionModule),
       },
