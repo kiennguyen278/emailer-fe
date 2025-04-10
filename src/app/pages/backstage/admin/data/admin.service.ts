@@ -26,7 +26,7 @@ export class AdminService extends BaseApiService {
     status: string | null,
     page: number = 0,
     size: number = 10
-  ): Observable<ApiResponse<any>> {
+  ): Observable<ApiResponse<UserDTO>> {
     // Xây dựng params (query string)
     const params: any = {
       email: email || '', // Nếu email null, thì gán là chuỗi rỗng
@@ -65,4 +65,16 @@ export class AdminService extends BaseApiService {
   updateBusinessStatus(id: number, active: boolean) {
     return this.http.put(`${this.BASE_URL}/users/${id}/business-status`, { active });
   }
+
+  getUserStatusOptions(): Observable<{ label: string, value: string }[]> {
+    return new Observable(observer => {
+      observer.next([
+        { label: 'ACTIVE', value: 'ACTIVE' },
+        { label: 'ACTIVE', value: 'ACTIVE' },
+        { label: 'PENDING', value: 'PENDING' }
+      ]);
+      observer.complete();
+    });
+  }
+
 }
