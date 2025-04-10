@@ -73,7 +73,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: false })], // useHash này là có hiện dấu # trên url router hay ko, ví dụ: "useHash: false" => "/home/dashboard"; "useHash: true" => "/#/home/dashboard"
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
