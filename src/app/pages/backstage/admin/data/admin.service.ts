@@ -23,16 +23,12 @@ export class AdminService extends BaseApiService {
 
   getUsers(
     email: string | null,
-    status: string | null,
-    page: number = 0,
-    size: number = 10
+    status: string | null
   ): Observable<ApiResponse<UserDTO>> {
     // Xây dựng params (query string)
     const params: any = {
       email: email || '', // Nếu email null, thì gán là chuỗi rỗng
-      status: status || '', // Nếu status null, thì gán là chuỗi rỗng
-      page: page.toString(),
-      size: size.toString()
+      status: status || ''
     };
 
     // Gửi request GET với query string được cấu hình
