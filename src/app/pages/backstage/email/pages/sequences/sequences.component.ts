@@ -104,7 +104,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
   openModal(item?: SequenceDTO) {
 
     this.modalRef = this.modal.create({
-      nzTitle: item?.id ? `Cập nhật chuỗi email sequence  "${item.name}"` : 'Thêm mới',
+      nzTitle: item?.id ? `Cập nhật chuỗi email sequence  "${item.name}"` : 'Thêm mới sequence',
       nzContent: SequenceFormComponent,
       nzData: {
         sequence: item || null

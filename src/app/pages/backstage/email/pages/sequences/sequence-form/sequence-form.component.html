@@ -1,173 +1,188 @@
 <div>
 
-    <nz-tabset (nzSelectChange)="onTabChange($event)" [nzSelectedIndex]="selectedTabIndex">
-      <!-- TAB 1: DETAIL -->
+  <div class="border rounded-[5px] p-4 relative">
+    <h3 class="absolute top-[-14px] left-[20px] bg-white px-2 font-semibold">Thông tin sequence</h3>
+    <form [formGroup]="form" (ngSubmit)="saveSequence()">
 
-      <nz-tab nzTitle="Thông tin sequence">
-        <form [formGroup]="form" (ngSubmit)="saveSequence()">
-
-          <div class="max-w-[500px] mx-auto">
-            <div class="field-item mb-3">
-              <div class="mb-1">Tên sequence:</div>
-              <div class="flex-[1_0_0]">
-                <app-form-control>
-                  <app-input formControlName="name"
-                             [allowClear]="true"
-                             placeholder="Tên sequence"></app-input>
-                </app-form-control>
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center">
-              <div class="field-item flex items-center">
-                <div class="mr-2">Status:</div>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="18">
+          <div nz-row [nzGutter]="16">
+            <div nz-col [nzSpan]="20">
+              <div class="field-item mb-3">
+                <div class="mb-1">Tên sequence:</div>
                 <div class="flex-[1_0_0]">
                   <app-form-control>
-                    <app-switch
-                      formControlName="status"
-                      (switchChange)="form.controls['status'].patchValue(!$event)"
-                    ></app-switch>
+                    <app-input formControlName="name"
+                               [allowClear]="true"
+                               placeholder="Tên sequence"></app-input>
                   </app-form-control>
                 </div>
               </div>
-
-              <div class="btn-group text-right">
-                <button nz-button type="button" nzType="default" [disabled]="isLoadingSave" (click)="closeModal()">Cancel</button>
-                <button nz-button
-                        nzType="primary"
-                        type="submit"
-                        [nzLoading]="isLoadingSave"
-                        class="ml-3"
-                >Save</button>
-              </div>
             </div>
-          </div>
 
-        </form>
-      </nz-tab>
-
-      <nz-tab nzTitle="Steps" [nzDisabled]="!sequence?.id">
-
-        <form [formGroup]="formStep" (ngSubmit)="saveStepSequence()">
-          <div class="mb-3">
-            <div nz-row [nzGutter]="16">
-
-
-              <div nz-col [nzSpan]="18">
-                  <ng-container formArrayName="steps">
-                    <ng-container *ngFor="let item of steps.controls; let index = index">
-                      <ng-container  [formGroupName]="index">
-
-                        <ng-container *ngIf="crrStep == index">
-                          <div nz-row [nzGutter]="16">
-                            <div nz-col [nzSpan]="19">
-                              <div class="field-item mb-3">
-                                <div class="mb-1">Subject line:</div>
-                                <div class="flex-[1_0_0]">
-                                  <app-form-control>
-                                    <app-input formControlName="subject"
-                                               [allowClear]="true"
-                                               placeholder="Subject line"></app-input>
-                                  </app-form-control>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div nz-col [nzSpan]="5">
-                              <div class="field-item mb-3">
-                                <div class="mb-1">Send this email:</div>
-                                <div class="flex-[1_0_0]">
-                                  <app-form-control>
-                                    <app-select formControlName="delayDays"
-                                                [options]="optionDelayDate"
-                                               placeholder="Subject line"></app-select>
-                                  </app-form-control>
-                                </div>
-                              </div>
-                            </div>
-
-
-                            <div nz-col [nzSpan]="24">
-                              <div class="field-item mb-3">
-                                <div class="mb-1">Nội dung:</div>
-                                <div class="flex-[1_0_0]">
-                                  <app-form-control>
-                                    <app-richtext-email
-                                      formControlName="htmlBody"
-                                      [extraTpl]="extraTpl"></app-richtext-email>
-                                  </app-form-control>
-
-                                  <ng-template #extraTpl>
-                                    <button
-                                      type="button"
-                                      (click)="openModalSelectTemplate()"
-                                      class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2">
-                                      Chọn template
-                                    </button>
-                                  </ng-template>
-                                </div>
-                              </div>
-                            </div>
-
-
-                          </div>
-                        </ng-container>
-
-
-
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-
-                <div class="btn-group text-right" *ngIf="steps.length > 0">
-                  <button nz-button type="button" nzType="default" [disabled]="isLoadingSave" (click)="closeModal()">Cancel</button>
-                  <button nz-button
-                          nzType="primary"
-                          type="submit"
-                          [nzLoading]="isLoadingSave"
-                          class="ml-3"
-                  >
-                    Save
-<!--                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step' : 'Update Step'}}-->
-                    </button>
-                </div>
-
-
-
-              </div>
-
-              <div nz-col [nzSpan]="6">
-                <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)" class="max-h-[55vh] overflow-y-auto">
-                  <div *ngFor="let item of steps.controls; let index = index">
-                    <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
-                         (click)="editStep(index)"
-                         [formGroupName]="index" cdkDrag>
-                      <div class="whitespace-nowrap text-ellipsis">
-                        <div>{{formStep.controls['steps']?.value[index]?.subject}}</div>
-                        <ng-container *ngIf="!formStep.controls['steps']?.value[index]?.id">
-                          <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
-                        </ng-container>
-                      </div>
-                      <span class="leading-none">
-                      <i nz-icon nzType="icons:icon-bar"></i>
-                    </span>
-                    </div>
+            <div nz-col [nzSpan]="4">
+              <div class="flex justify-end">
+                <div class="field-item ">
+                  <div class="mr-2">Status:</div>
+                  <div class="flex-[1_0_0]">
+                    <app-form-control>
+                      <app-switch
+                        formControlName="status"
+                        (switchChange)="form.controls['status'].patchValue(!$event)"
+                      ></app-switch>
+                    </app-form-control>
                   </div>
                 </div>
 
-                <button nz-button type="button"
-                        nzType="default"
-                        (click)="addStep()">+ Add Email</button>
+                <div class="field-item ">
+                  <div class="mr-2">&nbsp;</div>
+                  <div class="btn-group text-right">
+    <!--                <button nz-button type="button" nzType="default" [disabled]="isLoadingSave" (click)="closeModal()">Cancel</button>-->
+                    <button nz-button
+                            nzType="primary"
+                            type="submit"
+                            [nzLoading]="isLoadingSave"
+                            class="ml-3"
+                    >Save</button>
+                  </div>
+                </div>
               </div>
-
             </div>
 
           </div>
 
-        </form>
+          <div class="">
 
-      </nz-tab>
-    </nz-tabset>
+
+
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+
+  <div *ngIf="sequence?.id" class="border rounded-[5px] p-4 mt-6 relative">
+    <h3 class="absolute top-[-14px] left-[20px] bg-white px-2 font-semibold">Steps sequence</h3>
+    <form [formGroup]="formStep" (ngSubmit)="saveStepSequence()">
+      <div class="mb-3">
+        <div nz-row [nzGutter]="16">
+
+
+          <div nz-col [nzSpan]="18">
+            <ng-container formArrayName="steps">
+              <ng-container *ngFor="let item of steps.controls; let index = index">
+                <ng-container  [formGroupName]="index">
+
+                  <ng-container *ngIf="crrStep == index">
+                    <div nz-row [nzGutter]="16">
+                      <div nz-col [nzSpan]="19">
+                        <div class="field-item mb-3">
+                          <div class="mb-1">Subject line:</div>
+                          <div class="flex-[1_0_0]">
+                            <app-form-control>
+                              <app-input formControlName="subject"
+                                         [allowClear]="true"
+                                         placeholder="Subject line"></app-input>
+                            </app-form-control>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div nz-col [nzSpan]="5">
+                        <div class="field-item mb-3">
+                          <div class="mb-1">Send this email:</div>
+                          <div class="flex-[1_0_0]">
+                            <app-form-control>
+                              <app-select formControlName="delayDays"
+                                          [options]="optionDelayDate"
+                                          placeholder="Subject line"></app-select>
+                            </app-form-control>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div nz-col [nzSpan]="24">
+                        <div class="field-item mb-3">
+                          <div class="mb-1">Nội dung:</div>
+                          <div class="flex-[1_0_0]">
+                            <app-form-control>
+                              <app-richtext-email
+                                formControlName="htmlBody"
+                                [extraTpl]="extraTpl"></app-richtext-email>
+                            </app-form-control>
+
+                            <ng-template #extraTpl>
+                              <button
+                                type="button"
+                                (click)="openModalSelectTemplate()"
+                                class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2">
+                                Chọn template
+                              </button>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </ng-container>
+
+
+
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+            <div class="btn-group text-right" *ngIf="steps.length > 0">
+              <button nz-button type="button" nzType="default" [disabled]="isLoadingSave" (click)="closeModal()">Cancel</button>
+              <button nz-button
+                      nzType="primary"
+                      type="submit"
+                      [nzLoading]="isLoadingSave"
+                      class="ml-3"
+              >
+                Save
+                <!--                    {{!formStep.controls['steps']?.value[steps.length-1]?.id ? 'Add Step' : 'Update Step'}}-->
+              </button>
+            </div>
+
+
+
+          </div>
+
+          <div nz-col [nzSpan]="6">
+            <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)" class="max-h-[55vh] overflow-y-auto">
+              <div *ngFor="let item of steps.controls; let index = index">
+                <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
+                     (click)="editStep(index)"
+                     [formGroupName]="index" cdkDrag>
+                  <div class="whitespace-nowrap text-ellipsis">
+                    <div>{{formStep.controls['steps']?.value[index]?.subject}}</div>
+                    <ng-container *ngIf="!formStep.controls['steps']?.value[index]?.id">
+                      <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
+                    </ng-container>
+                  </div>
+                  <span class="leading-none">
+                      <i nz-icon nzType="icons:icon-bar"></i>
+                    </span>
+                </div>
+              </div>
+            </div>
+
+            <button nz-button type="button"
+                    nzType="default"
+                    (click)="addStep()">+ Add Email</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+  </div>
 
 </div>
 
