@@ -58,12 +58,12 @@ export class AdminService extends BaseApiService {
     });
   }
 
-  updateUserStatus(id: number, active: boolean) {
-    return this.http.put(`${this.BASE_URL}/users/${id}/status`, { active });
+  updateUserStatus(id: number, userDTO: UserDTO) {
+    return this.http.put(`${this.BASE_URL}/users/${id}/status`, { userDTO });
   }
 
-  updateBusinessStatus(id: number, active: boolean) {
-    return this.http.put(`${this.BASE_URL}/users/${id}/business-status`, { active });
+  updateBusinessStatus(id: number, userDTO: UserDTO) {
+    return this.http.put(`${this.BASE_URL}/users/${id}/business-status`, { userDTO });
   }
 
   getUserStatusOptions(): Observable<{ label: string, value: string }[]> {

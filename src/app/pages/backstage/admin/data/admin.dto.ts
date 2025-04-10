@@ -1,14 +1,16 @@
 
 export interface UserDTO {
-  userId?: number;
+  id?: number;
   email?: string;
-  status?: 'PENDING' | 'ACTIVE' | 'INACTIVE'; // Trạng thái người dùng
+  status?: string; // Trạng thái người dùng 'PENDING' | 'ACTIVE' | 'INACTIVE'
   role?: 'USER' | 'ADMIN'; // Vai trò của người dùng
 
-  businessName?: string;
   businessEmail?: string;
-  businessDomain?: string;
-  isVerified?: boolean; // true | false
+  businessName?: string;
+  domain?: string;
+  statusBusinessEmail?: string;
   useCustomSmtp?: boolean; // true | false
+
+  createdAt?: string;
 
 }
