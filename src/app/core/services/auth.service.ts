@@ -87,7 +87,15 @@ export class AuthService extends BaseApiService {
 
   getUserInfo():Observable<ApiResponse<UserInfo>>{
     const url = this.buildUrl(`/users/me`);
-    return this.http.get<ApiResponse<UserInfo>>(url);
+    return this.http.get<ApiResponse<UserInfo>>(url).pipe(
+      catchError((err) => {
+        localStorage.clear();
+        return throwError(err)
+      }), // clear localStore nếu get thông tin userInfo lỗi để chặn login luôn
+      switchMap((response: ApiResponse<UserInfo>) => {
+        return of(response);
+      })
+    );
   }
 
 
