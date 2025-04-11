@@ -7,7 +7,7 @@ import { NotificationService } from '@core/services/notification.service';
 import jwt_decode from 'jwt-decode';
 import {AuthService} from "@core/services/auth.service";
 import {TokenStorageService} from "@core/services/token-storage.service";
-import {LoginResponsed} from "@core/models/auth.models";
+import {AuthResponse, LoginResponsed} from "@core/models/auth.models";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 
 @UntilDestroy()
@@ -53,10 +53,13 @@ export class LoginComponent implements OnInit {
     this.authService.login(paramsLogin)
       .pipe(untilDestroyed(this))
       .subscribe({
-        next: (res: LoginResponsed) => {
-          this.authService.accessToken = res.data.accessToken;
-          const jwtTokenParse = jwt_decode(res.data.accessToken);
+        next: (res: AuthResponse ) => {
+          console.log('res', res)
+          // this.authService.accessToken = res.data.accessToken;
+          const jwtTokenParse = jwt_decode(res.loginResponse.data.accessToken);
           console.log('jwtTokenParse', jwtTokenParse)
+
+          this.tokenStorage.saveUser(res.userInfo);
 
           this.goToDashboard();
           this.isLoading = false;

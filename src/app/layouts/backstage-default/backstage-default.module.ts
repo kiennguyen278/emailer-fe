@@ -7,6 +7,7 @@ import {ReuseTabComponent} from './reuse-tab/reuse-tab.component'
 import {HeaderComponent} from './header/header.component'
 import {FooterComponent} from './footer/footer.component'
 import {ZorroAntdModule} from "@shared/zorro-antd.module";
+import {SharedModule} from "@shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {ZorroAntdModule} from "@shared/zorro-antd.module";
   imports: [
     CommonModule,
     ZorroAntdModule,
+    SharedModule,
     RouterModule
   ]
 })

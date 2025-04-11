@@ -4,6 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { AdminService } from '../data/admin.service';
 import { UserDTO } from '../data/admin.dto';
 import { BehaviorSubject } from 'rxjs';
+import {ColumnConfig} from "@core/models";
 
 @Component({
   selector: 'app-users',
@@ -33,28 +34,25 @@ export class UsersComponent implements OnInit {
     { label: 'INACTIVE', value: 'INACTIVE' }
   ];
 
-  columns = [
+  columns: ColumnConfig[] = [
     {
-      title: 'Email',
       header: 'Email',
       key: 'email',
       tdClass: 'text-center',
       nzWidth: '200px'
     },
     {
-      title: 'Trạng thái',
       header: 'Trạng thái',
       key: 'status',
       tdClass: 'text-center',
       nzWidth: '200px'
     },
     {
-      title: 'Thao tác',
-      header: 'Actions',
+      header: 'Thao tác',
       key: 'actions',
       tdClass: 'text-center',
       nzWidth: '200px',
-      type: 'action' // ⬅️ bắt buộc phải có dòng này
+      pipe: 'template',
     }
   ];
 

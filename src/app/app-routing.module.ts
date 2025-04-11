@@ -7,6 +7,7 @@ import { BackstageDefaultComponent as BackstageLayoutComponent } from './layouts
 import {AuthLayoutComponent} from "./layouts/auth-layout/auth-layout.component";
 import {AuthGuard} from "@core/guards/auth.guard";
 import {LoginAuthGuard} from "@core/guards/login-auth.guard";
+import {PermissionService} from "@core/services/permission.service";
 
 const routes: Routes = [
   {
@@ -53,7 +54,13 @@ const routes: Routes = [
 
       {
         path: 'admin',
-        loadChildren: () => import('./pages/backstage/admin/admin.module').then((m) => m.AdminModule)
+        loadChildren: () => import('./pages/backstage/admin/admin.module').then((m) => m.AdminModule),
+        data: {
+          permissions: {
+            allow: ['ADMIN'],
+          }
+        },
+        canActivate: [PermissionService]
       },
 
       {

@@ -18,27 +18,30 @@ export class PermissionService implements CanActivate{
   ) {}
 
 
-  hasRole(roleCode: string[]){
-    const user = this.tokenStorageService.getUser();
-
-    return user.roles?.some((item) => roleCode.includes(item)) || false
-
-  }
+  // hasRole(roleCode: string[]){
+  //   const user = this.tokenStorageService.getUser();
+  //
+  //   return user.roles?.some((item) => roleCode.includes(item)) || false
+  //
+  // }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     const user = this.tokenStorageService.getUser();
     const routerData = route.data;
-    const permissionDenied = routerData.permissions.denied;
     const permissionAllow = routerData.permissions.allow;
+
 
     let hasPermision = true;
 
-    if (!isEmpty(permissionDenied)){
-      hasPermision = !user.roles?.some((item) => permissionDenied.includes(item));
-    }
+    // if (!isEmpty(permissionDenied)){
+    //   hasPermision = !user.roles?.some((item) => permissionDenied.includes(item));
+    // }
+
+
     if (!isEmpty(permissionAllow)){
-      hasPermision = user.roles?.some((item) => permissionAllow.includes(item)) || false;
+      // hasPermision = user.roles?.some((item) => permissionAllow.includes(item)) || false;
+      hasPermision = permissionAllow.includes(user.role) || false; // vì user Role ở UserInfo chỉ có 2 role là USER hoặc ADMIN chứ ko phải trả về 1 list role, nên chỉ cần check permissionAllow.includes(user.role) hay ko là đc
     }
 
     if (!hasPermision){

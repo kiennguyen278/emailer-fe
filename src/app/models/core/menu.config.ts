@@ -82,6 +82,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Admin',
     icon: 'user',
     isOpen: false,
+    allowRole: ['ADMIN'],
     children: [
       {
         module: '/admin',

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import { LocalStorageUtil } from "@core/utils/local-storage.util";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@core/constants/local-storage.constants.key";
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import {BaseApiService} from "@core/services/base-api.service";
-import {LoginRequest, LoginResponsed} from "@core/models/auth.models";
+import {LoginRequest, LoginResponsed, UserInfo} from "@core/models/auth.models";
+import jwt_decode from "jwt-decode";
+import {ApiResponse} from "@core/models";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -46,7 +48,7 @@ export class AuthService extends BaseApiService {
   signInUsingRefreshToken() {
     // const refreshToken
     return this.http
-      .post(this.buildUrl('refresh-token'), {
+      .post(this.buildUrl('/refresh-token'), {
         params: {
           token: this.refreshToken
         }
@@ -62,9 +64,30 @@ export class AuthService extends BaseApiService {
   }
 
 
-  login(params: LoginRequest): Observable<LoginResponsed> {
+  login(params: LoginRequest): Observable<any> {
     const url = this.buildUrl(`/auth/login`);
-    return this.http.post<LoginResponsed>(url, params, httpOptions);
+    return this.http.post<LoginResponsed>(url, params, httpOptions)
+      .pipe(
+        switchMap((loginResponse: LoginResponsed) => {
+
+          this.accessToken = loginResponse.data.accessToken;
+          this.refreshToken = loginResponse.data.refreshToken;
+          const jwtTokenParse = jwt_decode(loginResponse.data.accessToken);
+          console.log('jwtTokenParse', jwtTokenParse)
+
+          return this.getUserInfo().pipe(
+            map((userInfo) => ({
+              loginResponse: loginResponse,
+              userInfo: userInfo.data
+            }))
+          );
+        })
+      );
+  }
+
+  getUserInfo():Observable<ApiResponse<UserInfo>>{
+    const url = this.buildUrl(`/users/me`);
+    return this.http.get<ApiResponse<UserInfo>>(url);
   }
 
 

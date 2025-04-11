@@ -1,21 +1,23 @@
 import {Directive, ElementRef, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {PermissionItemResponse} from "@core/models/permission.model";
 import { LIST_PERMISSION_BY_GROUP } from '@core/constants/local-storage.constants.key';
+import {UserInfo} from "@core/models/auth.models";
+import {TokenStorageService} from "@core/services/token-storage.service";
 
 @Directive({
   selector: '[hasPermission]'
 })
 export class HasPermissionDirective implements OnInit {
-  private permissions: string = '';
-  private type = '';
+  private permissions: string[] = [];
 
-  listGroupPermission: any[] = JSON.parse(window.localStorage.getItem(LIST_PERMISSION_BY_GROUP)!) || [];
+  user: UserInfo;
 
   constructor(
     private element: ElementRef,
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
+    private tokenStorage: TokenStorageService,
   ) {
+    this.user = this.tokenStorage.getUser();
   }
 
   ngOnInit() {
@@ -25,14 +27,8 @@ export class HasPermissionDirective implements OnInit {
   }
 
   @Input()
-  set hasPermission(permission: string) {
-    this.permissions = permission;
-    this.updateView();
-  }
-
-  @Input()
-  set hasPermissionType(type: string) {
-    this.type = type;
+  set hasPermission(permissions: string[]) {
+    this.permissions = permissions;
     this.updateView();
   }
 
@@ -47,18 +43,9 @@ export class HasPermissionDirective implements OnInit {
   private checkPermission() {
     let hasPermission = false;
 
-    if (this.type && this.permissions){
-
-      const permissionGroupType = this.listGroupPermission[this.type];
-      hasPermission = permissionGroupType?.some((item: PermissionItemResponse) => item.permissionCode == this.permissions);
+    if (this.permissions){
+      hasPermission = this.permissions.includes(this.user.role);
     }
-
-    // if (this.currentUser && this.currentUser.permissions) {
-    //   for (const checkPermission of this.permissions) {
-    //     const permissionFound = this.currentUser.permissions.find(x => x.toUpperCase() === checkPermission.toUpperCase());
-    //   ...
-    //   }
-    // }
 
     return hasPermission;
   }
