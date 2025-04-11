@@ -48,15 +48,15 @@ export class AuthService extends BaseApiService {
   signInUsingRefreshToken() {
     // const refreshToken
     return this.http
-      .post(this.buildUrl('/refresh-token'), {
+      .post(this.buildUrl('/auth/refresh-token'), {
         params: {
-          token: this.refreshToken
+          refreshToken: this.refreshToken
         }
       })
       .pipe(
         catchError(() => of(false)),
         switchMap((response: any) => {
-          this.accessToken = response.accessToken;
+          this.accessToken = response.data;
           this._authenticated = true;
           return of(true);
         })

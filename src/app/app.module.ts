@@ -22,8 +22,6 @@ import {CoreModule} from "@core/core.module";
 import {globalbarFeatureKey, SidebarReducer} from "./state/sidebar/reducer";
 import {metaReducers} from "./state/sidebar/meta-reducers";
 import { AdminModule } from './pages/backstage/admin/admin.module';
-import {TokenStorageService} from "@core/services/token-storage.service";
-import {PermissionService} from "@core/services/permission.service";
 
 registerLocaleData(en);
 
@@ -50,8 +48,6 @@ registerLocaleData(en);
   providers: [
     { provide: NZ_I18N, useValue: en_US },
     { provide: RouteReuseStrategy, useClass: AppReuseStrategy },
-    TokenStorageService,
-    PermissionService,
   ],
   bootstrap: [AppComponent]
 })

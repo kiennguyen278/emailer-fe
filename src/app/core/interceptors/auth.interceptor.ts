@@ -38,30 +38,32 @@ export class AuthInterceptor implements HttpInterceptor {
       // since an error is thrown, the function will terminate here
       this.notification.open({
         type: 'error',
-        content: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
+        content: 'Internet is offline'
       });
       return throwError(
         new HttpErrorResponse({
-          error: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
+          error: 'Internet is offline'
         })
       );
     }
     return next.handle(newReq).pipe(
       catchError((error: HttpErrorResponse) => {
 
-        if (error.status === 401){
-           this.logoutExpired()
-          return throwError(error); // ko có refresh token nên logout luôn nếu hết hạn
-        }
+        // if (error.status === 401){
+        //    this.logoutExpired()
+        //   return throwError(error); // ko có refresh token nên logout luôn nếu hết hạn
+        // }
 
         if (!newReq.url.includes('/auth/refresh-token') && error.status === 401) {
           return this.handle401Error(newReq, next);
         }
 
+
+
         if ([0, 500].includes(error.status) || !navigator.onLine) {
           this.notification.open({
             type: 'error',
-            content: 'Có lỗi xảy ra, vui lòng liên hệ zalo 0988406040 để được hỗ trợ'
+            content: error?.message || 'Có lỗi xảy ra'
           });
         }
 
@@ -111,10 +113,10 @@ export class AuthInterceptor implements HttpInterceptor {
   private addTokenHeader(request: HttpRequest<any>): HttpRequest<any> {
     return request.clone({
 
-      // headers: request.headers.set(
-      //   'Authorization',
-      //   `Bearer ${this.authService.accessToken}`
-      // ) // tạm thời bỏ authentication đi,
+      headers: request.headers.set(
+        'Authorization',
+        `Bearer ${this.authService.accessToken}`
+      ) // tạm thời bỏ authentication đi,
 
 
       //   .set(
