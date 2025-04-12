@@ -114,9 +114,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
     });
 
     this.modalRef.afterClose.subscribe(isReload => {
-      if(isReload){
         this.loadItems();
-      }
     });
   }
 
