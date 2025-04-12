@@ -1,34 +1,39 @@
-<div class="workflow-list">
-  <div class="header flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold">📋 Danh sách Workflow</h2>
+<nz-card nzTitle="📋 Danh sách Workflow" [nzSize]="'small'" [nzExtra]="extraTemplate">
+
+  <ng-template #extraTemplate>
     <button class="create-btn bg-blue-600 text-white px-4 py-2 rounded" [routerLink]="['/workflows/builder']">
       ➕ Tạo Workflow
     </button>
+  </ng-template>
+
+  <div class="table-list pt-3">
+    <div class="basis-0 grow shrink">
+      <table *ngIf="!loading && workflows.length > 0" class="w-full border">
+        <thead>
+        <tr class="bg-gray-100">
+          <th class="p-2 border">Tên</th>
+          <th class="p-2 border">Trạng thái</th>
+          <th class="p-2 border text-center">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let wf of workflows">
+          <td class="p-2 border">{{ wf.name }}</td>
+          <td class="p-2 border">{{ wf.status }}</td>
+          <td class="p-2 border text-center space-x-2">
+            <button class="action-btn text-blue-600" [routerLink]="['/workflows/builder', wf.id]">🛠️ Sửa</button>
+            <button class="action-btn text-red-600" (click)="confirmDelete(wf.id)">🗑️ Xoá</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="loading">Đang tải...</div>
+
+    <div *ngIf="!loading && workflows.length === 0" class="text-center text-gray-600 mt-4">
+      Không có workflow nào.
+    </div>
+
   </div>
-
-  <div *ngIf="loading">Đang tải...</div>
-
-  <table *ngIf="!loading && workflows.length > 0" class="w-full border">
-    <thead>
-    <tr class="bg-gray-100">
-      <th class="p-2 border">Tên</th>
-      <th class="p-2 border">Trạng thái</th>
-      <th class="p-2 border text-center">Hành động</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let wf of workflows">
-      <td class="p-2 border">{{ wf.name }}</td>
-      <td class="p-2 border">{{ wf.status }}</td>
-      <td class="p-2 border text-center space-x-2">
-        <button class="action-btn text-blue-600" [routerLink]="['/workflows/builder', wf.id]">🛠️ Sửa</button>
-        <button class="action-btn text-red-600" (click)="confirmDelete(wf.id)">🗑️ Xoá</button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="!loading && workflows.length === 0" class="text-center text-gray-600 mt-4">
-    Không có workflow nào.
-  </div>
-</div>
+</nz-card>

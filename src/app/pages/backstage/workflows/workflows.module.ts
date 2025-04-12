@@ -6,6 +6,8 @@ import { WorkflowBuilderComponent } from './workflow-builder/workflow-builder.co
 import { RouterModule } from '@angular/router';
 import { WorkflowService } from './data/workflow.service';
 import { WorkflowsRoutingModule } from './workflows-routing.module';
+import {ComponentsModule} from "@shared/components/components.module";
+import {SharedModule} from "@shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { WorkflowsRoutingModule } from './workflows-routing.module';
     CommonModule,
     RouterModule,
     FormsModule,
-    WorkflowsRoutingModule
+    WorkflowsRoutingModule,
+    ComponentsModule,
+    SharedModule
   ],
   providers: [
     WorkflowService
