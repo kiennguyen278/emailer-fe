@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: 'dashboard', component: DashboardComponent, data: { title: 'Dashboard', reuse: true } },
+  { path: 'dashboard', component: DashboardComponent, data: { title: 'Dashboard', reuse: false } },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 

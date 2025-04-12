@@ -16,12 +16,28 @@ export class AppReuseStrategy implements RouteReuseStrategy {
     private static waitDelete: string;
     private static currentDelete: string;
 
+  public static readonly noReuseList: string[] = [
+    '/login',
+    '/home/dashboard',
+    '/workflows',
+  ];
+
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
         return future.routeConfig === curr.routeConfig;
     }
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        const data = this.getRouteData(route);
+
+      return route?.data?.reuse;
+
+      const path = this.getFullRoutePath(route);
+
+      if (AppReuseStrategy.noReuseList.includes(path)){
+        return false;
+      }
+      
+      const data = this.getRouteData(route);
+
         if (data) {
             return true;
         }
@@ -105,4 +121,12 @@ export class AppReuseStrategy implements RouteReuseStrategy {
             AppReuseStrategy.waitDelete = url;
         }
     }
+
+  private getFullRoutePath(route: ActivatedRouteSnapshot): string {
+      console.log('route ActivatedRouteSnapshot', route)
+    return '/' + route.pathFromRoot
+      .map(r => r.routeConfig ? r.routeConfig.path : '')
+      .filter(path => path.length > 0)
+      .join('/');
+  }
 }

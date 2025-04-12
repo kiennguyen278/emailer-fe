@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     component: MainComponent,
-    data: { title: 'workflows', reuse: true }
+    data: { title: 'workflows', reuse: false }
   },
   {
     path: 'builder',
