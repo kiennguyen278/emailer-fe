@@ -167,7 +167,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       name: [null, [ValidatorUtil.required('Tên sequence không được để trống!')]],
       description: [null],
-      status: [1],
+      status: [0],
     });
 
     this.formStep = this.fb.group({
