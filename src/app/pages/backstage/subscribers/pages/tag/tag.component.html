@@ -1,29 +1,32 @@
 
-<nz-card nzTitle="Quản lý Tag" [nzSize]="'small'" [nzExtra]="extraTemplate">
-  <ng-template #extraTemplate>
-    <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
-  </ng-template>
+<div class="max-w-[700px]">
+  <nz-card nzTitle="Quản lý Tag" [nzSize]="'small'" [nzExtra]="extraTemplate">
+    <ng-template #extraTemplate>
+      <button nz-button nzType="primary" (click)="showCreateModal()">+ Thêm Tag</button>
+    </ng-template>
 
-  <div class="table-list pt-3 flex justify-center"> <!-- Thêm class này -->
-    <div class="w-full max-w-[700px]"> <!-- Wrapper mới này -->
-      <app-table
-        [columns]="columns"
-        [items]="tags"
-        [loading]="isLoading$ | async"
-        [showPagination]="false"
-      >
-        <ng-template [appCellTemplate]="'actions'" let-item>
-          <button nz-button nzType="text" (click)="showEditModal(item)">
-            <i nz-icon nzType="edit" nzTooltipTitle="Sửa tag"></i>
-          </button>
-          <button nz-button nzType="text" (click)="confirmDelete(item)" class="ml-2">
-            <i nz-icon nzType="delete" nzTooltipTitle="Xóa tag"></i>
-          </button>
-        </ng-template>
-      </app-table>
+    <div class="table-list pt-3 flex justify-center"> <!-- Thêm class này -->
+      <div class="w-full max-w-[700px]"> <!-- Wrapper mới này -->
+        <app-table
+          [columns]="columns"
+          [items]="tags"
+          [loading]="isLoading$ | async"
+          [showPagination]="false"
+        >
+          <ng-template [appCellTemplate]="'actions'" let-item>
+            <button nz-button nzType="text" (click)="showEditModal(item)">
+              <i nz-icon nzType="edit" nzTooltipTitle="Sửa tag"></i>
+            </button>
+            <button nz-button nzType="text" (click)="confirmDelete(item)" class="ml-2">
+              <i nz-icon nzType="delete" nzTooltipTitle="Xóa tag"></i>
+            </button>
+          </ng-template>
+        </app-table>
+      </div>
     </div>
-  </div>
-</nz-card>
+  </nz-card>
+</div>
+
 
 
 

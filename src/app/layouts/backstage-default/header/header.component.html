@@ -1,15 +1,15 @@
 <div class="bst-header-wrap">
-    <span class="flex" nz-dropdown [nzDropdownMenu]="userSettingMenu">
+    <span class="flex cursor-pointer" nz-dropdown [nzDropdownMenu]="userSettingMenu">
         <img src="assets/img/default_face.png"
             style="width: 24px;height: 24px;line-height: 24px;margin: 20px 8px 20px 0;vertical-align:top;">
-        <span style="font-size: 14px;">demo</span>
+        <span style="font-size: 14px;">{{user.businessName}}</span>
     </span>
     <nz-dropdown-menu #userSettingMenu="nzDropdownMenu">
         <ul nz-menu class="bst-header_usr_menu">
-            <li nz-menu-item>
-                <i nz-icon nzType="user" nzTheme="outline" class="bst-header_usr_menu_icon"></i><span>User</span>
-            </li>
-            <li nz-menu-divider></li>
+<!--            <li nz-menu-item>-->
+<!--                <i nz-icon nzType="user" nzTheme="outline" class="bst-header_usr_menu_icon"></i><span>User</span>-->
+<!--            </li>-->
+<!--            <li nz-menu-divider></li>-->
             <li nz-menu-item (click)="signOut()">
                 <i nz-icon nzType="logout" nzTheme="outline" class="bst-header_usr_menu_icon"></i><span>Logout</span>
             </li>
