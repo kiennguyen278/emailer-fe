@@ -8,6 +8,7 @@ import {AuthLayoutComponent} from "./layouts/auth-layout/auth-layout.component";
 import {AuthGuard} from "@core/guards/auth.guard";
 import {LoginAuthGuard} from "@core/guards/login-auth.guard";
 import {PermissionService} from "@core/services/permission.service";
+import {Role} from "@core/enums";
 
 const routes: Routes = [
   {
@@ -57,7 +58,7 @@ const routes: Routes = [
         loadChildren: () => import('./pages/backstage/admin/admin.module').then((m) => m.AdminModule),
         data: {
           permissions: {
-            allow: ['ADMIN'],
+            allow: [Role.ADMIN],
           }
         },
         canActivate: [PermissionService]

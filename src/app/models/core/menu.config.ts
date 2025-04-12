@@ -1,4 +1,5 @@
 import { MenuItem } from 'src/app/models/core/menuItem';
+import {Role} from "@core/enums";
 
 export const MENU_ITEMS: MenuItem[] = [
   {
@@ -82,7 +83,7 @@ export const MENU_ITEMS: MenuItem[] = [
     label: 'Admin',
     icon: 'user',
     isOpen: false,
-    allowRole: ['ADMIN'],
+    allowRole: [Role.ADMIN],
     children: [
       {
         module: '/admin',

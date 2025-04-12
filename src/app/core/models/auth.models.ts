@@ -1,3 +1,5 @@
+import {Role} from "@core/enums";
+
 export interface LoginRequest {
   email: string,
   password: string,
@@ -17,7 +19,7 @@ export interface UserInfo {
   userId: 1,
   email: string,
   status: "ACTIVE" | "INACTIVE",
-  role: "USER" | "ADMIN",
+  role: Role.USER | Role.ADMIN,
   createdAt: string,
   businessName: string,
   businessEmail: string,

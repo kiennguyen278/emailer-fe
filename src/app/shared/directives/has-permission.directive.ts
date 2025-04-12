@@ -1,5 +1,4 @@
 import {Directive, ElementRef, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import { LIST_PERMISSION_BY_GROUP } from '@core/constants/local-storage.constants.key';
 import {UserInfo} from "@core/models/auth.models";
 import {TokenStorageService} from "@core/services/token-storage.service";
 
