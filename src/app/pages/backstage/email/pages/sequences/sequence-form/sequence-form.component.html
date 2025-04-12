@@ -75,7 +75,7 @@
 <!--  <div *ngIf="sequence?.id" class="border rounded-[5px] p-4 mt-6 relative">-->
   <div class="border rounded-[5px] p-4 mt-6 relative" *ngIf="steps.length > 0">
     <h3 class="absolute top-[-14px] left-[20px] bg-white px-2 font-semibold">Steps sequence</h3>
-    <form [formGroup]="formStep" (ngSubmit)="saveStepSequence()">
+    <form [formGroup]="formStep" (ngSubmit)="saveCombineSequence()">
       <div class="mb-3">
         <div nz-row [nzGutter]="16">
 

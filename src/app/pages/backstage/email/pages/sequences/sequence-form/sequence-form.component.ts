@@ -48,8 +48,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
 
   crrStep = 0;
   optionDelayDate = OptionDelayDate;
-  selectedTabIndex = 0;
-
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
 
@@ -150,7 +148,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
           this.isLoadingSave = false;
           console.log('res', res);
           if (!this.sequence?.id){
-            this.onTabChange({index: 1});
             this.sequence = res.data;
           } else {
             // this.modalRef.destroy(true);
@@ -201,8 +198,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     }
 
     const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
-    console.log('currentStepControl', currentStepControl.getRawValue())
-    console.log('invalid', currentStepControl.invalid)
 
     FormUtil.validate(currentStepControl, true);
 
@@ -227,6 +222,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     this.emailService.saveCombineSequence(request).pipe()
       .subscribe({
         next: (res) => {
+          this.sequence = res.info;
           this.notification.open({
             type: 'success',
             content: this.sequence?.id ? 'Cập nhật sequence thành công' : 'Thêm mới sequence thành công'
@@ -348,10 +344,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
 
   closeModal(){
     this.modalRef.destroy();
-  }
-
-  onTabChange(e: any): void {
-    this.selectedTabIndex = e.index;
   }
 
   openModalSelectTemplate(){
