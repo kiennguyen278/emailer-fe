@@ -237,18 +237,14 @@ export class WorkflowBuilderComponent implements OnInit {
         }
       }
 
+      requestAnimationFrame(() => {
+        this.editor.import(finalDataImport);
 
+        requestAnimationFrame(() => {
+          this.editor.updateConnectionNodes('all');
+        });
+      });
 
-      this.editor.import(finalDataImport);
-
-      Object.values(ObjDataStepFinal).forEach((item: any) => {
-        this.editor.updateConnectionNodes(item.id);
-      })
-
-
-      setTimeout(() => {
-        this.editor.updateConnectionNodes('all');
-      }, 1000);
     }
   }
 
@@ -259,6 +255,7 @@ export class WorkflowBuilderComponent implements OnInit {
     if (container && !this.editor) {
       this.editor = new Drawflow(container);
       this.editor.reroute = true;
+      this.editor.reroute_fix_curvature = true;
       this.editor.start();
     }
   }
@@ -284,7 +281,6 @@ export class WorkflowBuilderComponent implements OnInit {
 
     if (this.workflowId){
       this.buildTreeWorkflow();
-      this.cdr.detectChanges();
     }
 
   }
