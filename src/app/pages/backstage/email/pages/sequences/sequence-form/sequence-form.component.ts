@@ -19,7 +19,6 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 import {Store} from "@ngrx/store";
 import {OptionDelayDate, Status} from "@core/options";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
-import {TemplateFormComponent} from "../../templates/template-form/template-form.component";
 import {SelectTemplateModalComponent} from "../../../components/select-template-modal/select-template-modal.component";
 import {isEmpty} from "lodash";
 
@@ -190,6 +189,67 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   }
 
 
+  saveCombineSequence(){
+    FormUtil.validate(this.form, true);
+
+    if (this.steps.length == 0){
+      this.notification.open({
+        type: 'info',
+        content: 'Vui lòng thêm step sequence'
+      });
+      return;
+    }
+
+    const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
+    console.log('currentStepControl', currentStepControl.getRawValue())
+    console.log('invalid', currentStepControl.invalid)
+
+    FormUtil.validate(currentStepControl, true);
+
+    if (currentStepControl.invalid || this.form.invalid){ return }
+
+    const formVal = this.form.getRawValue();
+    this.isLoadingSave = true;
+
+    const requestInfo = {
+      ...formVal,
+      status: formVal.status === Status.ACTIVE ? 'ACTIVE' : 'INACTIVE',
+    }
+
+    const requestSaveSequence: SaveSequenceRequest = this.sequence?.id ? {id: this.sequence.id, ...requestInfo} : requestInfo;
+    const requestSaveStep: SaveStepSequenceRequest = currentStepControl.getRawValue()
+
+    const request = {
+      info: requestSaveSequence,
+      steps: requestSaveStep,
+    }
+
+    this.emailService.saveCombineSequence(request).pipe()
+      .subscribe({
+        next: (res) => {
+          this.notification.open({
+            type: 'success',
+            content: this.sequence?.id ? 'Cập nhật sequence thành công' : 'Thêm mới sequence thành công'
+          })
+          this.isLoadingSave = false;
+          if (!requestSaveStep?.id){
+            currentStepControl.patchValue(res.step); // set id cho step trong formSteps để bỏ trạng thái DRAFT
+          }
+
+          // this.modalRef.destroy(true);
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Thao tác thất bại'
+          });
+          this.isLoadingSave = false;
+        }
+      });
+
+
+  }
+
   saveStepSequence(){
     const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
     console.log('currentStepControl', currentStepControl.getRawValue())
@@ -227,7 +287,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   }
 
 
-
   addStep(){
     const totalSteps = this.steps.length;
     console.log('totalSteps', totalSteps)
@@ -239,7 +298,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   newStep(): FormGroup {
     return this.fb.group({
       id: [],
-      sequenceId: [this.sequence.id],
+      sequenceId: [this.sequence?.id || null],
       templateId: [null],
       templateName: [null],
       subject: ['New step', [ValidatorUtil.required('Subject không được để trống')]],

@@ -87,10 +87,6 @@ export interface SequenceDTO {
   name: string,
   description: string,
   status: string,
-  subject: string,
-  htmlBody: string,
-  textBody: string,
-  scheduledTime: string,
   createdAt: string,
   updatedAt: string
 }
@@ -102,8 +98,6 @@ export interface SaveSequenceRequest {
   description: string,
 }
 
-
-
 export interface SaveStepSequenceRequest {
   id: number | null | undefined, // id của step - khi cập nhật step sẽ dùng cái này
   sequenceId: number | null | undefined, // id của sequence - khi tạo mới step sẽ dùng cái này
@@ -112,6 +106,16 @@ export interface SaveStepSequenceRequest {
   delayDays: string | number,
 }
 
+
+export interface SaveCombineSequenceRequest {
+  info: SaveSequenceRequest;
+  steps: SaveStepSequenceRequest;
+}
+
+export interface SaveCombineSequenceResponse {
+  info: SequenceDTO;
+  step: StepSequenceDTO;
+}
 
 
 
