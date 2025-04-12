@@ -167,6 +167,7 @@
             <div formArrayName="steps" cdkDropList (cdkDropListDropped)="drop($event)" class="max-h-[55vh] overflow-y-auto">
               <div *ngFor="let item of steps.controls; let index = index">
                 <div class="flex mb-2 border rounded justify-between p-2 cursor-pointer"
+                     [ngClass]="{'border-[#ff6c00]': crrStep == index, 'text-[#ff6c00]': crrStep == index}"
                      (click)="editStep(index)"
                      [formGroupName]="index" cdkDrag>
                   <div class="whitespace-nowrap text-ellipsis">
@@ -175,7 +176,7 @@
                       <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
                     </ng-container>
                   </div>
-                  <span class="leading-none">
+                  <span class="leading-none" >
                       <i nz-icon nzType="icons:icon-bar"></i>
                     </span>
                 </div>
