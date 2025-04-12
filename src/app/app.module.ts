@@ -47,7 +47,7 @@ registerLocaleData(en);
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
-    { provide: RouteReuseStrategy, useClass: AppReuseStrategy },
+    // { provide: RouteReuseStrategy, useClass: AppReuseStrategy }, // cái này là để cache lại component và router đã mở trc đó, để đỡ phải gọi lại api hoặc chạy OnInit khi vào lại đúng component đó lần thứ 2
   ],
   bootstrap: [AppComponent]
 })
