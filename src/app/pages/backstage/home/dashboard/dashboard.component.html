@@ -1,5 +1,19 @@
 <div class="dashboard-wrapper">
 
+  <!-- 🔔 Thông báo quan trọng -->
+  <div *ngIf="importantNotices.length > 0" class="notice-bar mb-4">
+    <nz-alert
+      *ngFor="let notice of importantNotices"
+      [nzType]="notice.type"
+      [nzMessage]="notice.message"
+      nzShowIcon
+      nzBanner
+      class="mb-2"
+    >
+    </nz-alert>
+  </div>
+
+
   <!-- 1. Tăng trưởng Subscriber -->
   <nz-card nzTitle="Tăng trưởng subscribers" [nzSize]="'small'" class="mb-4">
     <div nz-row [nzGutter]="16">
