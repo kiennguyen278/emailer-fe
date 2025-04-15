@@ -12,6 +12,8 @@ import {EmailTrendItem} from "../data/dashboard.models";
 })
 export class DashboardComponent {
 
+  importantNotices: { type: 'warning' | 'info' | 'error' | 'success', message: string }[] = [];
+
   engagementChartOptions: any;
 
   subscriberGrowthItems: any[] = [];
@@ -46,6 +48,24 @@ export class DashboardComponent {
     this.loadEmailTrend(this.trendRange);
     this.loadEmailPerformance(this.performanceRange);
     this.loadAdvancedStats(this.advancedRange);
+
+    // load notices
+    // this.loadImportantNotices();
+  }
+
+  loadImportantNotices() {
+    this.importantNotices = [];
+    // mock data
+    this.importantNotices.push({
+      type: 'error',
+      message: '❗Tài khoản SMTP của bạn đang không kết nối được. Vui lòng kiểm tra lại cấu hình.'
+    });
+
+    // mock data
+    this.importantNotices.push({
+      type: 'warning',
+      message: '⚠️ Gói tài khoản của bạn sắp hết hạn. Vui lòng gia hạn để tránh gián đoạn dịch vụ.'
+    });
   }
 
   loadSubscriberGrowth() {
