@@ -19,12 +19,9 @@ const routes: Routes = [
       { path: '', redirectTo: 'home/dashboard', pathMatch: 'full' },
       {
         path: 'home',
-        loadChildren: () => import('./pages/backstage/home/home.module').then((m) => m.HomeModule)},
-
-      {
-        path: 'examples',
-        loadChildren: () => import('./pages/backstage/examples/examples.module').then((m) => m.ExamplesModule),
+        loadChildren: () => import('./pages/backstage/home/home.module').then((m) => m.HomeModule)
       },
+
       // {
       //   path: 'system',
       //   loadChildren: () =>

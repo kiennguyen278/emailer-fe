@@ -48,13 +48,9 @@ export class AuthService extends BaseApiService {
   signInUsingRefreshToken() {
     // const refreshToken
     return this.http
-      .post(this.buildUrl('/auth/refresh-token'), {
-        params: {
-          refreshToken: this.refreshToken
-        }
-      })
+      .post(this.buildUrl('/auth/refresh-token'), null, {params: {refreshToken: this.refreshToken}})
       .pipe(
-        catchError(() => of(false)),
+        catchError((error) => of(error)),
         switchMap((response: any) => {
           this.accessToken = response.data;
           this._authenticated = true;
@@ -73,7 +69,6 @@ export class AuthService extends BaseApiService {
           this.accessToken = loginResponse.data.accessToken;
           this.refreshToken = loginResponse.data.refreshToken;
           const jwtTokenParse = jwt_decode(loginResponse.data.accessToken);
-          console.log('jwtTokenParse', jwtTokenParse)
 
           return this.getUserInfo().pipe(
             map((userInfo) => ({

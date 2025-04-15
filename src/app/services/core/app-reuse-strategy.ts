@@ -35,7 +35,7 @@ export class AppReuseStrategy implements RouteReuseStrategy {
       if (AppReuseStrategy.noReuseList.includes(path)){
         return false;
       }
-      
+
       const data = this.getRouteData(route);
 
         if (data) {

@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_KEY } from '@core/constants/local-storage.constants.key';
 import {UserInfo} from "@core/models/auth.models";
+import {AuthService} from "@core/services/auth.service";
+import {NotificationService} from "@core/services/notification.service";
+import {Router} from "@angular/router";
 
 
 const TOKEN_KEY = ACCESS_TOKEN_KEY;
@@ -17,11 +20,14 @@ export interface DataFromToken{
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor() {
-  }
+  constructor(
+    private notification: NotificationService,
+    private router: Router,
+  ) {}
 
   signOut(): void {
     localStorage.clear();
+    this.router.navigate(['/auth/login']);
   }
 
 

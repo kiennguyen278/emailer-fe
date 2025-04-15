@@ -56,8 +56,14 @@ export class LoginComponent implements OnInit {
         next: (res: AuthResponse ) => {
           console.log('res', res)
           // this.authService.accessToken = res.data.accessToken;
-          const jwtTokenParse = jwt_decode(res.loginResponse.data.accessToken);
+          const jwtTokenParse: any = jwt_decode(res.loginResponse.data.accessToken);
           console.log('jwtTokenParse', jwtTokenParse)
+
+          const dateExp = new Date(jwtTokenParse.exp * 1000);
+
+          localStorage.setItem('jwtToken', JSON.stringify({...jwtTokenParse, dateExp}));
+
+          console.log('dateExp', dateExp)
 
           this.tokenStorage.saveUser(res.userInfo);
 
@@ -69,6 +75,7 @@ export class LoginComponent implements OnInit {
           this.notification.open({
             type: 'error',
             content: error?.message || 'Đã có lỗi khi đăng nhập',
+            duration: 5000
           });
         }
       });

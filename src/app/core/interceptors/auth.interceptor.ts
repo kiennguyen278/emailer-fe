@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotificationService } from '@core/services/notification.service';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {AuthService} from "@core/services/auth.service";
@@ -54,11 +54,9 @@ export class AuthInterceptor implements HttpInterceptor {
         //   return throwError(error); // ko có refresh token nên logout luôn nếu hết hạn
         // }
 
-        if (!newReq.url.includes('/auth/refresh-token') && error.status === 401) {
+        if (!newReq.url.includes('/auth/refresh-token') && error.status === 403) {
           return this.handle401Error(newReq, next);
         }
-
-
 
         if ([0, 500].includes(error.status) || !navigator.onLine) {
           this.notification.open({
@@ -73,13 +71,13 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private logoutExpired(){
-    this.tokenStorage.signOut();
     this.notification.open({
       type: 'error',
       content: 'Hết hạn phiên đăng nhập, vui lòng đăng nhập lại',
       duration: 7000,
     });
-    this.router.navigate(['/auth/login'])
+
+    this.tokenStorage.signOut();
   }
 
   private handle401Error(
@@ -97,9 +95,11 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(this.addTokenHeader(request));
         }),
         catchError((err: any) => {
+          console.error('handle401Error', err);
+          this.logoutExpired();
           this.isRefreshing = false;
-          location.assign('/auth/login');
-          return throwError(err);
+          // location.assign('/auth/login');
+          return of(err);
         })
       );
     }
