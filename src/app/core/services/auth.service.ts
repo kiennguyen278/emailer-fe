@@ -50,7 +50,10 @@ export class AuthService extends BaseApiService {
     return this.http
       .post(this.buildUrl('/auth/refresh-token'), null, {params: {refreshToken: this.refreshToken}})
       .pipe(
-        catchError((error) => of(error)),
+        catchError((error) => {
+          this._authenticated = false;
+          return throwError(error);
+        }),
         switchMap((response: any) => {
           this.accessToken = response.data;
           this._authenticated = true;

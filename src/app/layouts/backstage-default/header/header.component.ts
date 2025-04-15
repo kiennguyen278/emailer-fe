@@ -27,7 +27,8 @@ export class HeaderComponent implements OnInit {
   }
 
   signOut(){
-    this.tokenStorage.signOut();
+    this.tokenStorage.clearLocalStore();
+    this.router.navigate(['/auth/login']);
     this.notification.open({
       type: 'success',
       content: 'Bạn đã đăng xuất!'

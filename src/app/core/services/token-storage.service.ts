@@ -20,14 +20,9 @@ export interface DataFromToken{
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor(
-    private notification: NotificationService,
-    private router: Router,
-  ) {}
 
-  signOut(): void {
+  clearLocalStore(): void {
     localStorage.clear();
-    this.router.navigate(['/auth/login']);
   }
 
 

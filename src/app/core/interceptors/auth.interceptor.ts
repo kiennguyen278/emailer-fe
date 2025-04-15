@@ -77,7 +77,9 @@ export class AuthInterceptor implements HttpInterceptor {
       duration: 7000,
     });
 
-    this.tokenStorage.signOut();
+    this.tokenStorage.clearLocalStore();
+    this.router.navigate(['/auth/login']);
+    return;
   }
 
   private handle401Error(
