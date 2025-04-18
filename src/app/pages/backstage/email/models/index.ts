@@ -7,7 +7,8 @@ export interface EmailTemplateDTO {
   type: 'HTML' | 'TEXT';
   htmlBody: string;
   textBody: string;
-  status: 'active' | 'inactive';
+  status: 'ACTIVE' | 'INACTIVE';
+  activeStatus?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -140,6 +141,11 @@ export interface ReOrderStepsSequenceRequest {
 
 
 export interface SwitchStatusSequenceRequest{
+  id: number;
+  status: boolean;
+}
+
+export interface SwitchStatusTemplateRequest{
   id: number;
   status: boolean;
 }

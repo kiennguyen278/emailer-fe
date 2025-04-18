@@ -16,7 +16,7 @@ import {
   SaveStepSequenceRequest,
   SequenceDTO,
   StepSequenceDTO,
-  SwitchStatusSequenceRequest
+  SwitchStatusSequenceRequest, SwitchStatusTemplateRequest
 } from "../models";
 
 @Injectable({ providedIn: 'root' })
@@ -159,6 +159,11 @@ export class EmailService extends BaseApiService{
 
   switchStatusSequence(request: SwitchStatusSequenceRequest): Observable<any> {
     const url = this.buildUrl(`sequences/${request.id}/status`);
+    return this.http.put(url, null, {params: { status: request.status ? 'ACTIVE' : 'INACTIVE' }} );
+  }
+
+  switchStatusTemplate(request: SwitchStatusTemplateRequest): Observable<any> {
+    const url = this.buildUrl(`email-templates/${request.id}/status`);
     return this.http.put(url, null, {params: { status: request.status ? 'ACTIVE' : 'INACTIVE' }} );
   }
 

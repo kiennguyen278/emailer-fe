@@ -8,7 +8,7 @@ import {NotificationService} from "@core/services/notification.service";
 import {ColumnConfig} from "@core/models";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {ValidatorUtil} from "@core/utils/validator.util";
-import {EmailTemplateDTO} from "../../models";
+import {EmailTemplateDTO, SequenceDTO, SwitchStatusSequenceRequest} from "../../models";
 import {
   selectDataGetEmailTemplateList,
   selectErrorGetEmailTemplateList,
@@ -65,6 +65,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       header: 'Trạng thái',
       nzWidth: '100px',
       tdClass: 'text-center',
+      pipe: 'template',
     },
     {
       key: 'actions',
@@ -81,7 +82,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     this.store.select(selectDataGetEmailTemplateList)
       .pipe(untilDestroyed(this))
       .subscribe((items) => {
-        this.items = items;
+        this.items = items.map(item => ({...item, activeStatus: item.status === 'ACTIVE'}));
         this.cdr.detectChanges();
       });
 
@@ -155,6 +156,32 @@ export class TemplatesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+  onSwitchStatus(item: EmailTemplateDTO){
+    const request: SwitchStatusSequenceRequest = {
+      id: item.id!,
+      status: !item.activeStatus,
+    }
+    this.emailService.switchStatusTemplate(request)
+      .pipe()
+      .subscribe(res => {
+        this.loadItems();
+        this.notification.open({
+          type: 'success',
+          content: res?.message || 'Trạng thái đã được cập nhật'
+        });
+      })
+  }
+
+  confirmSwitchStatus(item: any){
+    this.modal.confirm({
+      nzTitle: `Bạn có muốn thay đổi trạng thái của template "${item.name}"?`,
+      nzOkText: 'OK',
+      nzOnOk: () => this.onSwitchStatus(item)
+    });
+  }
+
 
   ngOnDestroy() {
     if (this.modalRef){

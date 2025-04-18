@@ -17,6 +17,9 @@
           {{item.createdAt | date: DATE_TIME_FORMAT}}
         </ng-template>
 
+        <ng-template [appCellTemplate]="'status'" let-item>
+          <app-switch [ngModel]="item.activeStatus" (switchChange)="confirmSwitchStatus(item)"></app-switch>
+        </ng-template>
 
         <ng-template [appCellTemplate]="'actions'" let-item>
           <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
