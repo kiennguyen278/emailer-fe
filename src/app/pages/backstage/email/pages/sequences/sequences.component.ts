@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {SequenceDTO} from "../../models";
+import {SequenceDTO, SwitchStatusSequenceRequest} from "../../models";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {Observable} from "rxjs";
 import {
@@ -53,6 +53,7 @@ export class SequencesComponent implements OnInit, OnDestroy {
       header: 'Trạng thái',
       nzWidth: '100px',
       tdClass: 'text-center',
+      pipe: 'template',
       filter: {
         type: 'select',
         options: OptionScheduledStatus,
@@ -79,8 +80,8 @@ export class SequencesComponent implements OnInit, OnDestroy {
 
     this.store.select(selectDataGetSequenceList)
       .pipe(untilDestroyed(this))
-      .subscribe((items) => {
-        this.items = items;
+      .subscribe((items: SequenceDTO[]) => {
+        this.items = items.map(item => ({...item, activeStatus: item.status === 'ACTIVE'}));
         this.cdr.detectChanges();
       });
 
@@ -171,6 +172,33 @@ export class SequencesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
+
+  onSwitchStatus(item: SequenceDTO){
+    const request: SwitchStatusSequenceRequest = {
+      id: item.id!,
+      status: !item.activeStatus,
+    }
+    this.emailService.switchStatusSequence(request)
+      .pipe()
+      .subscribe(res => {
+        this.loadItems();
+        this.notification.open({
+          type: 'success',
+          content: res?.message || 'Trạng thái đã được cập nhật'
+        });
+      })
+  }
+
+  confirmSwitchStatus(item: any){
+    this.modal.confirm({
+      nzTitle: `Bạn có muốn thay đổi trạng thái của sequence "${item.name}"?`,
+      nzOkText: 'OK',
+      nzOnOk: () => this.onSwitchStatus(item)
+    });
+  }
+
 
   ngOnDestroy() {
     if (this.modalRef){

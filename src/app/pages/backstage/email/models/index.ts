@@ -87,6 +87,7 @@ export interface SequenceDTO {
   name: string,
   description: string,
   status: string,
+  activeStatus?: boolean,
   createdAt: string,
   updatedAt: string
 }
@@ -137,5 +138,10 @@ export interface ReOrderStepsSequenceRequest {
   sequenceId: number
 }
 
+
+export interface SwitchStatusSequenceRequest{
+  id: number;
+  status: boolean;
+}
 
 

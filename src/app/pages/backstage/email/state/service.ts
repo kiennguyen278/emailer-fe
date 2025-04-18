@@ -6,9 +6,17 @@ import {ApiResponse} from "@core/models/response.model";
 import {
   CampaignDetailDTO,
   EmailCampaignDTO,
-  EmailTemplateDTO, ReOrderStepsSequenceRequest, SaveCombineSequenceRequest, SaveCombineSequenceResponse,
+  EmailTemplateDTO,
+  ReOrderStepsSequenceRequest,
+  SaveCombineSequenceRequest,
+  SaveCombineSequenceResponse,
   SaveEmailCampaignRequest,
-  SaveEmailTemplateRequest, SaveSequenceRequest, SaveStepSequenceRequest, SequenceDTO, StepSequenceDTO
+  SaveEmailTemplateRequest,
+  SaveSequenceRequest,
+  SaveStepSequenceRequest,
+  SequenceDTO,
+  StepSequenceDTO,
+  SwitchStatusSequenceRequest
 } from "../models";
 
 @Injectable({ providedIn: 'root' })
@@ -149,6 +157,10 @@ export class EmailService extends BaseApiService{
   }
 
 
+  switchStatusSequence(request: SwitchStatusSequenceRequest): Observable<any> {
+    const url = this.buildUrl(`sequences/${request.id}/status`);
+    return this.http.put(url, null, {params: { status: request.status ? 'ACTIVE' : 'INACTIVE' }} );
+  }
 
 
 
