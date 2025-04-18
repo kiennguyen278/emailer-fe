@@ -3,6 +3,7 @@ export interface WorkflowDTO {
   userId?: number;
   name: string;
   status?: 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+  activeStatus?: boolean;
   triggerConditions: TriggerConditionDTO[];
   steps: WorkflowStepDTO[];
   drawflowJson: string;

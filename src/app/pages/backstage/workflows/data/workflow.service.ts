@@ -4,6 +4,7 @@ import {WorkflowDTO, Tag, EmailTemplateDTO,SequenceDTO} from './workflow.dto';
 import {BaseApiService} from "@core/services/base-api.service";
 import {ApiResponse} from "@core/models";
 import {HttpParams} from "@angular/common/http";
+import {SwitchStatusWorkflowRequest} from "../models";
 
 @Injectable({ providedIn: 'root' })
 export class WorkflowService extends BaseApiService {
@@ -44,6 +45,11 @@ export class WorkflowService extends BaseApiService {
 
   getEmailSequences(): Observable<ApiResponse<SequenceDTO[]>> {
     return this.http.get<ApiResponse<SequenceDTO[]>>(`${this.buildUrl('/sequences')}`);
+  }
+
+  switchStatusWorkFlow(request: SwitchStatusWorkflowRequest): Observable<any> {
+    const url = this.buildUrl(`workflows/${request.id}/status`);
+    return this.http.put(url, { status: request.status ? 'ACTIVE' : 'INACTIVE' });
   }
 
 }

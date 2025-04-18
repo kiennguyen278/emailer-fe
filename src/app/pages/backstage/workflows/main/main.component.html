@@ -19,7 +19,11 @@
         <tbody>
         <tr *ngFor="let wf of workflows">
           <td class="p-2 border">{{ wf.name }}</td>
-          <td class="p-2 border">{{ wf.status }}</td>
+
+          <td class="p-2 border text-center">
+            <app-switch [ngModel]="wf.activeStatus" (switchChange)="confirmSwitchStatus(wf)"></app-switch>
+          </td>
+
           <td class="p-2 border text-center space-x-2">
             <button class="action-btn text-blue-600" [routerLink]="['/workflows/builder', wf.id]">🛠️ Sửa</button>
             <button class="action-btn text-red-600" (click)="confirmDelete(wf.id)">🗑️ Xoá</button>
