@@ -15,7 +15,7 @@ import {
   SaveSequenceRequest,
   SaveStepSequenceRequest,
   SequenceDTO,
-  StepSequenceDTO,
+  StepSequenceDTO, SwitchStatusCampaignRequest,
   SwitchStatusSequenceRequest, SwitchStatusTemplateRequest
 } from "../models";
 
@@ -165,6 +165,11 @@ export class EmailService extends BaseApiService{
   switchStatusTemplate(request: SwitchStatusTemplateRequest): Observable<any> {
     const url = this.buildUrl(`email-templates/${request.id}/status`);
     return this.http.put(url, null, {params: { status: request.status ? 'ACTIVE' : 'INACTIVE' }} );
+  }
+
+  switchStatusCampaign(request: SwitchStatusCampaignRequest): Observable<any> {
+    const url = this.buildUrl(`campaigns/${request.id}/status`);
+    return this.http.patch(url, null, {params: { status: request.status}} );
   }
 
 

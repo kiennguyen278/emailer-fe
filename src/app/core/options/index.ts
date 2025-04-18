@@ -32,4 +32,11 @@ export const OptionDelayDate: OptionModel<Number>[] = [
   {label: 'After 5 days', value: 5},
   {label: 'After 6 days', value: 6},
   {label: 'After 7 days', value: 7},
+];
+
+
+export const CampainStatusOptions: OptionModel[] = [
+  {label: 'Tiếp tục gửi', value: 'SCHEDULED'},
+  {label: 'Dừng gửi', value: 'PAUSED'},
+  {label: 'Hủy', value: 'CANCELLED'},
 ]

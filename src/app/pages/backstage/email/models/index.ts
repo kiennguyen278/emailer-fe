@@ -28,7 +28,7 @@ export interface EmailCampaignDTO {
   userId: number,
   name: string,
   description: string,
-  status: string,
+  status: 'PAUSED' | 'CANCELLED' | 'SCHEDULED' | string,
   subject: string,
   htmlBody: string,
   textBody: string,
@@ -148,6 +148,11 @@ export interface SwitchStatusSequenceRequest{
 export interface SwitchStatusTemplateRequest{
   id: number;
   status: boolean;
+}
+
+export interface SwitchStatusCampaignRequest{
+  id: number;
+  status: 'PAUSED' | 'CANCELLED' | 'SCHEDULED';
 }
 
 

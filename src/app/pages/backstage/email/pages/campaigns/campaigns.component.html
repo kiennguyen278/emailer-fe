@@ -21,6 +21,13 @@
           {{item.scheduledTime | date: DATE_TIME_FORMAT}}
         </ng-template>
 
+        <ng-template [appCellTemplate]="'status'" let-item>
+          <app-select [options]="campainStatusOptions"
+                      [(ngModel)]="item.status"
+                      [disabled]="item.status === 'CANCELLED'"
+                      (ngModelChange)="onChangeStatusCampaign(item, $event)"
+          ></app-select>
+        </ng-template>
 
         <ng-template [appCellTemplate]="'actions'" let-item>
           <button nz-button nzType="text" nzShape="circle" (click)="showViewModal(item)">

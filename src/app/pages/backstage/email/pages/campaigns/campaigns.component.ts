@@ -1,5 +1,10 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {EmailCampaignDTO} from "../../models";
+import {
+  EmailCampaignDTO,
+  EmailTemplateDTO,
+  SwitchStatusCampaignRequest,
+  SwitchStatusSequenceRequest
+} from "../../models";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {Observable} from "rxjs";
 import {
@@ -14,7 +19,7 @@ import {ColumnConfig} from "@core/models";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {getListEmailCampaign} from "../../state/actions";
 import { DATE_TIME_FORMAT } from '@core/constants';
-import {OptionScheduledStatus} from "@core/options";
+import {CampainStatusOptions, OptionScheduledStatus} from "@core/options";
 import {CampaignFormComponent} from "./campaign-form/campaign-form.component";
 import {CampaignDetailComponent} from "./campaign-detail/campaign-detail.component";
 
@@ -40,6 +45,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
   ) {}
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
+  campainStatusOptions = CampainStatusOptions;
 
   columns: ColumnConfig[] = [
     {
@@ -73,6 +79,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
       header: 'Trạng thái',
       nzWidth: '100px',
       tdClass: 'text-center',
+      pipe: 'template',
       filter: {
         type: 'select',
         options: OptionScheduledStatus,
@@ -93,7 +100,7 @@ export class CampaignsComponent implements OnInit, OnDestroy {
     this.store.select(selectDataGetEmailCampaignList)
       .pipe(untilDestroyed(this))
       .subscribe((items) => {
-        this.items = items;
+        this.items = [...items];
         this.cdr.detectChanges();
       });
 
@@ -180,6 +187,41 @@ export class CampaignsComponent implements OnInit, OnDestroy {
           content: 'Xoá chiến dịch email thất bại'
         });
       }
+    });
+  }
+
+
+  onChangeStatusCampaign(item: EmailCampaignDTO, status: 'PAUSED' | 'CANCELLED' | 'SCHEDULED'){
+    const request: SwitchStatusCampaignRequest = {
+      id: item.id!,
+      status,
+    }
+    this.emailService.switchStatusCampaign(request)
+      .pipe()
+      .subscribe({
+        next: (res) => {
+          this.loadItems();
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Trạng thái đã được cập nhật'
+          });
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Có lỗi khi thay đổi trạng thái campaign'
+          });
+        }
+      })
+  }
+
+  confirmSwitchStatus(item: EmailCampaignDTO, status: 'PAUSED' | 'CANCELLED' | 'SCHEDULED'){
+
+    console.log('item', status, item)
+    this.modal.confirm({
+      nzTitle: `Bạn có muốn thay đổi trạng thái của campaign "${item.name}"?`,
+      nzOkText: 'OK',
+      nzOnOk: () => this.onChangeStatusCampaign(item, status),
     });
   }
 

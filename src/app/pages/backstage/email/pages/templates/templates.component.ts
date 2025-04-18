@@ -165,12 +165,20 @@ export class TemplatesComponent implements OnInit, OnDestroy {
     }
     this.emailService.switchStatusTemplate(request)
       .pipe()
-      .subscribe(res => {
-        this.loadItems();
-        this.notification.open({
-          type: 'success',
-          content: res?.message || 'Trạng thái đã được cập nhật'
-        });
+      .subscribe({
+        next: (res) => {
+          this.loadItems();
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Trạng thái template đã được cập nhật'
+          });
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Có lỗi khi thay đổi trạng thái template'
+          });
+        }
       })
   }
 
