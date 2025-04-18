@@ -375,9 +375,11 @@ export class WorkflowBuilderComponent implements OnInit {
     console.log("Calling API with data: ", dto);
 
     if (!dto.name || dto.triggerConditions.length === 0 || dto.steps.length === 0) {
-      alert('❌ Vui lòng nhập đầy đủ tên workflow, điều kiện trigger và ít nhất 1 bước!');
+      alert('❌ Vui lòng nhập ít nhất 1 bước!');
       return;
     }
+
+    if (!this.isValidFlow()) return;
 
     const request = omit(dto, ['status']);
 
@@ -448,5 +450,53 @@ export class WorkflowBuilderComponent implements OnInit {
     const dto = this.buildWorkflowDTO();
     localStorage.setItem('workflow_draft', JSON.stringify(dto));
   }
+
+  isValidFlow(): boolean {
+    const data = this.editor?.export()?.drawflow?.Home?.data;
+    if (!data) {
+      this.message.error('Không có dữ liệu workflow');
+      return false;
+    }
+
+    const nodes = Object.entries(data);
+    if (nodes.length === 0) {
+      this.message.error('Workflow cần có ít nhất 1 bước (step).');
+      return false;
+    }
+
+    const startNodes = nodes.filter(([_, node]: any) =>
+      node?.inputs && Object.values(node.inputs).every((input: any) => input.connections.length === 0)
+    );
+
+    if (startNodes.length === 0) {
+      this.message.error('Workflow không có bước bắt đầu nào (không có node nào có input trống).');
+      return false;
+    }
+
+    const startNodeId = startNodes[0][0];
+    const visited = new Set<string>();
+    const queue = [startNodeId];
+
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current || visited.has(current)) continue;
+      visited.add(current);
+
+      const out = data[current]?.outputs ?? {};
+      Object.values(out).forEach((output: any) => {
+        output.connections.forEach((conn: any) => {
+          queue.push(conn.node.toString());
+        });
+      });
+    }
+
+    if (visited.size !== nodes.length) {
+      this.message.error('Tất cả các bước phải được nối liền nhau thành một đường duy nhất.');
+      return false;
+    }
+
+    return true;
+  }
+
 
 }
