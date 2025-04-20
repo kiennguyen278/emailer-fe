@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { AccountRoutingModule } from './account-routing.module';
 import {SharedModule} from "../../shared/shared.module";
 import {AuthService} from "@core/services/auth.service";
+import { VerifyEmailResultComponent } from './verify-email-result/verify-email-result.component';
+
 
 @NgModule({
   imports: [
@@ -15,7 +17,10 @@ import {AuthService} from "@core/services/auth.service";
     SharedModule,
     AccountRoutingModule,
   ],
-  declarations: [LoginComponent],
+  declarations: [
+    LoginComponent,
+    VerifyEmailResultComponent
+  ],
   providers: [
     AuthService
   ]
