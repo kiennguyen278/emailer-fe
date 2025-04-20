@@ -1,5 +1,12 @@
 <div class="verify-result-container">
-  <h2>Xác minh email</h2>
+  <h2>Xác minh Email</h2>
   <p>{{ message }}</p>
-</div>
 
+  <button *ngIf="status === 'success'" (click)="goToLogin()">Đăng nhập ngay</button>
+
+  <div *ngIf="status === 'expired' && !resent">
+    <button (click)="resendVerification()" [disabled]="loading">
+      {{ loading ? 'Đang gửi lại...' : 'Gửi lại email xác minh' }}
+    </button>
+  </div>
+</div>
