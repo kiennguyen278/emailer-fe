@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {Routes, RouterModule, PreloadAllModules} from '@angular/router';
 
 // Layout component
 // import { BackstageTopbannerComponent as BackstageLayoutComponent} from './layouts/backstage-topbanner/backstage-topbanner.component';
@@ -78,7 +78,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: false })], // useHash này là có hiện dấu # trên url router hay ko, ví dụ: "useHash: false" => "/home/dashboard"; "useHash: true" => "/#/home/dashboard"
+  imports: [RouterModule.forRoot(routes, {
+    useHash: false,  // useHash này là có hiện dấu # trên url router hay ko, ví dụ: "useHash: false" => "/home/dashboard"; "useHash: true" => "/#/home/dashboard"
+    scrollPositionRestoration: "enabled", // Điều khiển việc quay lại vị trí scroll khi back/forward: 'disabled', 'enabled', 'top'.
+    preloadingStrategy: PreloadAllModules, // PreloadAllModules: Tải trước tất cả các module lazy-loaded ngay sau khi app load xong; NoPreloading: (default)	Không preload, chỉ load khi navigate tới route.
+    // initialNavigation: "enabledBlocking", // Điều khiển lần navigate đầu tiên. enabledBlocking sẽ chờ Navigation xong mới bootstrap app. Rất hữu ích với SSR.
+    paramsInheritanceStrategy: 'always', // 'emptyOnly' (default) | 'always', dùng 'always' để khi vào path trong router con thì vẫn lấy đc param url của router cha, nếu để "emptyOnly" thì vào trong path component con ko lấy đc path của router cha
+  })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
