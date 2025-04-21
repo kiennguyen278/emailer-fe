@@ -10,6 +10,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { MainComponent } from './main/main.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 import { SettingsService } from './data/settings.service'; // ✅ import service
 
@@ -25,6 +26,7 @@ import { SettingsService } from './data/settings.service'; // ✅ import service
     NzInputModule,
     NzButtonModule,
     NzSwitchModule,
+    NzSelectModule,
     NzTagModule,
     SettingsRoutingModule
   ],

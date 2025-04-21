@@ -66,8 +66,11 @@
         <form *ngIf="isSmtpFormVisible()" [formGroup]="smtpForm" nz-form [nzLayout]="'vertical'">
 
           <nz-form-label>Tên nhà cung cấp (Provider)</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="provider" placeholder="VD: Gmail, Sendinblue, Outlook..." />
+          <nz-form-control [nzErrorTip]="'Vui lòng chọn nhà cung cấp SMTP'">
+            <nz-select formControlName="provider" nzPlaceHolder="Chọn nhà cung cấp SMTP">
+              <nz-option [nzValue]="'ses'" nzLabel="Amazon SES"></nz-option>
+              <nz-option [nzValue]="'office365'" nzLabel="Microsoft Office 365"></nz-option>
+            </nz-select>
           </nz-form-control>
 
           <nz-form-item>
