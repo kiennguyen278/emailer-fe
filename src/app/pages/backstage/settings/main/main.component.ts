@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {SettingsService} from "../data/settings.service";
+import {TokenStorageService} from "@core/services/token-storage.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -24,7 +26,11 @@ export class MainComponent implements OnInit {
   // Password
   passwordForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private message: NzMessageService, private settingsService: SettingsService) {}
+  constructor(private fb: FormBuilder,
+              private message: NzMessageService,
+              private tokenStorage: TokenStorageService,
+              private router: Router,
+              private settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.activeTabIndex = 0; // Default: Business Info
@@ -190,7 +196,11 @@ export class MainComponent implements OnInit {
       return;
     }
     this.settingsService.changePassword(this.passwordForm.value).subscribe({
-      next: () => this.message.success('✅ Mật khẩu đã được đổi!'),
+      next: () => {
+        this.message.success('✅ Mật khẩu đã được đổi!');
+        this.tokenStorage.clearLocalStore();
+        this.router.navigate(['/auth/login']);
+      },
       error: err => this.message.error('❌ ' + err?.error?.message || 'Đổi mật khẩu thất bại')
     });
   }
