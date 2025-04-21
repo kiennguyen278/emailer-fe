@@ -85,15 +85,17 @@ export class MainComponent implements OnInit {
   }
 
   saveBusinessInfo() {
-    if (this.passwordForm.invalid) {
+    if (this.businessForm.invalid) {
       this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
-      this.passwordForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      this.businessForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
       return;
     }
 
     this.settingsService.updateBusinessInfo(this.businessForm.value).subscribe({
-      next: () => this.message.success('✅ Thông tin doanh nghiệp đã được lưu!'),
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu thông tin')
+      next: () => {
+        this.message.success('✅ Chúng tôi đã gửi một email yêu cầu xác minh email doanh nghiệp của bạn!')
+      },
+      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
     });
   }
 
