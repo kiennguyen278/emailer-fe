@@ -102,9 +102,9 @@ export class MainComponent implements OnInit {
   // -------------------- SMTP --------------------
   initSmtpForm() {
     this.smtpForm = this.fb.group({
-      provider: [null, Validators.required],
+      provider: ['office365', Validators.required],
       smtpServer: ['', Validators.required],
-      smtpPort: [587, [Validators.required, Validators.min(1)]],
+      smtpPort: [587, Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
