@@ -167,6 +167,7 @@ export class MainComponent implements OnInit {
     }
   }
 
+
   onTestSmtp(): void {
     if (this.smtpForm.invalid) {
       this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
@@ -174,14 +175,20 @@ export class MainComponent implements OnInit {
       return;
     }
 
-    this.settingsService.testSmtpConnection(this.smtpForm.value).subscribe({
-      next: (res) => {
-        this.message.success(res.message || '✅ Kết nối đến SMTP thành công!');
+    const payload = this.smtpForm.value;
+    this.settingsService.testSmtpConnection(payload).subscribe({
+      next: (result) => {
+        if (result.success) {
+          this.message.success('✅ Kết nối SMTP thành công.');
+        } else {
+          this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+        }
       },
-      error: err => {
-        this.message.error(err?.error?.message || '❌ Lỗi khi kiểm tra kết nối SMTP');
+      error: (err) => {
+        this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
       }
     });
+
   }
 
 
