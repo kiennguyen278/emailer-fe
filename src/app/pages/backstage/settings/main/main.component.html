@@ -85,7 +85,7 @@
             <nz-form-control>
               <nz-select formControlName="smtpPort" [nzPlaceHolder]="'Chọn cổng SMTP'" [nzAllowClear]="false">
                 <nz-option [nzValue]="587" nzLabel="587 (STARTTLS)"></nz-option>
-                <nz-option [nzValue]="465" nzLabel="465 (SSL)"></nz-option>
+                <nz-option *ngIf="smtpForm.get('provider')?.value === 'ses'" [nzValue]="465" nzLabel="465 (SSL)"></nz-option>
               </nz-select>
             </nz-form-control>
 
