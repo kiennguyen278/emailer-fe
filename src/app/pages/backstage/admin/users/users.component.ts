@@ -27,8 +27,6 @@ export class UsersComponent implements OnInit {
   isSaving = false;
   isEditing = false;
 
-
-
   statusOptions = [
     { label: 'ACTIVE', value: 'ACTIVE' },
     { label: 'INACTIVE', value: 'INACTIVE' }
@@ -70,8 +68,7 @@ export class UsersComponent implements OnInit {
 
     this.formUser = this.fb.group({
       id: [null],
-      email: ['', [Validators.required, Validators.email]],
-      status: ['ACTIVE', Validators.required]
+      email: ['', [Validators.required, Validators.email]]
     });
 
     this.loadAllUsers();
@@ -146,18 +143,26 @@ export class UsersComponent implements OnInit {
   }
 
   saveUser(): void {
-    if (this.formUser.invalid) return;
-    const value = this.formUser.value;
+    if (this.formUser.invalid) {
+      alert("Hãy nhập email đúng định dạng");
+      return;
+    }
+
     this.isSaving = true;
+    const value = this.formUser.value;
 
-    const request$ = this.isEditing
-      ? this.adminService.updateBusinessProfile(value.id, value)
-      : this.adminService.createUser(value);
-
-    request$.subscribe(() => {
-      this.isSaving = false;
-      this.closeModal();
-      this.loadAllUsers();
+    this.adminService.createUser(value).subscribe({
+      next: () => {
+        alert("✅ Tạo người dùng thành công!");
+        this.isSaving = false;
+        this.closeModal();
+        this.loadAllUsers()
+      },
+      error: (err) => {
+        this.isSaving = false;
+        alert("❌ Tạo người dùng thất bại. Vui lòng thử lại sau!");
+        console.error("Create user failed:", err);
+      }
     });
   }
 
