@@ -20,12 +20,14 @@ export class UsersComponent implements OnInit {
   filteredItems: UserDTO[] = [];
   pagedItems: UserDTO[] = [];
 
-  selectedUser: UserDTO | null = null;
-
   pagination = { pageIndex: 1, pageSize: 20, total: 0 };
   loading$ = new BehaviorSubject<boolean>(false);
   isSaving = false;
   isEditing = false;
+
+  selectedUser: UserDTO | null = null;
+  isViewModalVisible = false;
+  activeTabIndex = 0;
 
   statusOptions = [
     { label: 'ACTIVE', value: 'ACTIVE' },
@@ -129,15 +131,6 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  showViewModal(user: UserDTO): void {
-    this.selectedUser = user;
-    this.modal.create({
-      nzTitle: 'Chi tiết User',
-      nzContent: 'modalViewUser',
-      nzFooter: null
-    });
-  }
-
   closeModal(): void {
     this.modal.closeAll();
   }
@@ -166,4 +159,50 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  showViewModal(user: UserDTO): void {
+    this.selectedUser = { ...user };
+    this.activeTabIndex = 0;
+    this.isViewModalVisible = true;
+  }
+
+  closeViewModal(): void {
+    this.isViewModalVisible = false;
+    this.selectedUser = null;
+  }
+
+  toggleUserStatus(): void {
+    if (!this.selectedUser || this.selectedUser.id == null) return;
+    const newStatus = this.selectedUser.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    const dto = { id: this.selectedUser.id, status: newStatus };
+    this.adminService.updateUserStatus(this.selectedUser.id,dto).subscribe(() => {
+      this.selectedUser!.status = newStatus;
+    });
+  }
+
+  updateBusinessInfo(): void {
+    if (!this.selectedUser || this.selectedUser.id == null) return;
+    const userDto = {
+      businessName: this.selectedUser.businessName,
+      businessEmail: this.selectedUser.businessEmail,
+      businessDomain: this.selectedUser.domain
+    };
+    this.adminService.updateBusinessProfile(this.selectedUser.id, userDto).subscribe({
+      next: () => {
+        alert('✅ Đã cập nhật thông tin business!');
+      },
+      error: (err) => {
+        console.error('❌ Lỗi khi cập nhật business info:', err);
+        alert('❌ Cập nhật thất bại!');
+      }
+    });
+  }
+
+  updateBusinessStatus(): void {
+    if (!this.selectedUser || this.selectedUser.id == null) return;
+    const dto = {
+      id: this.selectedUser.id,
+      statusBusinessEmail: this.selectedUser.statusBusinessEmail
+    };
+    this.adminService.updateBusinessStatus(this.selectedUser.id,dto).subscribe();
+  }
 }
