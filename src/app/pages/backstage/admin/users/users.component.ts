@@ -122,21 +122,9 @@ export class UsersComponent implements OnInit {
 
   showCreateModal(): void {
     this.isEditing = false;
-    this.formUser.reset({ status: 'ACTIVE' });
+    this.formUser.reset({ status: 'INACTIVE' });
     this.modal.create({
       nzTitle: 'Thêm User mới',
-      nzContent: this.modalUserFormTpl, // ✅ dùng TemplateRef
-      nzFooter: null,
-      nzClosable: false,
-      nzMaskClosable: false
-    });
-  }
-
-  showEditModal(user: UserDTO): void {
-    this.isEditing = true;
-    this.formUser.patchValue(user);
-    this.modal.create({
-      nzTitle: 'Chỉnh sửa User',
       nzContent: this.modalUserFormTpl, // ✅ dùng TemplateRef
       nzFooter: null,
       nzClosable: false,
@@ -173,7 +161,4 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  confirmDelete(user: UserDTO): void {
-    alert("Dont delete user!");
-  }
 }

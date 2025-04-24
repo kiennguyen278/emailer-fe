@@ -38,12 +38,6 @@
       <button nz-button nzType="text" (click)="showViewModal(item)">
         <i nz-icon nzType="eye" nz-tooltip nzTooltipTitle="Xem chi tiết"></i>
       </button>
-      <button nz-button nzType="text" (click)="showEditModal(item)">
-        <i nz-icon nzType="edit" nz-tooltip nzTooltipTitle="Chỉnh sửa"></i>
-      </button>
-      <button nz-button nzType="text" (click)="confirmDelete(item)">
-        <i nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xoá"></i>
-      </button>
     </ng-template>
   </app-table>
 </nz-card>
@@ -78,11 +72,4 @@
       <button nz-button nzType="primary" type="submit" [nzLoading]="isSaving" class="ml-3">Lưu</button>
     </div>
   </form>
-</ng-template>
-
-<ng-template #modalViewUser>
-  <nz-descriptions nzTitle="Thông tin User" [nzColumn]="1" nzBordered *ngIf="selectedUser">
-    <nz-descriptions-item nzTitle="Email">{{ selectedUser.email }}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Trạng thái">{{ selectedUser.status }}</nz-descriptions-item>
-  </nz-descriptions>
 </ng-template>
