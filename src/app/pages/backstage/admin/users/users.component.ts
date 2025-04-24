@@ -23,7 +23,6 @@ export class UsersComponent implements OnInit {
   pagination = { pageIndex: 1, pageSize: 20, total: 0 };
   loading$ = new BehaviorSubject<boolean>(false);
   isSaving = false;
-  isEditing = false;
 
   selectedUser: UserDTO | null = null;
   isViewModalVisible = false;
@@ -120,7 +119,6 @@ export class UsersComponent implements OnInit {
   }
 
   showCreateModal(): void {
-    this.isEditing = false;
     this.formUser.reset({ status: 'INACTIVE' });
     this.modal.create({
       nzTitle: 'Thêm User mới',
@@ -140,19 +138,15 @@ export class UsersComponent implements OnInit {
       alert("Hãy nhập email đúng định dạng");
       return;
     }
-
-    this.isSaving = true;
     const value = this.formUser.value;
 
     this.adminService.createUser(value).subscribe({
       next: () => {
         alert("✅ Tạo người dùng thành công!");
-        this.isSaving = false;
         this.closeModal();
         this.loadAllUsers()
       },
       error: (err) => {
-        this.isSaving = false;
         alert("❌ Tạo người dùng thất bại. Vui lòng thử lại sau!");
         console.error("Create user failed:", err);
       }
