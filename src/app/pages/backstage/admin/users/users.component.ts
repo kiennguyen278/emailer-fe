@@ -160,6 +160,7 @@ export class UsersComponent implements OnInit {
   }
 
   showViewModal(user: UserDTO): void {
+    console.log('Selected user:', user);
     this.selectedUser = { ...user };
     this.activeTabIndex = 0;
     this.isViewModalVisible = true;
