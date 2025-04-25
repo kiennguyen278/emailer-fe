@@ -1,0 +1,29 @@
+  <nz-tabset [(nzSelectedIndex)]="activeTabIndex">
+
+    <nz-tab nzTitle="Business Info">
+      <form *ngIf="user" class="mt-2 px-2">
+        <label>Tên doanh nghiệp:</label>
+        <input nz-input [(ngModel)]="user.businessName" name="bizName" class="mb-2" />
+        <label>Email doanh nghiệp:</label>
+        <input nz-input [(ngModel)]="user.businessEmail" name="bizEmail" class="mb-2" />
+        <label>Domain:</label>
+        <input nz-input [(ngModel)]="user.domain" name="bizDomain" class="mb-2" />
+
+        <label>Trạng thái doanh nghiệp:</label>
+        <select [(ngModel)]="user.statusBusinessEmail" name="bizStatus" nz-select class="mb-3">
+          <option value="VERIFIED">VERIFIED</option>
+          <option value="UNVERIFIED">UNVERIFIED</option>
+        </select>
+
+        <div class="mt-2">
+          <button nz-button nzType="primary" (click)="updateBusinessInfo()">Cập nhật thông tin</button>
+          <button nz-button nzType="default" (click)="updateBusinessStatus()" class="ml-2">Cập nhật trạng thái</button>
+        </div>
+      </form>
+    </nz-tab>
+
+    <nz-tab nzTitle="SMTP Info">
+      Nothing
+    </nz-tab>
+
+  </nz-tabset>

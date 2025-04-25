@@ -5,6 +5,10 @@ import { AdminService } from '../data/admin.service';
 import { UserDTO } from '../data/admin.dto';
 import { BehaviorSubject } from 'rxjs';
 import {ColumnConfig} from "@core/models";
+import {UserDetailModalComponent} from "./components/user-detail-modal/user-detail-modal.component";
+import {EmailTemplateDTO, SwitchStatusSequenceRequest} from "../../email/models";
+import {NotificationService} from "@core/services/notification.service";
+import {SwitchStatusUserRequest} from "../models";
 
 @Component({
   selector: 'app-users',
@@ -21,7 +25,7 @@ export class UsersComponent implements OnInit {
   pagedItems: UserDTO[] = [];
 
   pagination = { pageIndex: 1, pageSize: 20, total: 0 };
-  loading$ = new BehaviorSubject<boolean>(false);
+  loading = false;
   isSaving = false;
 
   selectedUser: UserDTO | null = null;
@@ -44,7 +48,8 @@ export class UsersComponent implements OnInit {
       header: 'Trạng thái',
       key: 'status',
       tdClass: 'text-center',
-      nzWidth: '200px'
+      nzWidth: '200px',
+      pipe: 'template',
     },
     {
       header: 'Thao tác',
@@ -58,7 +63,8 @@ export class UsersComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private notification: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -76,12 +82,17 @@ export class UsersComponent implements OnInit {
   }
 
   loadAllUsers(): void {
-    this.loading$.next(true);
+    this.loading = true;
     this.adminService.getAllUsers().subscribe(res => {
       if (res.success) {
-        this.allItems = res.data;
+        this.allItems = res.data.map(item => {
+          return {
+            ...item,
+            activeStatus: item.status === 'ACTIVE'
+          }
+        });
         this.applySearchAndPagination();
-        this.loading$.next(false);
+        this.loading = false;
       }
     });
   }
@@ -154,24 +165,22 @@ export class UsersComponent implements OnInit {
   }
 
   showViewModal(user: UserDTO): void {
-    console.log('Selected user:', user);
-    this.selectedUser = { ...user };
-    this.activeTabIndex = 0;
-    this.isViewModalVisible = true;
+    this.modal.create({
+      nzTitle: 'Chi tiết người dùng',
+      nzContent: UserDetailModalComponent,
+      nzData: {
+        user: user || null
+      },
+      nzWidth: 800,
+      nzFooter: null,
+      nzClosable: false,
+      nzMaskClosable: false
+    });
   }
 
   closeViewModal(): void {
     this.isViewModalVisible = false;
     this.selectedUser = null;
-  }
-
-  toggleUserStatus(): void {
-    if (!this.selectedUser || this.selectedUser.id == null) return;
-    const newStatus = this.selectedUser.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-    const dto = { id: this.selectedUser.id, status: newStatus };
-    this.adminService.updateUserStatus(this.selectedUser.id,dto).subscribe(() => {
-      this.selectedUser!.status = newStatus;
-    });
   }
 
   updateBusinessInfo(): void {
@@ -200,4 +209,40 @@ export class UsersComponent implements OnInit {
     };
     this.adminService.updateBusinessStatus(this.selectedUser.id,dto).subscribe();
   }
+
+
+  onSwitchStatus(item: UserDTO){
+    const request: SwitchStatusUserRequest = {
+      userId: item.id!,
+      status: !item.activeStatus,
+    }
+    this.adminService.updateUserStatus(request)
+      .pipe()
+      .subscribe({
+        next: (res: any) => {
+          this.loadAllUsers();
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Trạng thái user đã được cập nhật'
+          });
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Có lỗi khi thay đổi trạng thái user'
+          });
+        }
+      })
+  }
+
+  confirmSwitchStatus(item: UserDTO){
+    this.modal.confirm({
+      nzTitle: `Bạn có muốn thay đổi trạng thái của user email "${item.email}"?`,
+      nzOkText: 'OK',
+      nzOnOk: () => this.onSwitchStatus(item)
+    });
+  }
+
+
+
 }

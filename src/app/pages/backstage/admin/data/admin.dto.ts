@@ -11,6 +11,7 @@ export interface UserDTO {
   domain?: string;
   statusBusinessEmail?: string;
   useCustomSmtp?: boolean; // true | false
+  activeStatus?: boolean; // true | false
 
   createdAt?: string;
 

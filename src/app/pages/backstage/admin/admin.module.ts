@@ -6,32 +6,25 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { MainComponent } from './main/main.component';
 import { UsersComponent } from './users/users.component';
 
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { SharedModule } from 'src/app/shared/shared.module';
+import {UserDetailModalComponent} from "./users/components/user-detail-modal/user-detail-modal.component";
+
+
 
 @NgModule({
   declarations: [
     MainComponent,
-    UsersComponent
+    UsersComponent,
+    UserDetailModalComponent,
   ],
+  // exports: [
+  //   UserDetailModalComponent
+  // ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     AdminRoutingModule,
-    NzButtonModule,
-    NzCheckboxModule,
-    NzInputModule,
-    NzSelectModule,
-    NzModalModule,
-    NzRadioModule,
-    NzCardModule,
     SharedModule
   ]
 })

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
+import {SwitchStatusUserRequest} from "../models";
 
 
 @Injectable({
@@ -30,8 +31,10 @@ export class AdminService extends BaseApiService {
     });
   }
 
-  updateUserStatus(id: number, userDTO: UserDTO) {
-    return this.http.put(`${this.BASE_URL}/users/${id}/status`, { userDTO });
+  updateUserStatus(request: SwitchStatusUserRequest) {
+    const url = this.buildUrl(`admin/users/${request.userId}/status`);
+
+    return this.http.put(url, { ...request, status: request.status ? 'ACTIVE' : 'INACTIVE' });
   }
 
 
