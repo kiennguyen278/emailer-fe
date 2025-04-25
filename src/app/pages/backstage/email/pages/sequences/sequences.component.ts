@@ -174,7 +174,6 @@ export class SequencesComponent implements OnInit, OnDestroy {
   }
 
 
-
   onSwitchStatus(item: SequenceDTO){
     const request: SwitchStatusSequenceRequest = {
       id: item.id!,
