@@ -9,7 +9,7 @@
           <div nz-row [nzGutter]="16">
             <div nz-col [nzSpan]="22">
               <div class="field-item mb-3">
-                <div class="mb-1">Tên sequence:</div>
+                <div class="mb-1">Tên sequence (<span class="text-[#f00]">*</span>)</div>
                 <div class="flex-[1_0_0]">
                   <app-form-control>
                     <app-input formControlName="name"
@@ -89,7 +89,7 @@
                     <div nz-row [nzGutter]="16">
                       <div nz-col [nzSpan]="19">
                         <div class="field-item mb-3">
-                          <div class="mb-1">Subject line:</div>
+                          <div class="mb-1">Subject line (<span class="text-[#f00]">*</span>)</div>
                           <div class="flex-[1_0_0]">
                             <app-form-control>
                               <app-input formControlName="subject"
@@ -102,7 +102,7 @@
 
                       <div nz-col [nzSpan]="5">
                         <div class="field-item mb-3">
-                          <div class="mb-1">Send this email:</div>
+                          <div class="mb-1">Send this email (<span class="text-[#f00]">*</span>)</div>
                           <div class="flex-[1_0_0]">
                             <app-form-control>
                               <app-select formControlName="delayDays"
@@ -116,7 +116,7 @@
 
                       <div nz-col [nzSpan]="24">
                         <div class="field-item mb-3">
-                          <div class="mb-1">Nội dung:</div>
+                          <div class="mb-1">Nội dung (<span class="text-[#f00]">*</span>)</div>
                           <div class="flex-[1_0_0]">
                             <app-form-control>
                               <app-richtext-email
