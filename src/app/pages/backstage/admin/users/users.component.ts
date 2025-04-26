@@ -9,6 +9,8 @@ import {UserDetailModalComponent} from "./components/user-detail-modal/user-deta
 import {EmailTemplateDTO, SwitchStatusSequenceRequest} from "../../email/models";
 import {NotificationService} from "@core/services/notification.service";
 import {SwitchStatusUserRequest} from "../models";
+import {ValidatorUtil} from "@core/utils/validator.util";
+import {FormUtil} from "@core/utils/form.util";
 
 @Component({
   selector: 'app-users',
@@ -74,8 +76,8 @@ export class UsersComponent implements OnInit {
     });
 
     this.formUser = this.fb.group({
-      id: [null],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [ValidatorUtil.required('Email không được để trống'), ValidatorUtil.email('Email không đúng định dạng')]],
+      status: ['INACTIVE']
     });
 
     this.loadAllUsers();
@@ -145,21 +147,24 @@ export class UsersComponent implements OnInit {
   }
 
   saveUser(): void {
-    if (this.formUser.invalid) {
-      alert("Hãy nhập email đúng định dạng");
-      return;
-    }
+    FormUtil.validate(this.formUser);
+
     const value = this.formUser.value;
 
     this.adminService.createUser(value).subscribe({
-      next: () => {
-        alert("✅ Tạo người dùng thành công!");
+      next: (res) => {
+        this.notification.open({
+          type: 'success',
+          content: res?.message || 'Tạo người dùng thành công!'
+        });
         this.closeModal();
         this.loadAllUsers()
       },
-      error: (err) => {
-        alert("❌ Tạo người dùng thất bại. Vui lòng thử lại sau!");
-        console.error("Create user failed:", err);
+      error: (error) => {
+        this.notification.open({
+          type: 'error',
+          content: error?.message || 'Tạo người dùng thất bại. Vui lòng thử lại sau!'
+        });
       }
     });
   }
@@ -174,24 +179,6 @@ export class UsersComponent implements OnInit {
       nzWidth: 800,
       nzFooter: null,
       nzMaskClosable: false
-    });
-  }
-
-  updateBusinessInfo(): void {
-    if (!this.selectedUser || this.selectedUser.id == null) return;
-    const userDto = {
-      businessName: this.selectedUser.businessName,
-      businessEmail: this.selectedUser.businessEmail,
-      businessDomain: this.selectedUser.domain
-    };
-    this.adminService.updateBusinessProfile(this.selectedUser.id, userDto).subscribe({
-      next: () => {
-        alert('✅ Đã cập nhật thông tin business!');
-      },
-      error: (err) => {
-        console.error('❌ Lỗi khi cập nhật business info:', err);
-        alert('❌ Cập nhật thất bại!');
-      }
     });
   }
 

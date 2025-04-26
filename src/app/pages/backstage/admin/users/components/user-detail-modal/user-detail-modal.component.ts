@@ -63,7 +63,7 @@ export class UserDetailModalComponent implements OnInit {
       ...this.form.getRawValue()
     }
 
-    this.adminService.updateBusinessProfile2(request).pipe()
+    this.adminService.updateBusinessProfile(request).pipe()
       .subscribe({
         next: (res: any) => {
           this.notification.open({
@@ -95,24 +95,6 @@ export class UserDetailModalComponent implements OnInit {
 
   closeModal(): void {
     this.modalRef.destroy();
-  }
-
-  updateBusinessInfo(): void {
-    if (!this.selectedUser || this.selectedUser.id == null) return;
-    const userDto = {
-      businessName: this.selectedUser.businessName,
-      businessEmail: this.selectedUser.businessEmail,
-      businessDomain: this.selectedUser.domain
-    };
-    this.adminService.updateBusinessProfile(this.selectedUser.id, userDto).subscribe({
-      next: () => {
-        alert('✅ Đã cập nhật thông tin business!');
-      },
-      error: (err) => {
-        console.error('❌ Lỗi khi cập nhật business info:', err);
-        alert('❌ Cập nhật thất bại!');
-      }
-    });
   }
 
   updateBusinessStatus(): void {

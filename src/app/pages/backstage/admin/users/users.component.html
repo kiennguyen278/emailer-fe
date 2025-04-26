@@ -6,22 +6,24 @@
   <!-- 🔍 FORM TÌM KIẾM -->
   <form [formGroup]="formSearch" (ngSubmit)="onSearch()" class="search-form mb-3">
     <div nz-row [nzGutter]="12">
-      <div nz-col [nzSpan]="4">
-        <label>Status:</label>
+      <div nz-col [nzSpan]="3">
+        <div class="mb-2">Status:</div>
         <app-form-control>
-          <app-select formControlName="status" [options]="statusOptions"></app-select>
+          <app-select formControlName="status"
+                      [allowClear]="true"
+                      (ngModelChange)="onSearch()"
+                      [options]="statusOptions"></app-select>
         </app-form-control>
       </div>
-      <div nz-col [nzSpan]="4">
-        <label>Email:</label>
+      <div nz-col [nzSpan]="5">
+        <div class="mb-2">Email:</div>
         <app-form-control>
           <app-input formControlName="email" placeholder="Tìm theo email" [allowClear]="true"></app-input>
         </app-form-control>
       </div>
       <div nz-col [nzSpan]="4">
-        <div class="btn-group mt-4">
+          <div class="mb-2">&nbsp;</div>
           <button nz-button nzType="primary" [nzLoading]="loading" type="submit">Tìm kiếm</button>
-        </div>
       </div>
     </div>
   </form>
@@ -55,17 +57,9 @@
   <form [formGroup]="formUser" (ngSubmit)="saveUser()" class="px-4 py-2">
     <div nz-row [nzGutter]="16">
       <div nz-col [nzSpan]="24">
-        <label for="email" class="block font-medium mb-1">Email:</label>
+        <label class="block font-medium mb-1">Email:</label>
         <app-form-control>
-          <app-input formControlName="email" id="email" placeholder="Nhập địa chỉ email" class="w-full" />
-          <ng-container *ngIf="formUser.get('email')?.touched && formUser.get('email')?.invalid">
-            <div class="text-red-500 text-xs mt-1" *ngIf="formUser.get('email')?.errors?.['required']">
-              Email là bắt buộc
-            </div>
-            <div class="text-red-500 text-xs mt-1" *ngIf="formUser.get('email')?.errors?.['email']">
-              Email không đúng định dạng
-            </div>
-          </ng-container>
+          <app-input formControlName="email" placeholder="Nhập địa chỉ email" class="w-full" />
         </app-form-control>
       </div>
     </div>

@@ -37,18 +37,18 @@
           </div>
         </div>
 
-        <div class="mb-3">
-<!--          <div class="flex flex-[1_0_0]">-->
-<!--            <div class="flex-[170px_0_0] text-right pr-3 leading-[22px] p-[5px]">Trạng thái</div>-->
-<!--            <div class="flex-[1_0_0]">-->
-<!--              <app-form-control>-->
-<!--                <app-switch-->
-<!--                  formControlName="statusBusinessEmail"-->
-<!--                  (switchChange)="form.controls['statusBusinessEmail'].patchValue(!$event)"-->
-<!--                ></app-switch>-->
-<!--              </app-form-control>-->
-<!--            </div>-->
-<!--          </div>-->
+        <div class="mb-3 flex">
+          <div class="flex flex-[1_0_0]">
+            <div class="flex-[170px_0_0] text-right pr-3 leading-[22px] p-[5px]">Trạng thái</div>
+            <div class="flex-[1_0_0]">
+              <app-form-control>
+                <app-switch
+                  formControlName="statusBusinessEmail"
+                  (switchChange)="form.controls['statusBusinessEmail'].patchValue(!$event)"
+                ></app-switch>
+              </app-form-control>
+            </div>
+          </div>
 
           <div class="flex-[1_0_0]">
             <div class="btn-group text-right">
