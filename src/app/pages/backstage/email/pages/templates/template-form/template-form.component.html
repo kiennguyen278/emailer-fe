@@ -7,7 +7,7 @@
 
       <div nz-col [nzSpan]="18">
         <div class="field-item mb-3">
-          <label class="mr-2">Tên template:</label>
+          <label class="mr-2">Tên template (<span class="text-[#f00]">*</span>)</label>
           <div class="flex-[1_0_0]">
             <app-form-control>
               <app-input formControlName="name"
@@ -20,7 +20,7 @@
 
       <div nz-col [nzSpan]="6">
         <div class="field-item mb-3">
-          <label class="mr-2">Content Type:</label>
+          <label class="mr-2">Content Type</label>
           <div class="flex-[1_0_0]">
             <app-form-control>
               <app-select formControlName="type"
@@ -35,7 +35,7 @@
 
       <div nz-col [nzSpan]="24">
         <div class="field-item mb-3">
-          <label class="mr-2">Subject:</label>
+          <label class="mr-2">Subject (<span class="text-[#f00]">*</span>)</label>
           <div class="flex-[1_0_0]">
             <app-form-control>
               <app-input formControlName="subject"
@@ -48,7 +48,7 @@
 
       <div nz-col [nzSpan]="24">
         <div class="field-item mb-3">
-          <label class="mr-2">Content:</label>
+          <label class="mr-2">Content (<span class="text-[#f00]">*</span>)</label>
           <div class="flex-[1_0_0]">
             <ng-container *ngIf="form.controls['type'].value == 'HTML'; else controlArea">
 

@@ -33,7 +33,7 @@
 <ng-template #modalEditTag>
   <form [formGroup]="tagForm" (ngSubmit)="handleOk()">
     <div>
-      <label>Tên Tag:</label>
+      <label>Tên Tag (<span class="text-[#f00]">*</span>)</label>
       <app-form-control>
         <app-input formControlName="name"></app-input>
       </app-form-control>
