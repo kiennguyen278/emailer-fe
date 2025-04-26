@@ -27,7 +27,7 @@ export interface SubscriberDTO {
   firstName: string,
   lastName: string | null | any,
   status: "ACTIVE" | "INACTIVE",
-  createdAt: string
+  createdAt: string,
 }
 
 export interface CampaignSubscriberEmail {

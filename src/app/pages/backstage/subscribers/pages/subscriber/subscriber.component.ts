@@ -138,14 +138,21 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     });
   }
 
-  openModal(item?: SubscriberDTO) {
-    if (item?.id){
-      this.form.patchValue(item);
+  openModal(item?: SubscriberDetailDTO) {
+    // item?: SubscriberDetailDTO lấy từ response API getSubscriberDetail chứ ko lấy từ item từ ngoài list truyền vào nữa
+    if (item?.subscriberId){
+      const tagIds = item.tags.map(item => item.id);
+      this.form.patchValue({
+        ...item,
+        tagIds: tagIds
+      });
+      this.form.controls['email'].disable();
     } else {
       this.form.reset();
+      this.form.controls['email'].enable();
     }
     this.modalRef = this.modal.create({
-      nzTitle: item?.id ? `Cập nhật subscriber "${item.firstName}"` : 'Thêm mới subscriber',
+      nzTitle: item?.subscriberId ? `Cập nhật subscriber "${item.firstName}"` : 'Thêm mới subscriber',
       nzContent: this.modalEditSubscriber,
       nzFooter: null
     });
@@ -244,7 +251,17 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
   showEditModal(item: SubscriberDTO): void {
-    this.openModal(item);
+    this.subscribersService.getSubscriberDetail(item.id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.openModal(res.data);
+        }
+      },
+      error: () => {
+        this.message.error('Lỗi khi tải chi tiết subscriber!');
+      }
+    });
+
   }
 
   saveSubscriber(): void {
@@ -265,10 +282,10 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
           this.isLoadingSave = false;
           this.form.reset();
         },
-        error: () => {
+        error: (error) => {
           this.notification.open({
             type: 'error',
-            content: 'Thao tác thất bại'
+            content: error?.message || 'Có lỗi khi cập nhật subscriber'
           });
           this.isLoadingSave = false;
         }

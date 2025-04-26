@@ -150,7 +150,7 @@
 
       <div nz-col [nzSpan]="12">
         <div class="field-item mb-3">
-          <label>First Name:</label>
+          <label>First Name (<span class="text-[#f00]">*</span>)</label>
           <app-form-control>
             <app-input formControlName="firstName"></app-input>
           </app-form-control>
@@ -159,7 +159,7 @@
 
       <div nz-col [nzSpan]="12">
         <div class="field-item mb-3">
-          <label>Last Name:</label>
+          <label>Last Name</label>
           <app-form-control>
             <app-input formControlName="lastName"></app-input>
           </app-form-control>
@@ -168,7 +168,7 @@
 
       <div nz-col [nzSpan]="12">
         <div class="field-item mb-3">
-          <label>Email:</label>
+          <label>Email (<span class="text-[#f00]">*</span>)</label>
           <app-form-control>
             <app-input formControlName="email"></app-input>
           </app-form-control>
@@ -177,7 +177,7 @@
 
       <div nz-col [nzSpan]="12">
         <div class="field-item mb-3">
-          <label>Tags:</label>
+          <label>Tags</label>
           <app-form-control>
             <app-select formControlName="tagIds"
             [options]="tagOptions$ | async"
