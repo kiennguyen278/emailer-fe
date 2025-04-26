@@ -170,7 +170,7 @@ export class UsersComponent implements OnInit {
   }
 
   showViewModal(user: UserDTO): void {
-    this.modal.create({
+    const modalDetail = this.modal.create({
       nzTitle: 'Chi tiết người dùng',
       nzContent: UserDetailModalComponent,
       nzData: {
@@ -179,6 +179,12 @@ export class UsersComponent implements OnInit {
       nzWidth: 800,
       nzFooter: null,
       nzMaskClosable: false
+    });
+
+    modalDetail.afterClose.subscribe(isReload => {
+      if(isReload){
+        this.loadAllUsers();
+      }
     });
   }
 

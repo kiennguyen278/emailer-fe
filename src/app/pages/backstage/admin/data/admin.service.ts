@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
-import {SaveBusinessProfileRequest, SwitchStatusUserRequest} from "../models";
+import {SaveBusinessProfileRequest, SwitchStatusBusinessRequest, SwitchStatusUserRequest} from "../models";
 import {omit} from "lodash";
 
 
@@ -41,12 +41,13 @@ export class AdminService extends BaseApiService {
   updateBusinessProfile(payload: SaveBusinessProfileRequest) {
     const url = this.buildUrl(`admin/users/${payload.userId}/update-business-profile`);
     const request = omit(payload, ['userId'])
-    return this.http.put<ApiResponse<string>>(url, {...request, statusBusinessEmail: request.statusBusinessEmail ? 'ACTIVE' : 'INACTIVE'});
+    return this.http.put<ApiResponse<string>>(url, {...request});
   }
 
 
-  updateBusinessStatus(id: number, userDTO: UserDTO) {
-    return this.http.put(`${this.BASE_URL}/users/${id}/business-status`, { userDTO });
+  updateBusinessStatus(request: SwitchStatusBusinessRequest) {
+    const url = this.buildUrl(`admin/users/${request.userId}/update-bussiness-status`);
+    return this.http.put(url, null, {params: {status: request.status ? 'ACTIVE' : 'INACTIVE'}});
   }
 
 }

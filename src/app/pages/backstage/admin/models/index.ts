@@ -10,7 +10,11 @@ export interface SaveBusinessProfileRequest{
   businessName: string;
   businessEmail: string;
   businessDomain: string;
-  statusBusinessEmail: boolean
+}
+
+export interface SwitchStatusBusinessRequest{
+  userId: number;
+  status: boolean;
 }
 
 

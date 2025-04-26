@@ -1,12 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
+import {NZ_MODAL_DATA, NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import {UserDTO} from "../../../data/admin.dto";
 import {AdminService} from "../../../data/admin.service";
-import {SequenceDTO} from "../../../../email/models";
 import {ValidatorUtil} from "@core/utils/validator.util";
 import {FormUtil} from "@core/utils/form.util";
-import {SaveBusinessProfileRequest} from "../../../models";
+import {SaveBusinessProfileRequest, SwitchStatusBusinessRequest} from "../../../models";
 import {NotificationService} from "@core/services/notification.service";
 
 @Component({
@@ -15,31 +14,26 @@ import {NotificationService} from "@core/services/notification.service";
 })
 export class UserDetailModalComponent implements OnInit {
 
-
   readonly modalData: {user: UserDTO} = inject(NZ_MODAL_DATA);
   form: FormGroup;
 
-  selectedUser: UserDTO | null = null;
-  activeTabIndex = 0;
-
-  statusOptions = [
-    { label: 'ACTIVE', value: 'ACTIVE' },
-    { label: 'INACTIVE', value: 'INACTIVE' }
-  ];
+  statusBusinessEmail = false;
+  markClose = false; // cái này là dùng để đánh dấu, nếu trong modal đã đổi status thì sau khi close modal phải gọi lại list user ở ngoài
 
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
     private modalRef: NzModalRef,
     private notification: NotificationService,
+    private modal: NzModalService,
   ) {
     this.buildForm();
     this.form.patchValue({
       businessName: this.user.businessName,
       businessEmail: this.user.businessEmail,
       businessDomain: this.user.domain,
-      statusBusinessEmail: this.user.statusBusinessEmail == 'VERIFIED',
-    })
+    });
+    this.statusBusinessEmail = this.user.statusBusinessEmail == 'ACTIVE'
   }
 
   get user(): UserDTO {
@@ -55,7 +49,6 @@ export class UserDetailModalComponent implements OnInit {
 
 
   saveBusinessInfo(){
-    console.log(this.form.getRawValue());
     FormUtil.validate(this.form);
 
     const request: SaveBusinessProfileRequest = {
@@ -70,6 +63,7 @@ export class UserDetailModalComponent implements OnInit {
             type: 'success',
             content: res?.message || 'Đã cập nhật thông tin business!'
           });
+          this.modalRef.destroy(true)
         },
         error: ({error}) => {
           this.notification.open({
@@ -87,22 +81,51 @@ export class UserDetailModalComponent implements OnInit {
       businessName: [null, [ValidatorUtil.required('Tên doanh nghiệp không được để trống!')]],
       businessEmail: [null, [ValidatorUtil.required('Email doanh nghiệp không được để trống!'), ValidatorUtil.email('Email không đúng định dạng!')]],
       businessDomain: [null],
-      statusBusinessEmail: [0],
     });
 
   }
 
 
   closeModal(): void {
-    this.modalRef.destroy();
+    if (this.markClose){
+      this.modalRef.destroy(true);
+    } else {
+      this.modalRef.destroy();
+    }
   }
 
-  updateBusinessStatus(): void {
-    if (!this.selectedUser || this.selectedUser.id == null) return;
-    const dto = {
-      id: this.selectedUser.id,
-      statusBusinessEmail: this.selectedUser.statusBusinessEmail
-    };
-    this.adminService.updateBusinessStatus(this.selectedUser.id,dto).subscribe();
+
+  onSwitchStatus(item: UserDTO){
+    const request: SwitchStatusBusinessRequest = {
+      userId: item.id!,
+      status: !this.statusBusinessEmail,
+    }
+    this.adminService.updateBusinessStatus(request)
+      .pipe()
+      .subscribe({
+        next: (res: any) => {
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Trạng thái business đã được cập nhật'
+          });
+          this.statusBusinessEmail = !this.statusBusinessEmail;
+          this.markClose = true;
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Có lỗi khi thay đổi trạng thái business'
+          });
+        }
+      })
   }
+
+  confirmSwitchStatus(item: UserDTO){
+    this.modal.confirm({
+      nzTitle: `Bạn có muốn thay đổi trạng thái business của email "${item.email}"?`,
+      nzOkText: 'OK',
+      nzOnOk: () => this.onSwitchStatus(item)
+    });
+  }
+
 }

@@ -54,7 +54,12 @@
 </nz-card>
 
 <ng-template #modalUserForm>
-  <form [formGroup]="formUser" (ngSubmit)="saveUser()" class="px-4 py-2">
+  <form [formGroup]="formUser" (ngSubmit)="saveUser()">
+
+    <div class="flex">
+
+
+    </div>
     <div nz-row [nzGutter]="16">
       <div nz-col [nzSpan]="24">
         <label class="block font-medium mb-1">Email:</label>

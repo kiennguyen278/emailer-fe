@@ -1,4 +1,4 @@
-  <nz-tabset [(nzSelectedIndex)]="activeTabIndex">
+  <nz-tabset>
 
     <nz-tab nzTitle="Business Info">
 
@@ -37,33 +37,34 @@
           </div>
         </div>
 
+      </form>
+
         <div class="mb-3 flex">
           <div class="flex flex-[1_0_0]">
             <div class="flex-[170px_0_0] text-right pr-3 leading-[22px] p-[5px]">Trạng thái</div>
             <div class="flex-[1_0_0]">
-              <app-form-control>
-                <app-switch
-                  formControlName="statusBusinessEmail"
-                  (switchChange)="form.controls['statusBusinessEmail'].patchValue(!$event)"
-                ></app-switch>
-              </app-form-control>
+              <app-switch [ngModel]="statusBusinessEmail"
+                          (switchChange)="confirmSwitchStatus(user)"></app-switch>
             </div>
           </div>
 
+
           <div class="flex-[1_0_0]">
-            <div class="btn-group text-right">
-              <button nz-button type="button" nzType="default" (click)="closeModal()">Cancel</button>
-              <button nz-button
-                      nzType="primary"
-                      type="submit"
-                      class="ml-3"
-              >Cập nhật thông tin</button>
-            </div>
+            <form [formGroup]="form" (ngSubmit)="saveBusinessInfo()">
+              <div class="btn-group text-right">
+                <button nz-button type="button" nzType="default" (click)="closeModal()">Cancel</button>
+                <button nz-button
+                        nzType="primary"
+                        type="submit"
+                        class="ml-3"
+                >Cập nhật thông tin</button>
+              </div>
+            </form>
           </div>
         </div>
 
 
-      </form>
+
 
     </nz-tab>
 
