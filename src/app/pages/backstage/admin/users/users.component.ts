@@ -173,14 +173,8 @@ export class UsersComponent implements OnInit {
       },
       nzWidth: 800,
       nzFooter: null,
-      nzClosable: false,
       nzMaskClosable: false
     });
-  }
-
-  closeViewModal(): void {
-    this.isViewModalVisible = false;
-    this.selectedUser = null;
   }
 
   updateBusinessInfo(): void {
@@ -200,16 +194,6 @@ export class UsersComponent implements OnInit {
       }
     });
   }
-
-  updateBusinessStatus(): void {
-    if (!this.selectedUser || this.selectedUser.id == null) return;
-    const dto = {
-      id: this.selectedUser.id,
-      statusBusinessEmail: this.selectedUser.statusBusinessEmail
-    };
-    this.adminService.updateBusinessStatus(this.selectedUser.id,dto).subscribe();
-  }
-
 
   onSwitchStatus(item: UserDTO){
     const request: SwitchStatusUserRequest = {

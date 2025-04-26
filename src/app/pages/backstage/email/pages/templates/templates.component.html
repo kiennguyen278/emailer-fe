@@ -22,7 +22,7 @@
         </ng-template>
 
         <ng-template [appCellTemplate]="'actions'" let-item>
-          <button nz-button nzType="text" (click)="showEditModal(item)" class="cursor-pointer">
+          <button nz-button nzType="text" nzShape="circle" (click)="showEditModal(item)" class="cursor-pointer">
             <i nz-icon
                nzType="edit"
                nzTheme="outline"
@@ -32,6 +32,7 @@
 
           <button nz-button
                   nzType="text"
+                  nzShape="circle"
                   (click)="confirmDelete(item)" class="cursor-pointer ml-2">
             <i nz-icon
                nzType="delete"

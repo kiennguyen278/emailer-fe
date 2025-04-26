@@ -36,11 +36,14 @@
   >
 
     <ng-template [appCellTemplate]="'status'" let-item>
-      <app-switch [ngModel]="item.activeStatus" (switchChange)="confirmSwitchStatus(item)"></app-switch>
+      <app-switch [ngModel]="item.activeStatus"
+                  [checkedLabel]="item.status"
+                  [unCheckedLabel]="item.status"
+                  (switchChange)="confirmSwitchStatus(item)"></app-switch>
     </ng-template>
 
     <ng-template [appCellTemplate]="'actions'" let-item>
-      <button nz-button nzType="text" (click)="showViewModal(item)">
+      <button nz-button nzType="text" nzShape="circle" (click)="showViewModal(item)">
         <i nz-icon nzType="eye" nz-tooltip nzTooltipTitle="Xem chi tiết"></i>
       </button>
     </ng-template>

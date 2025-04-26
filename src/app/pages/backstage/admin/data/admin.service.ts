@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
-import {SwitchStatusUserRequest} from "../models";
+import {SaveBusinessProfileRequest, SwitchStatusUserRequest} from "../models";
 
 
 @Injectable({
@@ -35,6 +35,11 @@ export class AdminService extends BaseApiService {
     const url = this.buildUrl(`admin/users/${request.userId}/status`);
 
     return this.http.put(url, { ...request, status: request.status ? 'ACTIVE' : 'INACTIVE' });
+  }
+
+  updateBusinessProfile2(request: SaveBusinessProfileRequest) {
+    const url = this.buildUrl(`admin/users/${request.userId}/updateBusinessProfile`);
+    return this.http.put<ApiResponse<string>>(url, {...request, statusBusinessEmail: request.statusBusinessEmail ? 'ACTIVE' : 'INACTIVE'});
   }
 
 
