@@ -133,11 +133,18 @@ export class MainComponent implements OnInit {
 
   }
 
+  lastTestResult: string | undefined;
+  lastTestedAt: string | undefined;
+
   loadSmtpSetting(): void {
     this.settingsService.getSmtpSetting().subscribe({
       next: (res) => {
         if (res.success && res.data) {
           this.smtpForm.patchValue(res.data);
+
+          // Gán test result ra biến hiển thị
+          this.lastTestResult = res.data.lastTestResult;
+          this.lastTestedAt = res.data.lastTestedAt;
         } else {
           console.warn('Không tìm thấy cấu hình SMTP');
         }

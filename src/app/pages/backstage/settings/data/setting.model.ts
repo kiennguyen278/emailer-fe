@@ -4,6 +4,12 @@ export interface SmtpSetting {
   smtpPort: number;
   username: string;
   password: string;
+
+  isActive?: boolean;
+  isDefault?: boolean;
+  lastTestResult?: string;
+  lastTestedAt?: string;
+  createdAt?: string;
 }
 
 export interface BusinessInfo {

@@ -51,8 +51,9 @@
     <!-- TAB 2: SMTP -->
     <nz-tab nzTitle="Cấu hình SMTP">
       <nz-card [nzSize]="'default'">
+
         <nz-form-item>
-          <nz-form-label>Dùng Custom SMTP</nz-form-label>
+          <nz-form-label>User SMTP</nz-form-label>
           <nz-form-control>
             <nz-switch
               [(ngModel)]="useCustomSmtp"
@@ -60,6 +61,18 @@
               (ngModelChange)="onToggleCustomSmtp($event)">
             </nz-switch>
             <div class="text-xs text-gray-500 mt-1">Tắt để sử dụng SMTP mặc định của hệ thống</div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="lastTestResult">
+          <nz-form-control>
+            <div>
+              <span>✅ Kết quả gần nhất: </span>
+              <nz-tag [nzColor]="lastTestResult === 'SUCCESS' ? 'green' : 'red'">
+                {{ lastTestResult }}
+              </nz-tag>
+              <span *ngIf="lastTestedAt"> (Test lúc {{ lastTestedAt | date: 'HH:mm dd/MM/yyyy' }})</span>
+            </div>
           </nz-form-control>
         </nz-form-item>
 
@@ -92,14 +105,14 @@
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Tên đăng nhập</nz-form-label>
+            <nz-form-label>Username</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="username" placeholder="user@example.com" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Mật khẩu</nz-form-label>
+            <nz-form-label>Password</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="password" type="password" placeholder="••••••••" />
             </nz-form-control>
