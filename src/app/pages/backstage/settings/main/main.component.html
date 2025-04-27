@@ -2,7 +2,7 @@
   <nz-tabset  [(nzSelectedIndex)]="activeTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
 
     <!-- TAB 1: Thông tin doanh nghiệp -->
-    <nz-tab nzTitle="Doanh nghiệp">
+    <nz-tab nzTitle="Thông Tin Doanh nghiệp">
       <nz-card nzTitle="Thông tin doanh nghiệp" [nzSize]="'default'">
         <form [formGroup]="businessForm" nz-form [nzLayout]="'vertical'" >
           <nz-row [nzGutter]="16">
@@ -49,7 +49,7 @@
     </nz-tab>
 
     <!-- TAB 2: SMTP -->
-    <nz-tab nzTitle="Cấu hình SMTP">
+    <nz-tab nzTitle="Cấu hình gửi mail">
       <nz-card [nzSize]="'default'">
 
         <nz-form-item>
