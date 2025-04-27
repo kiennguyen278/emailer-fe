@@ -36,7 +36,7 @@ export const OptionDelayDate: OptionModel<Number>[] = [
 
 
 export const CampainStatusOptions: OptionModel[] = [
-  {label: 'Tiếp tục gửi', value: 'SCHEDULED'},
+  {label: 'Đang gửi', value: 'SCHEDULED'},
   {label: 'Dừng gửi', value: 'PAUSED'},
-  {label: 'Hủy', value: 'CANCELLED'},
+  {label: 'Hủy gửi', value: 'CANCELLED'},
 ]
