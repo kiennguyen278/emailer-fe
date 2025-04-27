@@ -3,7 +3,7 @@ import {Role} from "@core/enums";
 export interface UserDTO {
   id?: number;
   email?: string;
-  status?: string; // Trạng thái người dùng 'PENDING' | 'ACTIVE' | 'INACTIVE'
+  status?: string; // Trạng thái người dùng 'PENDING' | 'ACTIVE' | 'INACTIVE'|'LOCKED'
   role?: Role.USER | Role.ADMIN; // Vai trò của người dùng
 
   businessEmail?: string;

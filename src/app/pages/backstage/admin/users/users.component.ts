@@ -32,7 +32,8 @@ export class UsersComponent implements OnInit {
 
   statusOptions = [
     { label: 'ACTIVE', value: 'ACTIVE' },
-    { label: 'INACTIVE', value: 'INACTIVE' }
+    { label: 'INACTIVE', value: 'INACTIVE' },
+    { label: 'LOCKED', value: 'LOCKED' }
   ];
 
   columns: ColumnConfig[] = [
