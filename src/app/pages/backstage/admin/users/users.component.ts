@@ -44,7 +44,7 @@ export class UsersComponent implements OnInit {
       header: 'Email',
       key: 'email',
       tdClass: 'text-center',
-      nzWidth: '200px'
+      nzWidth: '100px'
     },
     {
       header: 'Role',
@@ -56,9 +56,45 @@ export class UsersComponent implements OnInit {
       header: 'Trạng thái',
       key: 'status',
       tdClass: 'text-center',
-      nzWidth: '200px',
+      nzWidth: '100px',
       pipe: 'template',
     },
+
+    {
+      header: 'Biz Name',
+      key: 'businessName',
+      tdClass: 'text-center',
+      nzWidth: '100px'
+    },
+
+    {
+      header: 'Biz Email',
+      key: 'businessEmail',
+      tdClass: 'text-center',
+      nzWidth: '100px'
+    },
+
+    {
+      header: 'Biz Status',
+      key: 'statusBusinessEmail',
+      tdClass: 'text-center',
+      nzWidth: '100px'
+    },
+
+    {
+      header: 'Custom Smtp',
+      key: 'useCustomSmtp',
+      tdClass: 'text-center',
+      nzWidth: '50px'
+    },
+
+    {
+      header: 'Register Date',
+      key: 'createdAt',
+      tdClass: 'text-center',
+      nzWidth: '100px'
+    },
+
     {
       header: 'Thao tác',
       key: 'actions',
