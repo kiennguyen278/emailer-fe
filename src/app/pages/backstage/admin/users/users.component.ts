@@ -47,6 +47,12 @@ export class UsersComponent implements OnInit {
       nzWidth: '200px'
     },
     {
+      header: 'Role',
+      key: 'role',
+      tdClass: 'text-center',
+      nzWidth: '100px'
+    },
+    {
       header: 'Trạng thái',
       key: 'status',
       tdClass: 'text-center',
