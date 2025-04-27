@@ -1,16 +1,15 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { AdminService } from '../data/admin.service';
-import { UserDTO } from '../data/admin.dto';
-import { BehaviorSubject } from 'rxjs';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {AdminService} from '../data/admin.service';
+import {UserDTO} from '../data/admin.dto';
 import {ColumnConfig} from "@core/models";
 import {UserDetailModalComponent} from "./components/user-detail-modal/user-detail-modal.component";
-import {EmailTemplateDTO, SwitchStatusSequenceRequest} from "../../email/models";
 import {NotificationService} from "@core/services/notification.service";
 import {SwitchStatusUserRequest} from "../models";
 import {ValidatorUtil} from "@core/utils/validator.util";
 import {FormUtil} from "@core/utils/form.util";
+import {DATE_TIME_FORMAT} from '@core/constants';
 
 @Component({
   selector: 'app-users',
@@ -28,11 +27,8 @@ export class UsersComponent implements OnInit {
 
   pagination = { pageIndex: 1, pageSize: 20, total: 0 };
   loading = false;
-  isSaving = false;
 
-  selectedUser: UserDTO | null = null;
-  isViewModalVisible = false;
-  activeTabIndex = 0;
+  DATE_TIME_FORMAT = DATE_TIME_FORMAT;
 
   statusOptions = [
     { label: 'ACTIVE', value: 'ACTIVE' },
@@ -92,7 +88,8 @@ export class UsersComponent implements OnInit {
       header: 'Register Date',
       key: 'createdAt',
       tdClass: 'text-center',
-      nzWidth: '100px'
+      nzWidth: '100px',
+      pipe: 'template',
     },
 
     {
@@ -261,7 +258,5 @@ export class UsersComponent implements OnInit {
       nzOnOk: () => this.onSwitchStatus(item)
     });
   }
-
-
 
 }
