@@ -57,11 +57,11 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   overviewStats: SubscriberStatsDTO | null = null;
 
-  isImportModalVisible = false;
   form: FormGroup;
   formSearch: FormGroup;
   isLoadingSave = false;
-  modalRef: NzModalRef;
+  modalEditSubcriberRef: NzModalRef;
+  modalImportSubcriberRef: NzModalRef;
 
   items: SubscriberDTO[] = [];
 
@@ -152,7 +152,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       this.form.reset();
       this.form.controls['email'].enable();
     }
-    this.modalRef = this.modal.create({
+    this.modalEditSubcriberRef = this.modal.create({
       nzTitle: item?.subscriberId ? `Cập nhật subscriber "${item.firstName}"` : 'Thêm mới subscriber',
       nzContent: this.modalEditSubscriber,
       nzFooter: null
@@ -160,21 +160,19 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
   showImportModal() {
-    this.modal.create({
+    this.modalImportSubcriberRef = this.modal.create({
       nzTitle: 'Import Subscribers từ CSV',
       nzContent: this.modalImportSubscriber,
       nzFooter: null,
       nzWidth: 600
     });
 
-    this.isImportModalVisible = true;
   }
 
   closeImportModal(): void {
     this.isLoadingImport = false;
     this.formImport.reset();
-    this.selectedFile = null;
-    this.isImportModalVisible = false; // 🔑 Đây là điều kiện để modal đóng lại
+    this.modalImportSubcriberRef.destroy();
   }
 
   onFileSelected(event: Event): void {
@@ -278,7 +276,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
             type: 'success',
             content: formVal?.id ? 'Cập nhật subscriber thành công' : 'Thêm subscriber mới thành công'
           })
-          this.modalRef.close();
+          this.modalEditSubcriberRef.close();
           this.findItems();
           this.isLoadingSave = false;
           this.form.reset();
@@ -295,7 +293,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   closeModal(): void {
     this.form.reset();
-    this.modalRef.close();
+    this.modalEditSubcriberRef.close();
   }
 
   confirmDelete(item: SubscriberDTO): void {
@@ -371,8 +369,11 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
   ngOnDestroy() {
     super.ngOnDestroy()
-    if (this.modalRef){
-      this.modalRef.destroy();
+    if (this.modalEditSubcriberRef){
+      this.modalEditSubcriberRef.destroy();
+    }
+    if (this.modalImportSubcriberRef){
+      this.modalImportSubcriberRef.destroy();
     }
   }
 
