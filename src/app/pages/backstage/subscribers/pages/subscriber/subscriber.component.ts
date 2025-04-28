@@ -144,6 +144,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       const tagIds = item.tags.map(item => item.id);
       this.form.patchValue({
         ...item,
+        id: item.subscriberId,
         tagIds: tagIds
       });
       this.form.controls['email'].disable();
@@ -282,7 +283,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
           this.isLoadingSave = false;
           this.form.reset();
         },
-        error: (error) => {
+        error: ({error}) => {
           this.notification.open({
             type: 'error',
             content: error?.message || 'Có lỗi khi cập nhật subscriber'
