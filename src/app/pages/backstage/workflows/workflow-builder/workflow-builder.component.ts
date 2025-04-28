@@ -193,7 +193,7 @@ export class WorkflowBuilderComponent implements OnInit {
   getTriggerLabel(trigger: any): string {
     switch (trigger.conditionType) {
       case 'TAG':
-        const tag = this.tags.find(t => t.id === trigger.value['tag_id']);
+        const tag = this.tags.find(t => t.id == trigger.value['tag_id']);
         return tag ? `Tag: ${tag.name}` : `Tag: #${trigger.value['tag_id']}`;
       case 'SUBSCRIBED_BEFORE':
         return `Trước ngày ${trigger.value['before_date']}`;
