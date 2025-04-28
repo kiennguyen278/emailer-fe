@@ -200,7 +200,8 @@ export class UsersComponent implements OnInit {
         this.closeModal();
         this.loadAllUsers()
       },
-      error: (error) => {
+      error: ({error}) => {
+        console.log('error', error)
         this.notification.open({
           type: 'error',
           content: error?.message || 'Tạo người dùng thất bại. Vui lòng thử lại sau!'

@@ -26,11 +26,8 @@ export class AdminService extends BaseApiService {
    * Đăng ký người dùng mới
    */
   createUser(userDTO: UserDTO): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.BASE_URL}/users/register`, userDTO, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    });
+    const url = this.buildUrl(`admin/users/register`);
+    return this.http.post<ApiResponse<string>>(url, userDTO);
   }
 
   updateUserStatus(request: SwitchStatusUserRequest) {
