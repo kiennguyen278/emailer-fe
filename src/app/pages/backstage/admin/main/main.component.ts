@@ -37,8 +37,10 @@ export class MainComponent implements OnInit {
   loadSettings(): void {
     this.loading = true;
     this.adminService.getGeneralSettings().subscribe({
-      next: (data: GeneralSettings) => {
-        this.generalForm.patchValue(data); // ✅ KHÔNG gọi lại initForm!
+      next: (res: any) => {
+        const data: GeneralSettings = res.data; // ✅ bóc 'data'
+        console.log('✅ Settings loaded:', data);
+        this.generalForm.patchValue(data);
         this.loading = false;
       },
       error: () => {
