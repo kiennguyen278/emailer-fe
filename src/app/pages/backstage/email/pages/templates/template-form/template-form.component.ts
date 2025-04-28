@@ -27,7 +27,6 @@ export class TemplateFormComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private emailService: EmailService,
     private notification: NotificationService,
-    private sanitizer: DomSanitizer,
   ) {
     this.buildForm();
   }
@@ -36,7 +35,6 @@ export class TemplateFormComponent implements OnInit {
     return this.modalData.emailTemplate;
   }
 
-  contentPreviewHTML: any; // Dùng cho Quill
   isLoadingSave = false
 
   form: FormGroup;

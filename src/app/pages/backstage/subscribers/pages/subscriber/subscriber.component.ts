@@ -315,10 +315,10 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
         this.findItems();
       },
-      error: () => {
+      error: ({error}) => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá subscriber thất bại'
+          content: error?.message || 'Xoá subscriber thất bại'
         });
       }
     });

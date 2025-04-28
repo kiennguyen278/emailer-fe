@@ -148,10 +148,10 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         });
         this.loadItems();
       },
-      error: () => {
+      error: ({error}) => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá email template thất bại'
+          content: error?.message || 'Xoá email template thất bại'
         });
       }
     });

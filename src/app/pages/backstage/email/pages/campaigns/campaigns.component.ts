@@ -181,10 +181,10 @@ export class CampaignsComponent implements OnInit, OnDestroy {
         });
         this.loadItems();
       },
-      error: () => {
+      error: ({error}) => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá chiến dịch email thất bại'
+          content: error?.message || 'Xoá chiến dịch email thất bại'
         });
       }
     });

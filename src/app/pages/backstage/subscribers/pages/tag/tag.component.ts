@@ -125,10 +125,10 @@ export class TagComponent implements OnInit, OnDestroy {
           this.isLoadingSave = false;
           this.tagForm.reset();
         },
-        error: () => {
+        error: ({error}) => {
           this.notification.open({
             type: 'error',
-            content: 'Thao tác thất bại'
+            content: error?.message || 'Thao tác thất bại'
           });
           this.isLoadingSave = false;
         }
@@ -159,10 +159,10 @@ export class TagComponent implements OnInit, OnDestroy {
 
         this.loadTags();
       },
-      error: () => {
+      error: ({error}) => {
       this.notification.open({
         type: 'error',
-        content: 'Xoá tag thất bại'
+        content: error?.message || 'Xoá tag thất bại'
       });
     }
     });

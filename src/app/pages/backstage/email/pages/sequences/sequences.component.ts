@@ -164,10 +164,10 @@ export class SequencesComponent implements OnInit, OnDestroy {
         });
         this.loadItems();
       },
-      error: () => {
+      error: ({error}) => {
         this.notification.open({
           type: 'error',
-          content: 'Xoá email sequence thất bại'
+          content: error?.message || 'Xoá email sequence thất bại'
         });
       }
     });
