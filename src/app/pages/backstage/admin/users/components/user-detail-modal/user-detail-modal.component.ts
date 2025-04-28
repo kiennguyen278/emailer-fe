@@ -176,10 +176,10 @@ export class UserDetailModalComponent implements OnInit {
   onToggleCustomSmtp(enabled: boolean): void {
 
     if (!this.user || !this.user.id) return;
-    this.useCustomSmtp = enabled;
-    this.adminService.updateCustomSmtpStatus(this.user.id,enabled).subscribe({
+    this.adminService.updateCustomSmtpStatus(this.user.id, !enabled).subscribe({
       next: res => {
         this.message.success(res.message || 'Cập nhật trạng thái SMTP thành công!');
+        this.useCustomSmtp = !enabled;
       },
       error: err => {
         this.message.error('Lỗi khi cập nhật trạng thái SMTP!');

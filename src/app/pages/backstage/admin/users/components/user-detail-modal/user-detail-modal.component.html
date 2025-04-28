@@ -75,7 +75,7 @@
             <label class="block font-medium mb-1">User SMTP</label>
             <app-switch
               [ngModel]="useCustomSmtp"
-              (ngModelChange)="onToggleCustomSmtp($event)">
+              (click)="onToggleCustomSmtp(useCustomSmtp)">
             </app-switch>
             <div class="text-xs text-gray-500 mt-1">Tắt để sử dụng SMTP mặc định của hệ thống</div>
           </div>
