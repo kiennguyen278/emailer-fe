@@ -46,9 +46,9 @@ export class AdminService extends BaseApiService {
     return this.http.put(url, null, {params: {status: request.status ? 'ACTIVE' : 'INACTIVE'}});
   }
 
-  getUserSMTP(userId: number) {
+  getUserSMTP(userId: number)  {
     const url = this.buildUrl(`admin/users/${userId}/smtp`);
-    return this.http.get<ApiResponse<any>>(url);
+    return this.http.get<ApiResponse<SmtpSetting>>(url);
   }
 
   updateCustomSmtpStatus(userId: number,useCustomSmtp: boolean): Observable<ApiResponse<string>> {
@@ -64,7 +64,7 @@ export class AdminService extends BaseApiService {
   }
 
   testSmtpConnection(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
-    const url = this.buildUrl(`admin/users/smtp/testSmtpConnection`);
+    const url = this.buildUrl(`admin/settings/testSmtpConnection`);
     return this.http.put<ApiResponse<SmtpSetting>>(url, data);
   }
 
@@ -78,5 +78,14 @@ export class AdminService extends BaseApiService {
     return this.http.put<void>(url, data);
   }
 
+  saveSystemSmtpSetting(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
+    const url = this.buildUrl(`admin/settings/saveSmtp`);
+    return this.http.put<ApiResponse<SmtpSetting>>(url, data);
+  }
+
+  getSystemSMTP()  {
+    const url = this.buildUrl(`admin/settings/smtp`);
+    return this.http.get<ApiResponse<SmtpSetting>>(url);
+  }
 
 }

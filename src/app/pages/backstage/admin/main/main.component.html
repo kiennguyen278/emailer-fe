@@ -50,7 +50,68 @@
   </nz-tab>
 
   <nz-tab nzTitle="SMTP Settings">
-    <div class="p-4">Coming soon...</div>
+
+    <div class="p-4 bg-white rounded shadow">
+      <div *ngIf="lastTestResult" class="mb-3">
+        <span>✅ Kết quả gần nhất:</span>
+        <nz-tag [nzColor]="lastTestResult === 'SUCCESS' ? 'green' : 'red'">
+          {{ lastTestResult }}
+        </nz-tag>
+        <span *ngIf="lastTestedAt"> (Test lúc {{ lastTestedAt | date: 'HH:mm dd/MM/yyyy' }})</span>
+      </div>
+
+      <form [formGroup]="smtpForm" nz-form [nzLayout]="'vertical'">
+
+        <nz-form-item>
+          <nz-form-label>Tên nhà cung cấp (Provider)</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="provider" nzPlaceHolder="Chọn nhà cung cấp SMTP">
+              <nz-option [nzValue]="'ses'" nzLabel="Amazon SES"></nz-option>
+              <nz-option [nzValue]="'office365'" nzLabel="Microsoft Office 365"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>SMTP Host</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="smtpServer" placeholder="smtp.example.com" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>SMTP Port</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="smtpPort" [nzPlaceHolder]="'Chọn cổng SMTP'">
+              <nz-option [nzValue]="587" nzLabel="587 (STARTTLS)"></nz-option>
+              <nz-option *ngIf="smtpForm.get('provider')?.value === 'ses'" [nzValue]="465" nzLabel="465 (SSL)"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Username</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="username" placeholder="user@example.com" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Password</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="password" formControlName="password" placeholder="••••••••" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button (click)="onTestSmtp()">Kiểm tra kết nối</button>
+            <button nz-button nzType="primary" class="ml-2" (click)="saveSmtpSetting()">Lưu cấu hình</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+
   </nz-tab>
 
   <nz-tab nzTitle="Advanced Settings">

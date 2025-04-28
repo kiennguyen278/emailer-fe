@@ -13,6 +13,10 @@ export class MainComponent implements OnInit {
   generalForm!: FormGroup;
   loading = false;
 
+  smtpForm!: FormGroup;
+  lastTestResult: string | null = null;
+  lastTestedAt: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -22,6 +26,10 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();       // ⚠️ Chỉ gọi 1 lần khi khởi tạo
     this.loadSettings();   // Sau đó patchValue()
+
+    this.initSmtpForm();
+    this.loadSmtpSetting();
+
   }
 
   initForm(): void {
@@ -74,5 +82,99 @@ export class MainComponent implements OnInit {
 
   onTabChange(index: number): void {
     this.selectedTabIndex = index;
+  }
+
+  initSmtpForm() {
+    this.smtpForm = this.fb.group({
+      provider: ['office365', Validators.required],
+      smtpServer: ['smtp.office365.com', Validators.required],
+      smtpPort: [587, Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+
+    this.smtpForm.get('provider')?.valueChanges.subscribe((provider) => {
+      if (provider === 'office365') {
+        // Office365 chỉ cho phép port 587 và host cố định
+        this.smtpForm.patchValue({
+          smtpPort: 587,
+          smtpServer: 'smtp.office365.com'
+        });
+      } else if (provider === 'ses') {
+        // SES có thể chọn port 587 hoặc 465, nhưng không tự set host
+        this.smtpForm.patchValue({
+          smtpPort: 587,
+          smtpServer: ''
+        });
+      }
+
+      // Reset port nếu không hợp lệ (tránh lưu port 465 cho office365)
+      const port = this.smtpForm.get('smtpPort')?.value;
+      if (provider === 'office365' && port !== 587) {
+        this.smtpForm.patchValue({ smtpPort: 587 });
+      }
+    });
+
+  }
+  loadSmtpSetting(): void {
+    this.adminService.getSystemSMTP().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.smtpForm.patchValue({
+            ...res.data,
+            provider: res.data.provider?.toLowerCase() || null
+          });
+
+
+          // Gán test result ra biến hiển thị
+          if (res.data.lastTestResult) {
+            this.lastTestResult = res.data.lastTestResult;
+          }
+          if (res.data.lastTestedAt) {
+            this.lastTestedAt = res.data.lastTestedAt;
+          }
+
+        } else {
+          console.warn('Không tìm thấy cấu hình SMTP');
+        }
+      },
+      error: (err) => {
+        console.error('Lỗi khi load SMTP:', err);
+      }
+    });
+  }
+  onTestSmtp(): void {
+    if (this.smtpForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.smtpForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+
+    const payload = this.smtpForm.value;
+    this.adminService.testSmtpConnection(payload).subscribe({
+      next: (result) => {
+        if (result.success) {
+          this.message.success('✅ Kết nối SMTP thành công.');
+        } else {
+          this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+        }
+      },
+      error: (err) => {
+        this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+      }
+    });
+
+  }
+
+  saveSmtpSetting() {
+    if (this.smtpForm.invalid) {
+      this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
+      this.smtpForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      return;
+    }
+    this.adminService.saveSystemSmtpSetting(this.smtpForm.value).subscribe({
+      next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
+      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
+    });
   }
 }
