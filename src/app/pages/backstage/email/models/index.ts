@@ -1,4 +1,5 @@
 import {CampaignSubscriberEmail, SubscriberDTO} from "../../subscribers/models";
+import {ApiResponse} from "@core/models";
 
 export interface EmailTemplateDTO {
   id: number;
@@ -111,12 +112,12 @@ export interface SaveStepSequenceRequest {
 
 export interface SaveCombineSequenceRequest {
   info: SaveSequenceRequest;
-  steps: SaveStepSequenceRequest;
+  step?: SaveStepSequenceRequest; // trong trường hợp tạo mới, ko cần step vẫn phải cho save squence, anh Đạt muốn thế
 }
 
 export interface SaveCombineSequenceResponse {
-  info: SequenceDTO;
-  step: StepSequenceDTO;
+  info: ApiResponse<SequenceDTO>;
+  step?: ApiResponse<StepSequenceDTO>;
 }
 
 

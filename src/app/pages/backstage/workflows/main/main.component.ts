@@ -78,12 +78,20 @@ export class MainComponent implements OnInit {
     }
     this.workflowService.switchStatusWorkFlow(request)
       .pipe()
-      .subscribe(res => {
-        this.loadWorkflows();
-        this.notification.open({
-          type: 'success',
-          content: res?.message || 'Trạng thái đã được cập nhật'
-        });
+      .subscribe({
+        next: res => {
+          this.loadWorkflows();
+          this.notification.open({
+            type: 'success',
+            content: res?.message || 'Trạng thái đã được cập nhật'
+          });
+        },
+        error: ({error}) => {
+          this.notification.open({
+            type: 'error',
+            content: error?.message || 'Thao tác thất bại'
+          });
+        }
       })
   }
 

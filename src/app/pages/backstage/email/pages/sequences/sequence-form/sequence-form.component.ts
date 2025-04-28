@@ -6,7 +6,7 @@ import {DATE_TIME_FORMAT} from "@core/constants";
 import {NZ_MODAL_DATA, NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {FormUtil} from "@core/utils/form.util";
 import {
-  EmailTemplateDTO, ReOrderStepsSequenceRequest,
+  EmailTemplateDTO, ReOrderStepsSequenceRequest, SaveCombineSequenceRequest,
   SaveSequenceRequest,
   SaveStepSequenceRequest,
   SequenceDTO,
@@ -189,22 +189,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   saveCombineSequence(){
     FormUtil.validate(this.form, true);
 
-    if (this.steps.length == 0){
-      this.notification.open({
-        type: 'info',
-        content: 'Vui lòng thêm step sequence'
-      });
-      return;
-    }
-
-    const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
-
-    FormUtil.validate(currentStepControl, true);
-
-    if (currentStepControl.invalid || this.form.invalid){ return }
-
     const formVal = this.form.getRawValue();
-    this.isLoadingSave = true;
 
     const requestInfo = {
       ...formVal,
@@ -212,24 +197,44 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     }
 
     const requestSaveSequence: SaveSequenceRequest = this.sequence?.id ? {id: this.sequence.id, ...requestInfo} : requestInfo;
-    const requestSaveStep: SaveStepSequenceRequest = currentStepControl.getRawValue()
 
-    const request = {
+    let requestSaveStep: SaveStepSequenceRequest;
+    let currentStepControl: FormGroup;
+    let request: SaveCombineSequenceRequest = {
       info: requestSaveSequence,
-      steps: requestSaveStep,
     }
+
+    if (this.steps.length != 0){
+      currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
+
+      FormUtil.validate(currentStepControl, true);
+      if (currentStepControl.invalid){ return }
+
+      requestSaveStep = currentStepControl.getRawValue();
+      request = {
+        ...request,
+        step: requestSaveStep,
+      }
+    }
+
+    if (this.form.invalid){ return }
+
+    this.isLoadingSave = true;
+
 
     this.emailService.saveCombineSequence(request).pipe()
       .subscribe({
         next: (res) => {
-          this.sequence = res.info;
+
           this.notification.open({
             type: 'success',
-            content: this.sequence?.id ? 'Cập nhật sequence thành công' : 'Thêm mới sequence thành công'
-          })
+            content: res.info?.message || (this.sequence?.id ? 'Cập nhật sequence thành công' : 'Thêm mới sequence thành công')
+          });
+
+          this.sequence = res.info.data;
           this.isLoadingSave = false;
-          if (!requestSaveStep?.id){
-            currentStepControl.patchValue(res.step); // set id cho step trong formSteps để bỏ trạng thái DRAFT
+          if (!requestSaveStep?.id && res.step?.data){
+            currentStepControl.patchValue(res.step.data); // set id cho step trong formSteps để bỏ trạng thái DRAFT
           }
 
           // this.modalRef.destroy(true);
@@ -245,43 +250,6 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
 
 
   }
-
-  saveStepSequence(){
-    const currentStepControl = this.steps?.at(this.crrStep) as FormGroup;
-    console.log('currentStepControl', currentStepControl.getRawValue())
-    if (currentStepControl.invalid){
-      this.steps?.at(this.crrStep).markAllAsTouched();
-      this.steps?.at(this.crrStep).markAsPristine();
-      return
-    }
-
-    const stepSequenceValue: SaveStepSequenceRequest = currentStepControl.getRawValue();
-
-    this.emailService.saveStepSequence(stepSequenceValue).pipe()
-      .subscribe({
-        next: (res) => {
-          this.notification.open({
-            type: 'success',
-            content: res?.message || (stepSequenceValue?.id ? 'Cập nhật step sequence thành công' : 'Thêm step sequence mới thành công')
-          })
-          this.isLoadingSave = false;
-          if (!stepSequenceValue?.id){
-            currentStepControl.patchValue(res.data); // set id cho step trong formSteps để bỏ trạng thái DRAFT
-          }
-
-          // this.modalRef.destroy(true);
-        },
-        error: ({error}) => {
-          console.log('err saveStepSequence ===>', error);
-          this.notification.open({
-            type: 'error',
-            content: error?.message || 'Thao tác thất bại'
-          });
-          this.isLoadingSave = false;
-        }
-      });
-  }
-
 
   addStep(){
     const totalSteps = this.steps.length;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import {BaseApiService} from "@core/services/base-api.service";
 import {ApiResponse} from "@core/models/response.model";
@@ -116,21 +116,35 @@ export class EmailService extends BaseApiService{
 
   saveCombineSequence(request: SaveCombineSequenceRequest): Observable<SaveCombineSequenceResponse> {
 
-    return this.saveSequence(request.info).pipe(
-      switchMap((infoSequence: ApiResponse<SequenceDTO>) => {
 
-        const saveStepRequest: SaveStepSequenceRequest = {
-          ...request.steps,
-          sequenceId: request.steps.sequenceId || infoSequence.data.id
+    if (request.step){
+      const step = request.step
+      return this.saveSequence(request.info).pipe(
+        switchMap((infoSequence: ApiResponse<SequenceDTO>) => {
+
+          const saveStepRequest: SaveStepSequenceRequest = {
+            ...step,
+            sequenceId: step.sequenceId || infoSequence.data.id
+          }
+          return this.saveStepSequence(saveStepRequest).pipe(
+            map((stepRes) => ({
+              info: infoSequence,
+              step: stepRes
+            }))
+          );
+        })
+      );
+    } else {
+      return this.saveSequence(request.info).pipe(
+        switchMap((infoSequence: ApiResponse<SequenceDTO>) => {
+          return of ({
+            info: infoSequence,
+          })
         }
-        return this.saveStepSequence(saveStepRequest).pipe(
-          map((stepRes) => ({
-            info: infoSequence.data,
-            step: stepRes.data
-          }))
-        );
-      })
-    );
+      ))
+    }
+
+
   }
 
 
