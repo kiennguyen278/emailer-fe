@@ -61,6 +61,8 @@
               <app-form-control>
                 <app-select formControlName="status"
                             [options]="subscriberStatusOptions$ | async"
+                            [allowClear]="true"
+                            (ngModelChange)="onSearch()"
                 ></app-select>
               </app-form-control>
             </div>
@@ -75,6 +77,8 @@
               <app-form-control>
                 <app-select formControlName="tagId"
                             [options]="tagOptions$ | async"
+                            [allowClear]="true"
+                            (ngModelChange)="onSearch()"
                 ></app-select>
               </app-form-control>
             </div>
