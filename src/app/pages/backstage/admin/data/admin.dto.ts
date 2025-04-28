@@ -14,5 +14,13 @@ export interface UserDTO {
   activeStatus?: boolean; // true | false
 
   createdAt?: string;
-
 }
+
+export interface GeneralSettings {
+  systemName: string;
+  systemEmail: string;
+  enableDefaultSmtp: boolean;
+  enabledSending: boolean;
+  timeZone: string;
+}
+

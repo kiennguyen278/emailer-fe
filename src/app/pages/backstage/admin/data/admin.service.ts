@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {UserDTO} from "./admin.dto";
+import {GeneralSettings, UserDTO} from "./admin.dto";
 import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
 import {SaveBusinessProfileRequest, SwitchStatusBusinessRequest, SwitchStatusUserRequest} from "../models";
@@ -67,6 +66,16 @@ export class AdminService extends BaseApiService {
   testSmtpConnection(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
     const url = this.buildUrl(`admin/users/smtp/testSmtpConnection`);
     return this.http.put<ApiResponse<SmtpSetting>>(url, data);
+  }
+
+  getGeneralSettings(): Observable<GeneralSettings> {
+    const url = this.buildUrl(`admin/settings/general`);
+    return this.http.get<GeneralSettings>(url);
+  }
+
+  updateGeneralSettings(data: GeneralSettings): Observable<void> {
+    const url = this.buildUrl(`admin/settings/general`);
+    return this.http.put<void>(url, data);
   }
 
 
