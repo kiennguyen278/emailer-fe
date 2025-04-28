@@ -1,1 +1,59 @@
-<p>Settings works!</p>
+<nz-tabset [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+  <nz-tab nzTitle="General Settings">
+    <form [formGroup]="generalForm" (ngSubmit)="saveSettings()" class="p-4 bg-white shadow rounded">
+      <h2 class="text-lg font-bold mb-4">General Settings</h2>
+
+      <!-- Tên hệ thống -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'systemName'" nzRequired>Tên hệ thống</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập tên hệ thống'">
+          <input nz-input id="systemName" formControlName="systemName" placeholder="Tên hệ thống" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Email hệ thống -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'systemEmail'" nzRequired>Email hệ thống</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
+          <input nz-input id="systemEmail" formControlName="systemEmail" placeholder="Email hệ thống" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Dùng SMTP mặc định -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'enableDefaultSmtp'">Dùng SMTP mặc định</nz-form-label>
+        <nz-form-control>
+          <nz-switch id="enableDefaultSmtp" formControlName="enableDefaultSmtp"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Cho phép gửi email -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'enabledSending'">Cho phép gửi email</nz-form-label>
+        <nz-form-control>
+          <nz-switch id="enabledSending" formControlName="enabledSending"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Time Zone -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'timeZone'" nzRequired>Time Zone</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập Time Zone'">
+          <input nz-input id="timeZone" formControlName="timeZone" placeholder="Asia/Ho_Chi_Minh" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="text-right mt-4">
+        <button nz-button nzType="primary" htmlType="submit" [nzLoading]="loading">Lưu cài đặt</button>
+      </div>
+    </form>
+  </nz-tab>
+
+  <nz-tab nzTitle="SMTP Settings">
+    <div class="p-4">Coming soon...</div>
+  </nz-tab>
+
+  <nz-tab nzTitle="Advanced Settings">
+    <div class="p-4">Coming soon...</div>
+  </nz-tab>
+</nz-tabset>
