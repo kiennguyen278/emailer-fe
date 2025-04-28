@@ -6,6 +6,7 @@ import {ApiResponse} from "@core/models";
 import {BaseApiService} from "@core/services/base-api.service";
 import {SaveBusinessProfileRequest, SwitchStatusBusinessRequest, SwitchStatusUserRequest} from "../models";
 import {omit} from "lodash";
+import {SmtpSetting} from "../../settings/data/setting.model";
 
 
 @Injectable({
@@ -44,10 +45,32 @@ export class AdminService extends BaseApiService {
     return this.http.put<ApiResponse<string>>(url, {...request});
   }
 
-
   updateBusinessStatus(request: SwitchStatusBusinessRequest) {
     const url = this.buildUrl(`admin/users/${request.userId}/update-bussiness-status`);
     return this.http.put(url, null, {params: {status: request.status ? 'ACTIVE' : 'INACTIVE'}});
   }
+
+  getUserSMTP(userId: number) {
+    const url = this.buildUrl(`admin/users/${userId}/smtp`);
+    return this.http.get<ApiResponse<any>>(url);
+  }
+
+  updateCustomSmtpStatus(userId: number,useCustomSmtp: boolean): Observable<ApiResponse<string>> {
+    const params = { useCustomSmtp: String(useCustomSmtp) }; // ⚠️ convert to string
+    const url = this.buildUrl(`admin/users/${userId}/updateCustomSMTP`);
+
+    return this.http.put<ApiResponse<string>>(url, null, { params });
+  }
+
+  saveSmtpSetting(userId: number,data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
+    const url = this.buildUrl(`admin/users/${userId}/saveSmtp`);
+    return this.http.put<ApiResponse<SmtpSetting>>(url, data);
+  }
+
+  testSmtpConnection(data: SmtpSetting): Observable<ApiResponse<SmtpSetting>> {
+    const url = this.buildUrl(`admin/users/smtp/testSmtpConnection`);
+    return this.http.put<ApiResponse<SmtpSetting>>(url, data);
+  }
+
 
 }
