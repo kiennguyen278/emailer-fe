@@ -26,4 +26,11 @@ export class IntegrationService extends BaseApiService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
+  testConnection(dto: IntegrationSettingDTO): Observable<any> {
+    return this.http.post(`${this.api}/testConnection`, dto);
+  }
+
+  pull(id: number): Observable<void> {
+    return this.http.post<void>(`${this.api}/${id}/pull`, {});
+  }
 }

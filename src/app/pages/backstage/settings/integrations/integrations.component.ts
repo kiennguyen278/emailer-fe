@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {IntegrationSettingDTO} from "../data/setting.model";
 import {IntegrationService} from "../data/integration.service";
 
@@ -55,7 +55,8 @@ export class IntegrationsComponent implements OnInit {
       username: [''],
       password: [''],
       apiKey: [''],
-      sourceType: ['OTHER', Validators.required],
+      tagId: [null, [this.optionalPositiveValidator()]],
+      sourceType: [{ value: 'KNACK', disabled: true }, Validators.required],
       status: ['ACTIVE', Validators.required]
     });
   }
@@ -70,6 +71,7 @@ export class IntegrationsComponent implements OnInit {
       username: [item.username],
       password: [''], // Nếu không sửa thì để trống
       apiKey: [item.apiKey],
+      tagId: [null, [this.optionalPositiveValidator()]],
       sourceType: [item.sourceType, Validators.required],
       status: [item.status, Validators.required]
     });
@@ -111,4 +113,43 @@ export class IntegrationsComponent implements OnInit {
       })
     });
   }
+
+  optionalPositiveValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (value === null || value === undefined || value === '') {
+        return null; // không nhập gì thì hợp lệ
+      }
+      return value > 0 ? null : { positive: true }; // nếu nhập thì phải > 0
+    };
+  }
+
+
+  testConnection() {
+    const value = this.form.getRawValue();
+    if (!value.endpointUrl || !value.systemName) {
+      this.message.warning('Vui lòng nhập Endpoint và System Name trước');
+      return;
+    }
+
+    // Gọi API test (tuỳ backend bạn có không)
+    this.message.info('Đang kiểm tra kết nối...');
+
+    // Ví dụ bạn tự tạo API: POST /api/integrations/test
+    this.service.testConnection(value).subscribe({
+      next: () => this.message.success('Kết nối thành công!'),
+      error: () => this.message.error('Kết nối thất bại!')
+    });
+  }
+
+
+  pullData() {
+    if (!this.editingId) return;
+
+    this.service.pull(this.editingId).subscribe({
+      next: () => this.message.success('Đã tải lại dữ liệu!'),
+      error: () => this.message.error('Không thể tải dữ liệu!')
+    });
+  }
+
 }

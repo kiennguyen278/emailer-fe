@@ -27,52 +27,87 @@
   </nz-table>
 </nz-card>
 
-<nz-modal [(nzVisible)]="isModalOpen" [nzTitle]="isEditMode ? 'Edit Integration' : 'Create Integration'" (nzOnCancel)="isModalOpen = false" (nzOnOk)="submitForm()">
-  <form [formGroup]="form">
-    <nz-form-item>
-      <nz-form-label>System Name</nz-form-label>
-      <nz-form-control><input nz-input formControlName="systemName" /></nz-form-control>
-    </nz-form-item>
+<nz-modal
+  [(nzVisible)]="isModalOpen"
+  [nzTitle]="isEditMode ? 'Edit Integration' : 'Create Integration'"
+  [nzWidth]="700"
+  (nzOnCancel)="isModalOpen = false"
+>
 
-    <nz-form-item>
-      <nz-form-label>Endpoint URL</nz-form-label>
-      <nz-form-control><input nz-input formControlName="endpointUrl" /></nz-form-control>
-    </nz-form-item>
+  <form [formGroup]="form" *nzModalContent>
+    <div class="grid-form">
 
-    <nz-form-item>
-      <nz-form-label>Username</nz-form-label>
-      <nz-form-control><input nz-input formControlName="username" /></nz-form-control>
-    </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Source Type</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-select formControlName="sourceType" [nzDisabled]="true">
+            <nz-option nzValue="KNACK" nzLabel="KNACK"></nz-option>
+            <nz-option nzValue="CONVERTKIT" nzLabel="CONVERTKIT"></nz-option>
+            <nz-option nzValue="OTHER" nzLabel="OTHER"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label>Password</nz-form-label>
-      <nz-form-control><input nz-input type="password" formControlName="password" /></nz-form-control>
-    </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">System Name</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="systemName" />
+        </nz-form-control>
+      </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label>API Key</nz-form-label>
-      <nz-form-control><input nz-input formControlName="apiKey" /></nz-form-control>
-    </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Endpoint URL</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="endpointUrl" />
+        </nz-form-control>
+      </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label>Source Type</nz-form-label>
-      <nz-form-control>
-        <nz-select formControlName="sourceType">
-          <nz-option nzValue="KNACK" nzLabel="KNACK"></nz-option>
-          <nz-option nzValue="CONVERTKIT" nzLabel="CONVERTKIT"></nz-option>
-          <nz-option nzValue="OTHER" nzLabel="OTHER"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Username</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="username" />
+        </nz-form-control>
+      </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label>Status</nz-form-label>
-      <nz-form-control>
-        <nz-select formControlName="status">
-          <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
-          <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Password</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input type="password" formControlName="password" />
+        </nz-form-control>
+      </nz-form-item>
+
+<!--      <nz-form-item>
+        <nz-form-label [nzSpan]="6">API Key</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <input nz-input formControlName="apiKey" />
+        </nz-form-control>
+      </nz-form-item>-->
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Tag ID (Để import tới)</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Tag ID phải lớn hơn 0 nếu nhập">
+          <input nz-input type="number" formControlName="tagId" />
+        </nz-form-control>
+      </nz-form-item>
+
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6">Status</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-select formControlName="status">
+            <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
+            <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
   </form>
+
+  <ng-container *nzModalFooter>
+    <button nz-button (click)="isModalOpen = false">Cancel</button>
+    <button nz-button (click)="testConnection()">Test Connection</button>
+    <button nz-button nzType="primary" (click)="submitForm()">Save</button>
+    <button nz-button nzType="default" [disabled]="!editingId" (click)="pullData()">Pull Data</button>
+  </ng-container>
 </nz-modal>
+

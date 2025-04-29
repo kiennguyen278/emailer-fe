@@ -29,6 +29,7 @@ export interface PasswordChange {
 export interface IntegrationSettingDTO {
   id?: number;
   userId?: number;
+  tagId?: number;
   systemName: string;
   endpointUrl: string;
   username?: string;

@@ -45,6 +45,12 @@ export class TagComponent implements OnInit, OnDestroy {
 
   columns: ColumnConfig[] = [
     {
+      key: 'id',
+      header: 'Tag Id',
+      tdClass: 'text-center',
+      nzWidth: '25%',
+    },
+    {
       key: 'name',
       header: 'Tên Tag',
       tdClass: 'text-center',
