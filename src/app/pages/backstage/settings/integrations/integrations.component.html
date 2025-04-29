@@ -1,0 +1,78 @@
+<nz-card>
+  <button nz-button nzType="primary" (click)="openCreate()">Add Integration</button>
+  <nz-table [nzData]="list" [nzLoading]="loading" [nzBordered]="true" class="mt-4">
+    <thead>
+    <tr>
+      <th>System Name</th>
+      <th>Endpoint URL</th>
+      <th>Source Type</th>
+      <th>Status</th>
+      <th>Last Pull At</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of list">
+      <td>{{ item.systemName }}</td>
+      <td>{{ item.endpointUrl }}</td>
+      <td>{{ item.sourceType }}</td>
+      <td>{{ item.status }}</td>
+      <td>{{ item.lastPullAt || '-' }}</td>
+      <td>
+        <a (click)="openEdit(item)">Edit</a>
+        <a class="ml-2" (click)="confirmDelete(item.id!)" style="color: red;">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+
+<nz-modal [(nzVisible)]="isModalOpen" [nzTitle]="isEditMode ? 'Edit Integration' : 'Create Integration'" (nzOnCancel)="isModalOpen = false" (nzOnOk)="submitForm()">
+  <form [formGroup]="form">
+    <nz-form-item>
+      <nz-form-label>System Name</nz-form-label>
+      <nz-form-control><input nz-input formControlName="systemName" /></nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Endpoint URL</nz-form-label>
+      <nz-form-control><input nz-input formControlName="endpointUrl" /></nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Username</nz-form-label>
+      <nz-form-control><input nz-input formControlName="username" /></nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Password</nz-form-label>
+      <nz-form-control><input nz-input type="password" formControlName="password" /></nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>API Key</nz-form-label>
+      <nz-form-control><input nz-input formControlName="apiKey" /></nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Source Type</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="sourceType">
+          <nz-option nzValue="KNACK" nzLabel="KNACK"></nz-option>
+          <nz-option nzValue="CONVERTKIT" nzLabel="CONVERTKIT"></nz-option>
+          <nz-option nzValue="OTHER" nzLabel="OTHER"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Status</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="status">
+          <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
+          <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

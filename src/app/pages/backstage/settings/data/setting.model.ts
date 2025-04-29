@@ -25,3 +25,17 @@ export interface PasswordChange {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface IntegrationSettingDTO {
+  id?: number;
+  userId?: number;
+  systemName: string;
+  endpointUrl: string;
+  username?: string;
+  password?: string; // chỉ khi tạo/sửa mới gửi
+  apiKey?: string;
+  sourceType: 'KNACK' | 'CONVERTKIT' | 'OTHER';
+  status: 'ACTIVE' | 'INACTIVE';
+  lastPullAt?: string;
+}
+

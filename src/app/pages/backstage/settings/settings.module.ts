@@ -11,11 +11,15 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { MainComponent } from './main/main.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-
+import { IntegrationsComponent } from './integrations/integrations.component';
 import { SettingsService } from './data/settings.service'; // ✅ import service
+import { NzModalModule } from 'ng-zorro-antd/modal'; // ✅ thêm dòng này
+import { NzTableModule } from 'ng-zorro-antd/table'; // ✅ thêm dòng này
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent,
+    IntegrationsComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -28,6 +32,8 @@ import { SettingsService } from './data/settings.service'; // ✅ import service
     NzSwitchModule,
     NzSelectModule,
     NzTagModule,
+    NzModalModule,
+    NzTableModule,
     SettingsRoutingModule
   ],
   providers: [
