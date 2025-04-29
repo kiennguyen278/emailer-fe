@@ -25,6 +25,7 @@ export interface SubscriberDTO {
   userId: number,
   email: string,
   firstName: string,
+  sourceType: string,
   lastName: string | null | any,
   status: "ACTIVE" | "INACTIVE",
   createdAt: string,

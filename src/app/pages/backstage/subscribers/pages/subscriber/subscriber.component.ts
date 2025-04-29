@@ -71,7 +71,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       header: 'Email',
       sortable: true,
       tdClass: 'text-center',
-      nzWidth: '200px',
+      nzWidth: '150px',
     },
 
     {
@@ -81,6 +81,15 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       tdClass: 'text-center',
       nzWidth: '150px',
     },
+
+    {
+      key: 'sourceType',
+      header: 'Source Type',
+      sortable: true,
+      tdClass: 'text-center',
+      nzWidth: '100px',
+    },
+
     {
       key: 'status',
       header: 'Trạng thái',
@@ -93,7 +102,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       header: 'Thao Tác',
       tdClass: 'text-center',
       pipe: 'template',
-      nzWidth: '80px',
+      nzWidth: '100px',
     },
   ];
 
