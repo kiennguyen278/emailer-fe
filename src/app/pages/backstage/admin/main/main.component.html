@@ -3,6 +3,14 @@
     <form [formGroup]="generalForm" (ngSubmit)="saveSettings()" class="p-4 bg-white shadow rounded">
       <h2 class="text-lg font-bold mb-4">General Settings</h2>
 
+      <!-- System Maintenance Mode -->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'isMaintenanceMode'">System Maintenance Mode </nz-form-label>
+        <nz-form-control>
+          <nz-switch id="isMaintenanceMode" formControlName="isMaintenanceMode"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
       <!-- Tên hệ thống -->
       <nz-form-item>
         <nz-form-label [nzFor]="'systemName'" nzRequired>System name</nz-form-label>
@@ -16,6 +24,22 @@
         <nz-form-label [nzFor]="'systemEmail'" nzRequired>System email</nz-form-label>
         <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
           <input nz-input id="systemEmail" formControlName="systemEmail" placeholder="Email hệ thống" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- systemUrl-->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'systemUrl'" nzRequired>System Url</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
+          <input nz-input id="systemUrl" formControlName="systemUrl" placeholder="System Url" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- frontendUrl-->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'frontendUrl'" nzRequired>Frontend Url</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
+          <input nz-input id="frontendUrl" formControlName="frontendUrl" placeholder="Frontend Url" />
         </nz-form-control>
       </nz-form-item>
 

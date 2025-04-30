@@ -23,5 +23,9 @@ export interface GeneralSettings {
   enabledSending: boolean;
   usedSystemSmtp: boolean;
   timeZone: string;
+
+  systemUrl: string | null;
+  frontendUrl: string | null;
+  isMaintenanceMode: boolean;
 }
 

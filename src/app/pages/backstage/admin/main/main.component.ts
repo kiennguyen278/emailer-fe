@@ -37,7 +37,10 @@ export class MainComponent implements OnInit {
   initForm(): void {
     this.generalForm = this.fb.group({
       systemName: ['', Validators.required],
+      systemUrl: ['', Validators.required],
+      frontendUrl: ['', Validators.required],
       systemEmail: ['', [Validators.required, Validators.email]],
+      isMaintenanceMode: [false],
       usedSystemSmtp: [false],
       enableDefaultSmtp: [true],
       enabledSending: [false],
