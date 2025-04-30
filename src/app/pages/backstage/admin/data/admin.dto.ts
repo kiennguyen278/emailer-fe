@@ -21,6 +21,7 @@ export interface GeneralSettings {
   systemEmail: string;
   enableDefaultSmtp: boolean;
   enabledSending: boolean;
+  usedSystemSmtp: boolean;
   timeZone: string;
 }
 

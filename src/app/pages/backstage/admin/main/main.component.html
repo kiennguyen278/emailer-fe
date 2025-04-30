@@ -21,7 +21,14 @@
 
       <!-- Dùng SMTP mặc định -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'enableDefaultSmtp'">Always use System SMTP </nz-form-label>
+        <nz-form-label [nzFor]="'usedSystemSmtp'">Force using system SMTP </nz-form-label>
+        <nz-form-control>
+          <nz-switch id="usedSystemSmtp" formControlName="usedSystemSmtp"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzFor]="'enableDefaultSmtp'">Enable default SMTP </nz-form-label>
         <nz-form-control>
           <nz-switch id="enableDefaultSmtp" formControlName="enableDefaultSmtp"></nz-switch>
         </nz-form-control>
@@ -29,7 +36,7 @@
 
       <!-- Cho phép gửi email -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'enabledSending'">Enabled/Disable Send Mail</nz-form-label>
+        <nz-form-label [nzFor]="'enabledSending'">Enabled sending</nz-form-label>
         <nz-form-control>
           <nz-switch id="enabledSending" formControlName="enabledSending"></nz-switch>
         </nz-form-control>
