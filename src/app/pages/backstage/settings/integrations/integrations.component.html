@@ -2,6 +2,7 @@
 
   <!-- KNACK Integration -->
   <nz-card nzTitle="KNACK Integration" class="mb-4">
+
     <div class="mb-3">
       <label class="font-bold mr-2">Trạng thái:</label>
 
@@ -76,6 +77,11 @@
         </div>
       </div>
     </form>
+
+    <div *ngIf="knackProcessing" class="text-center text-blue-500 mb-2">
+      ⏳ Đang xử lý, vui lòng chờ...
+    </div>
+
   </nz-card>
 
   <!-- ConvertKit Integration -->
@@ -134,6 +140,5 @@
       </form>
     </ng-template>
   </nz-card>
-
 
 </div>

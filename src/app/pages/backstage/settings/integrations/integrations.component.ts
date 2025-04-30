@@ -17,6 +17,7 @@ export class IntegrationsComponent implements OnInit {
 
 
   // KNACK Integration
+  knackProcessing = false;
   knackForm!: FormGroup;
   knackIntegrationId: number | null = null;
   isKnackEnabled = false;
@@ -101,6 +102,8 @@ export class IntegrationsComponent implements OnInit {
       systemName: 'Knack CRM'
     };
 
+    this.knackProcessing = true;
+
     this.integrationService.save(dto).subscribe({
       next: (res) => {
         if (res.success) {
@@ -109,7 +112,12 @@ export class IntegrationsComponent implements OnInit {
           this.knackForm.patchValue({ status: res.data?.status });
         }
       },
-      error: () => this.message.error('Lỗi khi lưu cấu hình KNACK!')
+      error: () => {
+        this.message.error('Lỗi khi lưu cấu hình KNACK!')
+      },
+      complete: () => {
+        this.knackProcessing = false;
+      }
     });
 
   }
@@ -143,21 +151,34 @@ export class IntegrationsComponent implements OnInit {
 // ✅ Pull dữ liệu KNACK
   pullKnackData(): void {
     if (!this.knackIntegrationId) return;
+    this.knackProcessing = true;
     this.integrationService.fetchSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
         if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
       },
-      error: () => this.message.error('Lỗi khi pull từ KNACK!')
+      error: () => {
+        this.message.error('Lỗi khi pull từ KNACK!')
+      },
+      complete: () => {
+        this.knackProcessing = false;
+      }
+
     });
   }
 
   pullAllKnackData(): void {
     if (!this.knackIntegrationId) return;
+    this.knackProcessing = true;
     this.integrationService.fetchAllSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
         if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
       },
-      error: () => this.message.error('Lỗi khi pull từ KNACK!')
+      error: () => {
+        this.message.error('Lỗi khi pull từ KNACK!')
+      },
+      complete: () => {
+        this.knackProcessing = false;
+      }
     });
   }
 
@@ -175,11 +196,17 @@ export class IntegrationsComponent implements OnInit {
       systemName: 'Knack CRM'
     };
 
+    this.knackProcessing = true;
     this.integrationService.testKnackConnection(body).subscribe({
       next: (res) => {
-        if (res.success) this.message.success(res.message);
+        this.message[res.success ? 'success' : 'error'](res.message);
       },
-      error: () => this.message.error("Kết nối KNACK không thành công!")
+      error: () => {
+        this.message.error('Lỗi khi kiểm tra kết nối!');
+      },
+      complete: () => {
+          this.knackProcessing = false;
+      }
     });
   }
 
