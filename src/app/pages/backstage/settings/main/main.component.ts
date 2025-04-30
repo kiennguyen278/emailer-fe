@@ -26,6 +26,8 @@ export class MainComponent implements OnInit {
   // Password
   passwordForm!: FormGroup;
 
+  isProcessing = false;
+
   constructor(private fb: FormBuilder,
               private message: NzMessageService,
               private tokenStorage: TokenStorageService,
@@ -95,7 +97,7 @@ export class MainComponent implements OnInit {
       next: () => {
         this.message.success('✅ Chúng tôi đã gửi một email yêu cầu xác minh email doanh nghiệp của bạn!')
       },
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
+      error: err => this.message.error(err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
     });
   }
 
@@ -183,16 +185,20 @@ export class MainComponent implements OnInit {
     }
 
     const payload = this.smtpForm.value;
+    this.isProcessing = true;
     this.settingsService.testSmtpConnection(payload).subscribe({
       next: (result) => {
         if (result.success) {
           this.message.success('✅ Kết nối SMTP thành công.');
         } else {
-          this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+          this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
         }
       },
       error: (err) => {
-        this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+        this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+      },
+      complete: () => {
+        this.isProcessing = false;
       }
     });
 
@@ -207,9 +213,17 @@ export class MainComponent implements OnInit {
       return;
     }
 
+    this.isProcessing = true;
     this.settingsService.saveSmtpSetting(this.smtpForm.value).subscribe({
-      next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
+      next: () => {
+        this.message.success('✅ Cấu hình SMTP đã được lưu!')
+      } ,
+      error: err => {
+        this.message.error( err?.error?.message || 'Lỗi khi lưu SMTP')
+      } ,
+      complete: () => {
+        this.isProcessing = false;
+      }
     });
   }
 
@@ -231,7 +245,7 @@ export class MainComponent implements OnInit {
 
     const { newPassword, confirmPassword } = this.passwordForm.value;
     if (newPassword !== confirmPassword) {
-      this.message.error('❌ Mật khẩu nhập lại không khớp!');
+      this.message.error('Mật khẩu nhập lại không khớp!');
       return;
     }
     this.settingsService.changePassword(this.passwordForm.value).subscribe({
@@ -240,7 +254,7 @@ export class MainComponent implements OnInit {
         this.tokenStorage.clearLocalStore();
         this.router.navigate(['/auth/login']);
       },
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Đổi mật khẩu thất bại')
+      error: err => this.message.error(err?.error?.message || 'Đổi mật khẩu thất bại')
     });
   }
 
