@@ -21,7 +21,7 @@ export class IntegrationsComponent implements OnInit {
   editingId?: number;
 
   constructor(
-    private service: IntegrationService,
+    private integrationService: IntegrationService,
     private modal: NzModalService,
     private message: NzMessageService,
     private fb: FormBuilder
@@ -33,9 +33,13 @@ export class IntegrationsComponent implements OnInit {
 
   loadList() {
     this.loading = true;
-    this.service.list().subscribe({
+    this.integrationService.getAll().subscribe({
       next: (res) => {
-        this.list = res;
+        if (res.success) {
+          this.list = res.data; // ✅ Lấy đúng `data`
+        } else {
+          this.message.error(res.message || 'Lấy danh sách thất bại!');
+        }
         this.loading = false;
       },
       error: () => {
@@ -77,42 +81,47 @@ export class IntegrationsComponent implements OnInit {
     });
   }
 
-  submitForm() {
-    if (this.form.invalid) {
-      this.message.error('Please fill all required fields');
-      return;
-    }
-    const value = this.form.value;
-    if (this.isEditMode && this.editingId != null) {
-      this.service.update(this.editingId, value).subscribe({
-        next: () => {
-          this.message.success('Updated successfully');
-          this.loadList();
-          this.isModalOpen = false;
-        }
-      });
-    } else {
-      this.service.create(value).subscribe({
-        next: () => {
-          this.message.success('Created successfully');
-          this.loadList();
-          this.isModalOpen = false;
-        }
-      });
-    }
-  }
+  submitForm(): void {
+    if (this.form.invalid) return;
 
-  confirmDelete(id: number) {
-    this.modal.confirm({
-      nzTitle: 'Are you sure delete this integration?',
-      nzOnOk: () => this.service.delete(id).subscribe({
-        next: () => {
-          this.message.success('Deleted successfully');
+    const body = this.form.value;
+    const request$ = this.editingId
+      ? this.integrationService.update(this.editingId, body)
+      : this.integrationService.create(body);
+
+    request$.subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.message.success(res.message || 'Thành công');
+          this.isModalOpen = false;
           this.loadList();
+        } else {
+          this.message.error(res.message || 'Thao tác thất bại!');
         }
-      })
+      },
+      error: () => this.message.error('Không thể thực hiện thao tác')
     });
   }
+
+
+  confirmDelete(id: number): void {
+    this.modal.confirm({
+      nzTitle: 'Xác nhận xoá?',
+      nzOnOk: () =>
+        this.integrationService.delete(id).subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.message.success(res.message || 'Xoá thành công');
+              this.loadList();
+            } else {
+              this.message.error(res.message || 'Không xoá được!');
+            }
+          },
+          error: () => this.message.error('Lỗi xoá!')
+        })
+    });
+  }
+
 
   optionalPositiveValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -136,20 +145,27 @@ export class IntegrationsComponent implements OnInit {
     this.message.info('Đang kiểm tra kết nối...');
 
     // Ví dụ bạn tự tạo API: POST /api/integrations/test
-    this.service.testConnection(value).subscribe({
+    this.integrationService.testConnection(value).subscribe({
       next: () => this.message.success('Kết nối thành công!'),
       error: () => this.message.error('Kết nối thất bại!')
     });
   }
 
 
-  pullData() {
+  pullData(): void {
     if (!this.editingId) return;
-
-    this.service.pull(this.editingId).subscribe({
-      next: () => this.message.success('Đã tải lại dữ liệu!'),
-      error: () => this.message.error('Không thể tải dữ liệu!')
+    this.integrationService.pull(this.editingId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.message.success(res.message || 'Pull thành công!');
+          this.loadList();
+        } else {
+          this.message.error(res.message || 'Pull thất bại!');
+        }
+      },
+      error: () => this.message.error('Lỗi khi pull dữ liệu!')
     });
   }
+
 
 }
