@@ -15,9 +15,19 @@ export class IntegrationsComponent implements OnInit {
 
   list: IntegrationSettingDTO[] = [];
 
+
+  // KNACK Integration
   knackForm!: FormGroup;
   knackIntegrationId: number | null = null;
   isKnackEnabled = false;
+
+
+  // ConvertKit Integration
+  isConvertkitEnabled = false;
+  convertkitForm!: FormGroup;
+  convertkitIntegrationId: number | null = null;
+  convertkitUnderConstruction = true;
+
 
   constructor(
     private integrationService: IntegrationService,
@@ -31,6 +41,9 @@ export class IntegrationsComponent implements OnInit {
 
     // knackForm
     this.initKnackForm();
+
+    // convertkit form
+    // this.initConvertkitForm();
   }
 
   loadList(): void {
@@ -47,14 +60,12 @@ export class IntegrationsComponent implements OnInit {
   initKnackForm(): void {
     // knackForm
     this.knackForm = this.fb.group({
-      endpointUrl: ['', Validators.required],
+      endpointUrl: ['https://webmedius.knack.com/dream-team-admin-v2#business-owners-v2/viewmyleads/', Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
       tagId: [null, Validators.required],
       status: ['INACTIVE']
     });
-
-
     this.knackIntegrationId = null;
     this.knackForm.reset(); // Hoặc giữ giá trị rỗng
     this.knackForm.disable(); // ✅ Tắt form ban đầu
@@ -66,17 +77,21 @@ export class IntegrationsComponent implements OnInit {
 
 // ✅ Load dữ liệu KNACK
   loadKnackIntegration(): void {
-    const knack = this.list.find(x => x.sourceType === 'KNACK');
+    const knack = this.findIntegration('knack');
     if (knack && knack.id) {
       this.isKnackEnabled = knack.status === 'ACTIVE';
       this.knackIntegrationId = knack.id;
       this.knackForm.patchValue({
-        endpointUrl: knack.endpointUrl,
+        endpointUrl: knack.endpointUrl || 'https://webmedius.knack.com/dream-team-admin-v2#business-owners-v2/viewmyleads/',
         username: knack.username,
         password: knack.password,
         tagId: knack.tagId
       });
     }
+  }
+
+  private findIntegration(type: string): IntegrationSettingDTO | undefined {
+    return this.list.find(x => x.sourceType?.toLowerCase() === type.toLowerCase());
   }
 
   // ✅ Save cấu hình KNACK
@@ -186,5 +201,138 @@ export class IntegrationsComponent implements OnInit {
   canPullKnack(): boolean {
     return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null;
   }
+
+
+  initConvertkitForm(): void {
+    this.convertkitForm = this.fb.group({
+      endpointUrl: ['https://api.convertkit.com/v3/', Validators.required],
+      apiKey: ['', Validators.required],
+      tagId: [null, Validators.required],
+      status: ['INACTIVE']
+    });
+    this.convertkitForm.disable();
+
+    this.convertkitIntegrationId  = null;
+    this.convertkitForm.reset(); // Hoặc giữ giá trị rỗng
+    this.convertkitForm.disable(); // ✅ Tắt form ban đầu
+    this.isConvertkitEnabled = false; // ✅ Switch OFF
+
+    // load and update from database
+    this.loadConvertkitIntegration();
+  }
+
+  loadConvertkitIntegration(): void {
+    const convertkit = this.findIntegration('convertkit');
+    if (convertkit && convertkit.id) {
+      this.convertkitIntegrationId = convertkit.id;
+      this.convertkitForm.patchValue({
+        endpointUrl: convertkit.endpointUrl || 'https://api.convertkit.com/v3/',
+        apiKey: convertkit.apiKey,
+        tagId: convertkit.tagId,
+        status: convertkit.status
+      });
+      this.isConvertkitEnabled = convertkit.status === 'ACTIVE';
+      convertkit.status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
+    }
+  }
+
+  toggleConvertkitStatus(active: boolean): void {
+    const status = active ? 'ACTIVE' : 'INACTIVE';
+    this.isConvertkitEnabled = active;
+    if (!this.convertkitIntegrationId) {
+      this.convertkitForm.patchValue({ status });
+      status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
+      return;
+    }
+
+    const body = {
+      ...this.convertkitForm.getRawValue(),
+      status,
+      sourceType: 'CONVERTKIT',
+      systemName: 'ConvertKit'
+    };
+
+    this.integrationService.update(this.convertkitIntegrationId, body).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.convertkitForm.patchValue({ status });
+          status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
+          this.message.success(`Đã ${status === 'ACTIVE' ? 'bật' : 'tắt'} ConvertKit`);
+        }
+      },
+      error: () => this.message.error('Lỗi khi cập nhật trạng thái ConvertKit!')
+    });
+  }
+
+  canPullConvertkit(): boolean {
+    return this.convertkitForm.value.status === 'ACTIVE' && this.convertkitIntegrationId !== null;
+  }
+
+  testConvertkitConnection(): void {
+    if (this.convertkitForm.invalid) {
+      this.convertkitForm.markAllAsTouched();
+      this.message.warning('Vui lòng nhập đầy đủ thông tin trước khi kiểm tra kết nối!');
+      return;
+    }
+
+    this.message.info('✅ Kết nối ConvertKit: OK (demo)');
+  }
+
+  saveConvertkitIntegration(): void {
+    if (this.convertkitForm.invalid) {
+      this.convertkitForm.markAllAsTouched();
+      this.message.warning('Vui lòng nhập đầy đủ thông tin!');
+      return;
+    }
+
+    const body = {
+      ...this.convertkitForm.getRawValue(),
+      sourceType: 'CONVERTKIT',
+      systemName: 'ConvertKit'
+    };
+
+    const request$ = this.convertkitIntegrationId
+      ? this.integrationService.update(this.convertkitIntegrationId, body)
+      : this.integrationService.create(body);
+
+    request$.subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.message.success('Đã lưu cấu hình ConvertKit!');
+          this.convertkitForm.patchValue({ status: body.status });
+
+          if (!this.convertkitIntegrationId && res.data?.id) {
+            this.convertkitIntegrationId = res.data.id;
+          }
+        }
+      },
+      error: () => this.message.error('Lỗi khi lưu cấu hình ConvertKit!')
+    });
+  }
+
+  pullConvertkitData(): void {
+    if (!this.convertkitIntegrationId) return;
+    this.integrationService.pull(this.convertkitIntegrationId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.message.success(res.message || 'Pull ConvertKit thành công!');
+        }
+      },
+      error: () => this.message.error('Lỗi khi pull ConvertKit!')
+    });
+  }
+
+  pullAllConvertkitData(): void {
+    if (!this.convertkitIntegrationId) return;
+    this.integrationService.pullAll(this.convertkitIntegrationId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.message.success(res.message || 'Pull toàn bộ ConvertKit thành công!');
+        }
+      },
+      error: () => this.message.error('Lỗi khi pull all ConvertKit!')
+    });
+  }
+
 
 }

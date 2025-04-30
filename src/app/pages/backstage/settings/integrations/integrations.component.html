@@ -1,8 +1,8 @@
 <div class="settings-wrapper">
   <h2 class="mb-4">Integration Settings</h2>
 
+  <!-- KNACK Integration -->
   <nz-card nzTitle="KNACK Integration" class="mb-4">
-    <!-- ✅ Switch nằm trong card body -->
     <div class="mb-3">
       <label class="font-bold mr-2">Trạng thái:</label>
 
@@ -14,34 +14,32 @@
       ></nz-switch>
 
     </div>
-
-    <!-- ✅ KHÔNG dùng [nzDisabled] nữa -->
     <form *ngIf="isKnackEnabled" [formGroup]="knackForm">
       <div class="grid-form">
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired>Endpoint URL</nz-form-label>
-          <nz-form-control [nzSpan]="18">
+          <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input formControlName="endpointUrl" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired>Username</nz-form-label>
-          <nz-form-control [nzSpan]="18">
+          <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input formControlName="username" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired >Password</nz-form-label>
-          <nz-form-control [nzSpan]="18">
+          <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input type="password" formControlName="password" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired>Tag ID</nz-form-label>
-          <nz-form-control [nzSpan]="18">
+          <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input type="number" formControlName="tagId" />
           </nz-form-control>
         </nz-form-item>
@@ -56,6 +54,60 @@
     </form>
   </nz-card>
 
+  <!-- ConvertKit Integration -->
+  <nz-card nzTitle="ConvertKit Integration" class="mb-4">
+    <ng-container *ngIf="convertkitUnderConstruction; else convertkitFormBlock">
+      <div class="text-center py-6">
+      <span style="color: #ff4d4f; font-weight: 500; font-size: 16px;">
+        🚧 ConvertKit đang được phát triển...
+      </span>
+      </div>
+    </ng-container>
+
+    <ng-template #convertkitFormBlock>
+      <div class="mb-3">
+        <label class="font-bold mr-2">Trạng thái:</label>
+        <nz-switch
+          [(ngModel)]="isConvertkitEnabled"
+          [nzCheckedChildren]="'ON'"
+          [nzUnCheckedChildren]="'OFF'"
+          (ngModelChange)="toggleConvertkitStatus($event)"
+        ></nz-switch>
+      </div>
+
+      <form *ngIf="isConvertkitEnabled" [formGroup]="convertkitForm">
+        <div class="grid-form">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Endpoint URL</nz-form-label>
+            <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
+              <input nz-input formControlName="endpointUrl" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>API Key</nz-form-label>
+            <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
+              <input nz-input formControlName="apiKey" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Tag ID</nz-form-label>
+            <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
+              <input nz-input type="number" formControlName="tagId" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <div class="text-right">
+            <button nz-button (click)="testConvertkitConnection()" [disabled]="convertkitForm.disabled">Test Connection</button>
+            <button nz-button nzType="primary" (click)="saveConvertkitIntegration()" [disabled]="convertkitForm.disabled">Save</button>
+            <button nz-button class="pull-btn" (click)="pullConvertkitData()" [disabled]="!canPullConvertkit()">Pull</button>
+            <button nz-button class="pull-all-btn" (click)="pullAllConvertkitData()" [disabled]="!canPullConvertkit()">Pull All</button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  </nz-card>
 
 
 </div>
