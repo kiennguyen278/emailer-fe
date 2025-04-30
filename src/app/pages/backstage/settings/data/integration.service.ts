@@ -20,8 +20,18 @@ export class IntegrationService extends BaseApiService {
     return this.http.put<ApiResponse<IntegrationSettingDTO>>(`${this.api}/${id}`, data);
   }
 
-  testConnection(dto: IntegrationSettingDTO): Observable<any> {
-    return this.http.post(`${this.api}/testConnection`, dto);
+  updateStatus(id: number, status: 'ACTIVE' | 'INACTIVE'): Observable<ApiResponse<IntegrationSettingDTO>> {
+    return this.http.put<ApiResponse<IntegrationSettingDTO>>(
+      `${this.api}/${id}/status`,
+      null,
+      {
+        params: { status }
+      }
+    );
+  }
+
+  testKnackConnection(dto: IntegrationSettingDTO): Observable<any> {
+    return this.http.post(`${this.api}/testKnackConnection`, dto);
   }
 
   fetchSubscribersFromKnack(id: number): Observable<ApiResponse<string>> {

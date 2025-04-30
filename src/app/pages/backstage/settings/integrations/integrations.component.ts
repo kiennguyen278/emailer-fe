@@ -126,32 +126,27 @@ export class IntegrationsComponent implements OnInit {
     this.isKnackEnabled = active;
     const status = active ? 'ACTIVE' : 'INACTIVE';
 
-    // Nếu chưa lưu integration -> chỉ enable/disable form
+    // Nếu chưa lưu integration → chỉ enable/disable form (không call API)
     if (!this.knackIntegrationId) {
       this.knackForm.patchValue({ status });
       status === 'ACTIVE' ? this.knackForm.enable() : this.knackForm.disable();
       return;
     }
 
-    const body = {
-      ...this.knackForm.getRawValue(),
-      status,
-      sourceType: 'KNACK',
-      systemName: 'Knack CRM'
-    };
-
-    this.integrationService.update(this.knackIntegrationId, body).subscribe({
+    // Gọi API update status
+    this.integrationService.updateStatus(this.knackIntegrationId, status).subscribe({
       next: (res) => {
         if (res.success) {
-          this.knackForm.patchValue({ status });
+          this.knackForm.patchValue({ status: res.data?.status });
           status === 'ACTIVE' ? this.knackForm.enable() : this.knackForm.disable();
           this.message.success(`Đã ${status === 'ACTIVE' ? 'bật' : 'tắt'} KNACK`);
+        } else {
+          this.message.error(res.message || 'Cập nhật trạng thái thất bại!');
         }
       },
-      error: () => this.message.error('Lỗi khi cập nhật trạng thái!')
+      error: () => this.message.error('Lỗi khi gọi API cập nhật trạng thái!')
     });
   }
-
 
 // ✅ Pull dữ liệu KNACK
   pullKnackData(): void {
@@ -188,7 +183,7 @@ export class IntegrationsComponent implements OnInit {
       systemName: 'Knack CRM'
     };
 
-    this.integrationService.testConnection(body).subscribe({
+    this.integrationService.testKnackConnection(body).subscribe({
       next: (res) => {
         if (res.success) this.message.success(res.message);
       },
