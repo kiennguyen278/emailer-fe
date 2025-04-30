@@ -156,7 +156,7 @@ export class IntegrationsComponent implements OnInit {
 // ✅ Pull dữ liệu KNACK
   pullKnackData(): void {
     if (!this.knackIntegrationId) return;
-    this.integrationService.pull(this.knackIntegrationId).subscribe({
+    this.integrationService.fetchSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
         if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
       },
@@ -166,7 +166,7 @@ export class IntegrationsComponent implements OnInit {
 
   pullAllKnackData(): void {
     if (!this.knackIntegrationId) return;
-    this.integrationService.pullAll(this.knackIntegrationId).subscribe({
+    this.integrationService.fetchAllSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
         if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
       },
@@ -308,29 +308,9 @@ export class IntegrationsComponent implements OnInit {
     });
   }
 
-  pullConvertkitData(): void {
-    if (!this.convertkitIntegrationId) return;
-    this.integrationService.pull(this.convertkitIntegrationId).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.message.success(res.message || 'Pull ConvertKit thành công!');
-        }
-      },
-      error: () => this.message.error('Lỗi khi pull ConvertKit!')
-    });
-  }
-
   pullAllConvertkitData(): void {
     if (!this.convertkitIntegrationId) return;
-    this.integrationService.pullAll(this.convertkitIntegrationId).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.message.success(res.message || 'Pull toàn bộ ConvertKit thành công!');
-        }
-      },
-      error: () => this.message.error('Lỗi khi pull all ConvertKit!')
-    });
+    this.message.info("Under construction...")
   }
-
 
 }

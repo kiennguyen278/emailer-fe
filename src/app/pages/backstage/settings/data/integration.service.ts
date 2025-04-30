@@ -20,19 +20,16 @@ export class IntegrationService extends BaseApiService {
     return this.http.put<ApiResponse<IntegrationSettingDTO>>(`${this.api}/${id}`, data);
   }
 
-  delete(id: number): Observable<ApiResponse<string>> {
-    return this.http.delete<ApiResponse<string>>(`${this.api}/${id}`);
-  }
-
   testConnection(dto: IntegrationSettingDTO): Observable<any> {
     return this.http.post(`${this.api}/testConnection`, dto);
   }
 
-  pull(id: number): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/pull`, {});
+  fetchSubscribersFromKnack(id: number): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/fetchSubscribersFromKnack`, {});
   }
 
-  pullAll(id: number): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/pullAll`, {});
+  fetchAllSubscribersFromKnack(id: number): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/fetchAllSubscribersFromKnack`, {});
   }
+  
 }

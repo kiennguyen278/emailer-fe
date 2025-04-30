@@ -61,7 +61,7 @@
     <ng-container *ngIf="convertkitUnderConstruction; else convertkitFormBlock">
       <div class="text-center py-6">
       <span style="color: #ff4d4f; font-weight: 500; font-size: 16px;">
-        🚧 ConvertKit đang được phát triển...
+        🚧 Under construction...
       </span>
       </div>
     </ng-container>
@@ -106,7 +106,6 @@
           <div class="text-right">
             <button nz-button (click)="testConvertkitConnection()" [disabled]="convertkitForm.disabled">Test Connection</button>
             <button nz-button nzType="primary" (click)="saveConvertkitIntegration()" [disabled]="convertkitForm.disabled">Save</button>
-            <button nz-button class="pull-btn" (click)="pullConvertkitData()" [disabled]="!canPullConvertkit()">Pull</button>
             <button nz-button class="pull-all-btn" (click)="pullAllConvertkitData()" [disabled]="!canPullConvertkit()">Pull All</button>
           </div>
         </div>
