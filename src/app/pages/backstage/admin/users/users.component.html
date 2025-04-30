@@ -61,8 +61,6 @@
   <form [formGroup]="formUser" (ngSubmit)="saveUser()">
 
     <div class="flex">
-
-
     </div>
     <div nz-row [nzGutter]="16">
       <div nz-col [nzSpan]="24">
@@ -77,51 +75,3 @@
     </div>
   </form>
 </ng-template>
-
-<!-- 📌 MODAL CHI TIẾT USER VỚI 2 TAB: INFO VÀ BUSINESS -->
-<!--<nz-modal-->
-<!--  [(nzVisible)]="isViewModalVisible"-->
-<!--  [nzTitle]="'Chi tiết người dùng'"-->
-<!--  [nzWidth]="800"-->
-<!--  (nzOnCancel)="closeViewModal()"-->
-<!--  [nzFooter]="null"-->
-<!--&gt;-->
-<!--  <nz-tabset [(nzSelectedIndex)]="activeTabIndex">-->
-<!--    <nz-tab nzTitle="Info">-->
-<!--      <div *ngIf="selectedUser">-->
-<!--        <p>Email: {{ selectedUser.email }}</p>-->
-<!--        <p>Trạng thái:-->
-<!--          <nz-tag [nzColor]="selectedUser.status === 'ACTIVE' ? 'green' : 'red'">{{ selectedUser.status }}</nz-tag>-->
-<!--          <button nz-button nzSize="small" (click)="toggleUserStatus()">Toggle</button>-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </nz-tab>-->
-
-<!--    <nz-tab nzTitle="Business Info">-->
-<!--      <form *ngIf="selectedUser" class="mt-2 px-2">-->
-<!--        <label>Tên doanh nghiệp:</label>-->
-<!--        <input nz-input [(ngModel)]="selectedUser.businessName" name="bizName" class="mb-2" />-->
-<!--        <label>Email doanh nghiệp:</label>-->
-<!--        <input nz-input [(ngModel)]="selectedUser.businessEmail" name="bizEmail" class="mb-2" />-->
-<!--        <label>Domain:</label>-->
-<!--        <input nz-input [(ngModel)]="selectedUser.domain" name="bizDomain" class="mb-2" />-->
-
-<!--        <label>Trạng thái doanh nghiệp:</label>-->
-<!--        <select [(ngModel)]="selectedUser.statusBusinessEmail" name="bizStatus" nz-select class="mb-3">-->
-<!--          <option value="VERIFIED">VERIFIED</option>-->
-<!--          <option value="UNVERIFIED">UNVERIFIED</option>-->
-<!--        </select>-->
-
-<!--        <div class="mt-2">-->
-<!--          <button nz-button nzType="primary" (click)="updateBusinessInfo()">Cập nhật thông tin</button>-->
-<!--          <button nz-button nzType="default" (click)="updateBusinessStatus()" class="ml-2">Cập nhật trạng thái</button>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </nz-tab>-->
-
-<!--    <nz-tab nzTitle="SMTP Info">-->
-<!--      Nothing-->
-<!--    </nz-tab>-->
-
-<!--  </nz-tabset>-->
-<!--</nz-modal>-->
