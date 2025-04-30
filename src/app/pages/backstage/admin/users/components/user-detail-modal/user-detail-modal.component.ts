@@ -16,6 +16,8 @@ import {NzMessageService} from "ng-zorro-antd/message";
 })
 export class UserDetailModalComponent implements OnInit {
 
+  isProcessing = false;
+
   readonly modalData: {user: UserDTO} = inject(NZ_MODAL_DATA);
   form: FormGroup;
 
@@ -72,13 +74,13 @@ export class UserDetailModalComponent implements OnInit {
     });
 
     this.smtpForm.get('provider')?.valueChanges.subscribe((provider) => {
-      if (provider === 'office365') {
+      if (provider.toLowerCase() === 'office365') {
         // Office365 chỉ cho phép port 587 và host cố định
         this.smtpForm.patchValue({
           smtpPort: 587,
           smtpServer: 'smtp.office365.com'
         });
-      } else if (provider === 'ses') {
+      } else if (provider.toLowerCase() === 'ses') {
         // SES có thể chọn port 587 hoặc 465, nhưng không tự set host
         this.smtpForm.patchValue({
           smtpPort: 587,
@@ -88,7 +90,7 @@ export class UserDetailModalComponent implements OnInit {
 
       // Reset port nếu không hợp lệ (tránh lưu port 465 cho office365)
       const port = this.smtpForm.get('smtpPort')?.value;
-      if (provider === 'office365' && port !== 587) {
+      if (provider.toLowerCase() === 'office365' && port !== 587) {
         this.smtpForm.patchValue({ smtpPort: 587 });
       }
     });
@@ -199,7 +201,10 @@ export class UserDetailModalComponent implements OnInit {
     this.adminService.getUserSMTP(this.user.id).subscribe({
       next: (res) => {
         if (res.success && res.data) {
-          this.smtpForm.patchValue(res.data);
+          this.smtpForm.patchValue({
+            ...res.data,
+            provider: res.data.provider?.toLowerCase() || null
+          });
 
           // Gán test result ra biến hiển thị
           if (res.data.lastTestResult) {
@@ -226,17 +231,21 @@ export class UserDetailModalComponent implements OnInit {
     }
 
     const payload = this.smtpForm.value;
+
+    this.isProcessing = true;
     this.adminService.testSmtpConnection(payload).subscribe({
       next: (result) => {
         if (result.success) {
           this.message.success('✅ Kết nối SMTP thành công.');
         } else {
-          this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+          this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
         }
       },
       error: (err) => {
-        this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
-      }
+        this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+      }, complete: () => {
+      this.isProcessing = false;
+    }
     });
 
   }
@@ -252,7 +261,7 @@ export class UserDetailModalComponent implements OnInit {
     if (!this.user || !this.user.id) return;
     this.adminService.saveSmtpSetting(this.user.id,this.smtpForm.value).subscribe({
       next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
+      error: err => this.message.error( err?.error?.message || 'Lỗi khi lưu SMTP')
     });
   }
 

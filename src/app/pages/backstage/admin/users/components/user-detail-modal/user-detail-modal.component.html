@@ -67,7 +67,7 @@
 
 
 
-    <nz-tab nzTitle="SMTP Info">
+    <nz-tab nzTitle="SMTP Settings">
       <div class="p-4 bg-white rounded shadow">
 
         <app-form-control>
@@ -134,8 +134,8 @@
 
           <nz-form-item>
             <nz-form-control>
-              <button nz-button (click)="onTestSmtp()">Kiểm tra kết nối</button>
-              <button nz-button nzType="primary" class="ml-2" (click)="saveSmtpSetting()">Lưu cấu hình</button>
+              <button nz-button (click)="onTestSmtp()" [disabled]="isProcessing"  >Kiểm tra kết nối</button>
+              <button nz-button nzType="primary" class="ml-2" (click)="saveSmtpSetting()" [disabled]="isProcessing" >Lưu cấu hình</button>
             </nz-form-control>
           </nz-form-item>
 
@@ -144,6 +144,11 @@
         <div *ngIf="!useCustomSmtp" class="mt-4 text-sm text-gray-500 italic">
           Bạn đang sử dụng <strong>SMTP mặc định</strong> của hệ thống để gửi email.
         </div>
+
+        <div *ngIf="isProcessing" class="text-center text-blue-500 mb-2 text-lg">
+          ⏳ Đang xử lý, vui lòng chờ...
+        </div>
+
       </div>
     </nz-tab>
 

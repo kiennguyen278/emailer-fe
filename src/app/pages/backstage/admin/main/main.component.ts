@@ -96,13 +96,13 @@ export class MainComponent implements OnInit {
     });
 
     this.smtpForm.get('provider')?.valueChanges.subscribe((provider) => {
-      if (provider === 'office365') {
+      if (provider.toLowerCase() === 'office365') {
         // Office365 chỉ cho phép port 587 và host cố định
         this.smtpForm.patchValue({
           smtpPort: 587,
           smtpServer: 'smtp.office365.com'
         });
-      } else if (provider === 'ses') {
+      } else if (provider.toLowerCase() === 'ses') {
         // SES có thể chọn port 587 hoặc 465, nhưng không tự set host
         this.smtpForm.patchValue({
           smtpPort: 587,
@@ -112,7 +112,7 @@ export class MainComponent implements OnInit {
 
       // Reset port nếu không hợp lệ (tránh lưu port 465 cho office365)
       const port = this.smtpForm.get('smtpPort')?.value;
-      if (provider === 'office365' && port !== 587) {
+      if (provider.toLowerCase() === 'office365' && port !== 587) {
         this.smtpForm.patchValue({ smtpPort: 587 });
       }
     });
