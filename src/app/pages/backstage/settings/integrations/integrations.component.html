@@ -16,31 +16,31 @@
     </div>
 
     <!-- ✅ KHÔNG dùng [nzDisabled] nữa -->
-    <form [formGroup]="knackForm">
+    <form *ngIf="isKnackEnabled" [formGroup]="knackForm">
       <div class="grid-form">
         <nz-form-item>
-          <nz-form-label [nzSpan]="6">Endpoint URL</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzRequired>Endpoint URL</nz-form-label>
           <nz-form-control [nzSpan]="18">
             <input nz-input formControlName="endpointUrl" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="6">Username</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzRequired>Username</nz-form-label>
           <nz-form-control [nzSpan]="18">
             <input nz-input formControlName="username" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="6">Password</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzRequired >Password</nz-form-label>
           <nz-form-control [nzSpan]="18">
             <input nz-input type="password" formControlName="password" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="6">Tag ID</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzRequired>Tag ID</nz-form-label>
           <nz-form-control [nzSpan]="18">
             <input nz-input type="number" formControlName="tagId" />
           </nz-form-control>
@@ -49,8 +49,8 @@
         <div class="text-right">
           <button nz-button (click)="testKnackConnection()" [disabled]="knackForm.disabled">Test Connection</button>
           <button nz-button nzType="primary" (click)="saveKnackIntegration()" [disabled]="knackForm.disabled">Save</button>
-          <button nz-button class="pull-btn" (click)="pullKnackData()" [disabled]="knackForm.disabled">Pull</button>
-          <button nz-button class="pull-all-btn" (click)="pullAllKnackData()" [disabled]="knackForm.disabled">Pull All</button>
+          <button nz-button class="pull-btn" (click)="pullKnackData()" [disabled]="!canPullKnack()">Pull</button>
+          <button nz-button class="pull-all-btn" (click)="pullAllKnackData()" [disabled]="!canPullKnack()" >Pull All</button>
         </div>
       </div>
     </form>

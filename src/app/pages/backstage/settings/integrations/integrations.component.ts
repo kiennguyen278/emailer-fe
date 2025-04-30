@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IntegrationService} from "../data/integration.service";
 import {IntegrationSettingDTO} from "../data/setting.model";
 
@@ -47,12 +47,13 @@ export class IntegrationsComponent implements OnInit {
   initKnackForm(): void {
     // knackForm
     this.knackForm = this.fb.group({
-      endpointUrl: [''],
-      username: [''],
-      password: [''],
-      tagId: [null],
-      status: ['INACTIVE'] // ✅ Mặc định OFF
+      endpointUrl: ['', Validators.required],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      tagId: [null, Validators.required],
+      status: ['INACTIVE']
     });
+
 
     this.knackIntegrationId = null;
     this.knackForm.reset(); // Hoặc giữ giá trị rỗng
@@ -80,6 +81,12 @@ export class IntegrationsComponent implements OnInit {
 
   // ✅ Save cấu hình KNACK
   saveKnackIntegration(): void {
+    if (this.knackForm.invalid) {
+      this.knackForm.markAllAsTouched(); // ✅ hiện lỗi ngay
+      this.message.warning('Vui lòng nhập đầy đủ thông tin cấu hình!');
+      return;
+    }
+
     const body = {
       ...this.knackForm.value,
       sourceType: 'KNACK',
@@ -155,6 +162,12 @@ export class IntegrationsComponent implements OnInit {
 
 // ✅ Test kết nối KNACK
   testKnackConnection(): void {
+    if (this.knackForm.invalid) {
+      this.knackForm.markAllAsTouched();
+      this.message.warning('Vui lòng nhập đầy đủ thông tin để kiểm tra kết nối!');
+      return;
+    }
+
     const body = {
       ...this.knackForm.value,
       sourceType: 'KNACK',
@@ -168,6 +181,10 @@ export class IntegrationsComponent implements OnInit {
       error: () => this.message.error("Kết nối KNACK không thành công!")
     });
     this.message.info('✅ Kết nối KNACK: OK (demo)');
+  }
+
+  canPullKnack(): boolean {
+    return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null;
   }
 
 }
