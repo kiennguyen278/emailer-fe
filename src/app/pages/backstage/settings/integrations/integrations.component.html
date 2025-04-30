@@ -70,8 +70,8 @@
         </nz-form-item>
 
         <div class="text-right">
-          <button nz-button (click)="testKnackConnection()" [disabled]="knackForm.disabled">Test Connection</button>
-          <button nz-button nzType="primary" (click)="saveKnackIntegration()" [disabled]="knackForm.disabled">Save</button>
+          <button nz-button (click)="testKnackConnection()" [disabled]="knackForm.disabled || knackProcessing">Test Connection</button>
+          <button nz-button nzType="primary" (click)="saveKnackIntegration()" [disabled]="knackForm.disabled || knackProcessing ">Save</button>
           <button nz-button class="pull-btn" (click)="pullKnackData()" [disabled]="!canPullKnack()">Pull</button>
           <button nz-button class="pull-all-btn" (click)="pullAllKnackData()" [disabled]="!canPullKnack()" >Pull All</button>
         </div>

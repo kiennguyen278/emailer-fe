@@ -153,29 +153,41 @@ export class IntegrationsComponent implements OnInit {
   pullKnackData(): void {
     if (!this.knackIntegrationId) return;
     this.knackProcessing = true;
+
     this.integrationService.fetchSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
-        if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
+        if (res.success) {
+          const count = res.data || 0;
+          this.message.success(`Đã cập nhật ${count} subscriber(s) vào hệ thống.`);
+        } else {
+          this.message.error(res.message || 'Pull từ KNACK thất bại!');
+        }
       },
       error: () => {
-        this.message.error('Lỗi khi pull từ KNACK!')
+        this.message.error('Lỗi khi pull từ KNACK!');
       },
       complete: () => {
         this.knackProcessing = false;
       }
-
     });
   }
+
 
   pullAllKnackData(): void {
     if (!this.knackIntegrationId) return;
     this.knackProcessing = true;
+
     this.integrationService.fetchAllSubscribersFromKnack(this.knackIntegrationId).subscribe({
       next: (res) => {
-        if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
+        if (res.success) {
+          const count = res.data || 0;
+          this.message.success(`Đã cập nhật ${count} subscriber(s) vào hệ thống.`);
+        } else {
+          this.message.error(res.message || 'Pull toàn bộ từ KNACK thất bại!');
+        }
       },
       error: () => {
-        this.message.error('Lỗi khi pull từ KNACK!')
+        this.message.error('Lỗi khi pull toàn bộ từ KNACK!');
       },
       complete: () => {
         this.knackProcessing = false;
@@ -212,7 +224,7 @@ export class IntegrationsComponent implements OnInit {
   }
 
   canPullKnack(): boolean {
-    return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null;
+    return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null && !this.knackProcessing;
   }
 
   initConvertkitForm(): void {
