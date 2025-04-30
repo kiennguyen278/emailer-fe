@@ -17,6 +17,8 @@ export class MainComponent implements OnInit {
   lastTestResult: string | null = null;
   lastTestedAt: string | null = null;
 
+  isProcessing = false;
+
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -70,11 +72,11 @@ export class MainComponent implements OnInit {
 
     this.adminService.updateGeneralSettings(payload).subscribe({
       next: () => {
-        this.message.success('✅ Đã cập nhật cài đặt hệ thống!');
+        this.message.success(' Đã cập nhật cài đặt hệ thống!');
         this.loading = false;
       },
       error: () => {
-        this.message.error('❌ Lỗi khi cập nhật cài đặt!');
+        this.message.error('Lỗi khi cập nhật cài đặt!');
         this.loading = false;
       }
     });
@@ -151,16 +153,20 @@ export class MainComponent implements OnInit {
     }
 
     const payload = this.smtpForm.value;
+    this.isProcessing = true;
     this.adminService.testSmtpConnection(payload).subscribe({
       next: (result) => {
         if (result.success) {
           this.message.success('✅ Kết nối SMTP thành công.');
         } else {
-          this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+          this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
         }
       },
       error: (err) => {
-        this.message.error('❌ Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+        this.message.error('Kết nối thất bại. Vui lòng kiểm tra lại cấu hình.');
+      },
+      complete: () => {
+        this.isProcessing = false;
       }
     });
 
@@ -174,7 +180,7 @@ export class MainComponent implements OnInit {
     }
     this.adminService.saveSystemSmtpSetting(this.smtpForm.value).subscribe({
       next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
-      error: err => this.message.error('❌ ' + err?.error?.message || 'Lỗi khi lưu SMTP')
+      error: err => this.message.error( err?.error?.message || 'Lỗi khi lưu SMTP')
     });
   }
 }
