@@ -37,13 +37,9 @@ export class IntegrationsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadList();
 
-    // knackForm
-    this.initKnackForm();
-
-    // convertkit form
-    // this.initConvertkitForm();
+    this.initKnackForm();  // ✅ luôn khởi tạo form trống ban đầu
+    this.loadList();       // ✅ sau đó load dữ liệu để patch nếu có
   }
 
   loadList(): void {
@@ -51,6 +47,8 @@ export class IntegrationsComponent implements OnInit {
       next: (res) => {
         if (res.success) {
           this.list = res.data || [];
+          // ✅ Load dữ liệu KNACK
+          this.loadKnackIntegration();
         }
       },
       error: () => this.message.error('Không thể load danh sách integration!')
@@ -66,12 +64,8 @@ export class IntegrationsComponent implements OnInit {
       tagId: [null, Validators.required],
       status: ['INACTIVE']
     });
-    this.knackIntegrationId = null;
-    this.knackForm.disable(); // ✅ Tắt form ban đầu
-    this.isKnackEnabled = false; // ✅ Switch OFF
-
-    // load and update from database
-    this.loadKnackIntegration();
+    this.isKnackEnabled = false;       // ✅ switch mặc định OFF
+    this.knackIntegrationId = null;    // ✅ chưa có id ban đầu
   }
 
 // ✅ Load dữ liệu KNACK
@@ -193,7 +187,6 @@ export class IntegrationsComponent implements OnInit {
     return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null;
   }
 
-
   initConvertkitForm(): void {
     this.convertkitForm = this.fb.group({
       endpointUrl: ['https://api.convertkit.com/v3/', Validators.required],
@@ -201,14 +194,8 @@ export class IntegrationsComponent implements OnInit {
       tagId: [null, Validators.required],
       status: ['INACTIVE']
     });
-    this.convertkitForm.disable();
-
     this.convertkitIntegrationId  = null;
-    this.convertkitForm.disable(); // ✅ Tắt form ban đầu
     this.isConvertkitEnabled = false; // ✅ Switch OFF
-
-    // load and update from database
-    this.loadConvertkitIntegration();
   }
 
   loadConvertkitIntegration(): void {
