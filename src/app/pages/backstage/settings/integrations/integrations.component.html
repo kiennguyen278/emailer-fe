@@ -1,113 +1,61 @@
-<nz-card>
-  <button nz-button nzType="primary" (click)="openCreate()">Add Integration</button>
-  <nz-table [nzData]="list" [nzLoading]="loading" [nzBordered]="true" class="mt-4">
-    <thead>
-    <tr>
-      <th>System Name</th>
-      <th>Endpoint URL</th>
-      <th>Source Type</th>
-      <th>Status</th>
-      <th>Last Pull At</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let item of list">
-      <td>{{ item.systemName }}</td>
-      <td>{{ item.endpointUrl }}</td>
-      <td>{{ item.sourceType }}</td>
-      <td>{{ item.status }}</td>
-      <td>{{ item.lastPullAt || '-' }}</td>
-      <td>
-        <a (click)="openEdit(item)">Edit</a>
-        <a class="ml-2" (click)="confirmDelete(item.id!)" style="color: red;">Delete</a>
-      </td>
-    </tr>
-    </tbody>
-  </nz-table>
-</nz-card>
+<div class="settings-wrapper">
+  <h2 class="mb-4">Integration Settings</h2>
 
-<nz-modal
-  [(nzVisible)]="isModalOpen"
-  [nzTitle]="isEditMode ? 'Edit Integration' : 'Create Integration'"
-  [nzWidth]="700"
-  (nzOnCancel)="isModalOpen = false"
->
+  <nz-card nzTitle="KNACK Integration" class="mb-4">
+    <!-- ✅ Switch nằm trong card body -->
+    <div class="mb-3">
+      <label class="font-bold mr-2">Trạng thái:</label>
 
-  <form [formGroup]="form" *nzModalContent>
-    <div class="grid-form">
+      <nz-switch
+        [(ngModel)]="isKnackEnabled"
+        [nzCheckedChildren]="'ON'"
+        [nzUnCheckedChildren]="'OFF'"
+        (ngModelChange)="toggleKnackStatus($event)"
+      ></nz-switch>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Source Type</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <nz-select formControlName="sourceType" [nzDisabled]="true">
-            <nz-option nzValue="KNACK" nzLabel="KNACK"></nz-option>
-            <nz-option nzValue="CONVERTKIT" nzLabel="CONVERTKIT"></nz-option>
-            <nz-option nzValue="OTHER" nzLabel="OTHER"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">System Name</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="systemName" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Endpoint URL</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="endpointUrl" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Username</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="username" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Password</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input type="password" formControlName="password" />
-        </nz-form-control>
-      </nz-form-item>
-
-<!--      <nz-form-item>
-        <nz-form-label [nzSpan]="6">API Key</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <input nz-input formControlName="apiKey" />
-        </nz-form-control>
-      </nz-form-item>-->
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Tag ID (Để import tới)</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Tag ID phải lớn hơn 0 nếu nhập">
-          <input nz-input type="number" formControlName="tagId" />
-        </nz-form-control>
-      </nz-form-item>
-
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6">Status</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <nz-select formControlName="status">
-            <nz-option nzValue="ACTIVE" nzLabel="ACTIVE"></nz-option>
-            <nz-option nzValue="INACTIVE" nzLabel="INACTIVE"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
     </div>
-  </form>
 
-  <ng-container *nzModalFooter>
-    <button nz-button (click)="isModalOpen = false">Cancel</button>
-    <button nz-button (click)="testConnection()">Test Connection</button>
-    <button nz-button nzType="primary" (click)="submitForm()">Save</button>
-    <button nz-button nzType="default" [disabled]="!editingId" (click)="pullData()">Pull Data</button>
-  </ng-container>
-</nz-modal>
+    <!-- ✅ KHÔNG dùng [nzDisabled] nữa -->
+    <form [formGroup]="knackForm">
+      <div class="grid-form">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Endpoint URL</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input formControlName="endpointUrl" />
+          </nz-form-control>
+        </nz-form-item>
 
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Username</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input formControlName="username" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Password</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input type="password" formControlName="password" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Tag ID</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <input nz-input type="number" formControlName="tagId" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <div class="text-right">
+          <button nz-button (click)="testKnackConnection()" [disabled]="knackForm.disabled">Test Connection</button>
+          <button nz-button nzType="primary" (click)="saveKnackIntegration()" [disabled]="knackForm.disabled">Save</button>
+          <button nz-button class="pull-btn" (click)="pullKnackData()" [disabled]="knackForm.disabled">Pull</button>
+          <button nz-button class="pull-all-btn" (click)="pullAllKnackData()" [disabled]="knackForm.disabled">Pull All</button>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
+
+
+</div>

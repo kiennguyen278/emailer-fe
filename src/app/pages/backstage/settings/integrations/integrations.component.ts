@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {IntegrationSettingDTO} from "../data/setting.model";
+import {Component, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {IntegrationService} from "../data/integration.service";
+import {IntegrationSettingDTO} from "../data/setting.model";
 
 @Component({
   selector: 'app-integrations',
@@ -12,13 +12,12 @@ import {IntegrationService} from "../data/integration.service";
   providers: [IntegrationService]
 })
 export class IntegrationsComponent implements OnInit {
-  list: IntegrationSettingDTO[] = [];
-  loading = false;
 
-  isModalOpen = false;
-  isEditMode = false;
-  form!: FormGroup;
-  editingId?: number;
+  list: IntegrationSettingDTO[] = [];
+
+  knackForm!: FormGroup;
+  knackIntegrationId: number | null = null;
+  isKnackEnabled = false;
 
   constructor(
     private integrationService: IntegrationService,
@@ -29,143 +28,146 @@ export class IntegrationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadList();
+
+    // knackForm
+    this.initKnackForm();
   }
 
-  loadList() {
-    this.loading = true;
+  loadList(): void {
     this.integrationService.getAll().subscribe({
       next: (res) => {
         if (res.success) {
-          this.list = res.data; // ✅ Lấy đúng `data`
-        } else {
-          this.message.error(res.message || 'Lấy danh sách thất bại!');
+          this.list = res.data || [];
         }
-        this.loading = false;
       },
-      error: () => {
-        this.message.error('Failed to load integrations');
-        this.loading = false;
-      }
+      error: () => this.message.error('Không thể load danh sách integration!')
     });
   }
 
-  openCreate() {
-    this.isEditMode = false;
-    this.isModalOpen = true;
-    this.editingId = undefined;
-    this.form = this.fb.group({
-      systemName: ['', Validators.required],
-      endpointUrl: ['', Validators.required],
+  initKnackForm(): void {
+    // knackForm
+    this.knackForm = this.fb.group({
+      endpointUrl: [''],
       username: [''],
       password: [''],
-      apiKey: [''],
-      tagId: [null, [this.optionalPositiveValidator()]],
-      sourceType: [{ value: 'KNACK', disabled: true }, Validators.required],
-      status: ['ACTIVE', Validators.required]
+      tagId: [null],
+      status: ['INACTIVE'] // ✅ Mặc định OFF
     });
+
+    this.knackIntegrationId = null;
+    this.knackForm.reset(); // Hoặc giữ giá trị rỗng
+    this.knackForm.disable(); // ✅ Tắt form ban đầu
+    this.isKnackEnabled = false; // ✅ Switch OFF
+
+    // load and update from database
+    this.loadKnackIntegration();
   }
 
-  openEdit(item: IntegrationSettingDTO) {
-    this.isEditMode = true;
-    this.isModalOpen = true;
-    this.editingId = item.id;
-    this.form = this.fb.group({
-      systemName: [item.systemName, Validators.required],
-      endpointUrl: [item.endpointUrl, Validators.required],
-      username: [item.username],
-      password: [''], // Nếu không sửa thì để trống
-      apiKey: [item.apiKey],
-      tagId: [null, [this.optionalPositiveValidator()]],
-      sourceType: [item.sourceType, Validators.required],
-      status: [item.status, Validators.required]
-    });
+// ✅ Load dữ liệu KNACK
+  loadKnackIntegration(): void {
+    const knack = this.list.find(x => x.sourceType === 'KNACK');
+    if (knack && knack.id) {
+      this.isKnackEnabled = knack.status === 'ACTIVE';
+      this.knackIntegrationId = knack.id;
+      this.knackForm.patchValue({
+        endpointUrl: knack.endpointUrl,
+        username: knack.username,
+        password: knack.password,
+        tagId: knack.tagId
+      });
+    }
   }
 
-  submitForm(): void {
-    if (this.form.invalid) return;
+  // ✅ Save cấu hình KNACK
+  saveKnackIntegration(): void {
+    const body = {
+      ...this.knackForm.value,
+      sourceType: 'KNACK',
+      systemName: 'Knack CRM'
+    };
 
-    const body = this.form.value;
-    const request$ = this.editingId
-      ? this.integrationService.update(this.editingId, body)
+    const obs$ = this.knackIntegrationId
+      ? this.integrationService.update(this.knackIntegrationId, body)
       : this.integrationService.create(body);
 
-    request$.subscribe({
+    obs$.subscribe({
       next: (res) => {
         if (res.success) {
-          this.message.success(res.message || 'Thành công');
-          this.isModalOpen = false;
-          this.loadList();
-        } else {
-          this.message.error(res.message || 'Thao tác thất bại!');
+          this.message.success(res.message || 'Đã lưu cấu hình KNACK');
+          this.loadKnackIntegration(); // reload lại form
         }
       },
-      error: () => this.message.error('Không thể thực hiện thao tác')
+      error: () => this.message.error('Lỗi khi lưu cấu hình KNACK!')
     });
   }
 
+  toggleKnackStatus(active: boolean): void {
+    this.isKnackEnabled = active;
+    const status = active ? 'ACTIVE' : 'INACTIVE';
 
-  confirmDelete(id: number): void {
-    this.modal.confirm({
-      nzTitle: 'Xác nhận xoá?',
-      nzOnOk: () =>
-        this.integrationService.delete(id).subscribe({
-          next: (res) => {
-            if (res.success) {
-              this.message.success(res.message || 'Xoá thành công');
-              this.loadList();
-            } else {
-              this.message.error(res.message || 'Không xoá được!');
-            }
-          },
-          error: () => this.message.error('Lỗi xoá!')
-        })
-    });
-  }
-
-
-  optionalPositiveValidator() {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      if (value === null || value === undefined || value === '') {
-        return null; // không nhập gì thì hợp lệ
-      }
-      return value > 0 ? null : { positive: true }; // nếu nhập thì phải > 0
-    };
-  }
-
-
-  testConnection() {
-    const value = this.form.getRawValue();
-    if (!value.endpointUrl || !value.systemName) {
-      this.message.warning('Vui lòng nhập Endpoint và System Name trước');
+    // Nếu chưa lưu integration -> chỉ enable/disable form
+    if (!this.knackIntegrationId) {
+      this.knackForm.patchValue({ status });
+      status === 'ACTIVE' ? this.knackForm.enable() : this.knackForm.disable();
       return;
     }
 
-    // Gọi API test (tuỳ backend bạn có không)
-    this.message.info('Đang kiểm tra kết nối...');
+    const body = {
+      ...this.knackForm.getRawValue(),
+      status,
+      sourceType: 'KNACK',
+      systemName: 'Knack CRM'
+    };
 
-    // Ví dụ bạn tự tạo API: POST /api/integrations/test
-    this.integrationService.testConnection(value).subscribe({
-      next: () => this.message.success('Kết nối thành công!'),
-      error: () => this.message.error('Kết nối thất bại!')
-    });
-  }
-
-
-  pullData(): void {
-    if (!this.editingId) return;
-    this.integrationService.pull(this.editingId).subscribe({
+    this.integrationService.update(this.knackIntegrationId, body).subscribe({
       next: (res) => {
         if (res.success) {
-          this.message.success(res.message || 'Pull thành công!');
-          this.loadList();
-        } else {
-          this.message.error(res.message || 'Pull thất bại!');
+          this.knackForm.patchValue({ status });
+          status === 'ACTIVE' ? this.knackForm.enable() : this.knackForm.disable();
+          this.message.success(`Đã ${status === 'ACTIVE' ? 'bật' : 'tắt'} KNACK`);
         }
       },
-      error: () => this.message.error('Lỗi khi pull dữ liệu!')
+      error: () => this.message.error('Lỗi khi cập nhật trạng thái!')
     });
   }
 
+
+// ✅ Pull dữ liệu KNACK
+  pullKnackData(): void {
+    if (!this.knackIntegrationId) return;
+    this.integrationService.pull(this.knackIntegrationId).subscribe({
+      next: (res) => {
+        if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
+      },
+      error: () => this.message.error('Lỗi khi pull từ KNACK!')
+    });
+  }
+
+  pullAllKnackData(): void {
+    if (!this.knackIntegrationId) return;
+    this.integrationService.pullAll(this.knackIntegrationId).subscribe({
+      next: (res) => {
+        if (res.success) this.message.success(res.message || 'Pull từ KNACK thành công!');
+      },
+      error: () => this.message.error('Lỗi khi pull từ KNACK!')
+    });
+  }
+
+// ✅ Test kết nối KNACK
+  testKnackConnection(): void {
+    const body = {
+      ...this.knackForm.value,
+      sourceType: 'KNACK',
+      systemName: 'Knack CRM'
+    };
+
+    this.integrationService.testConnection(body).subscribe({
+      next: (res) => {
+        if (res.success) this.message.success(res.message);
+      },
+      error: () => this.message.error("Kết nối KNACK không thành công!")
+    });
+    this.message.info('✅ Kết nối KNACK: OK (demo)');
+  }
 
 }

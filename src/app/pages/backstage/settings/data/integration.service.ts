@@ -29,6 +29,10 @@ export class IntegrationService extends BaseApiService {
   }
 
   pull(id: number): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/${id}/pull`, {});
+    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/pull`, {});
+  }
+
+  pullAll(id: number): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/pullAll`, {});
   }
 }

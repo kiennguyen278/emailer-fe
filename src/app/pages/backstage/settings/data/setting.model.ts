@@ -34,6 +34,7 @@ export interface IntegrationSettingDTO {
   endpointUrl: string;
   username?: string;
   password?: string; // chỉ khi tạo/sửa mới gửi
+  api_secret?: string;
   apiKey?: string;
   sourceType: 'KNACK' | 'CONVERTKIT' | 'OTHER';
   status: 'ACTIVE' | 'INACTIVE';
