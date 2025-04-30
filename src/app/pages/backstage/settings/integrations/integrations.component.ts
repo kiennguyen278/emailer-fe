@@ -79,7 +79,8 @@ export class IntegrationsComponent implements OnInit {
         endpointUrl: knack.endpointUrl || 'https://webmedius.knack.com/dream-team-admin-v2#business-owners-v2/viewmyleads/',
         username: knack.username,
         password: knack.password,
-        tagId: knack.tagId
+        tagId: knack.tagId,
+        status:knack.status
       });
     }
   }
