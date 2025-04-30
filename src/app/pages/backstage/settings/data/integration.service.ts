@@ -12,6 +12,10 @@ export class IntegrationService extends BaseApiService {
     return this.http.get<ApiResponse<IntegrationSettingDTO[]>>(`${this.api}`);
   }
 
+  save(dto: IntegrationSettingDTO): Observable<ApiResponse<IntegrationSettingDTO>> {
+    return this.http.post<ApiResponse<IntegrationSettingDTO>>(`${this.api}/save`, dto);
+  }
+
   create(data: IntegrationSettingDTO): Observable<ApiResponse<IntegrationSettingDTO>> {
     return this.http.post<ApiResponse<IntegrationSettingDTO>>(`${this.api}`, data);
   }

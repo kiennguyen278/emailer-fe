@@ -101,25 +101,23 @@ export class IntegrationsComponent implements OnInit {
       return;
     }
 
-    const body = {
-      ...this.knackForm.value,
+    const dto: IntegrationSettingDTO = {
+      ...this.knackForm.getRawValue(),
       sourceType: 'KNACK',
       systemName: 'Knack CRM'
     };
 
-    const obs$ = this.knackIntegrationId
-      ? this.integrationService.update(this.knackIntegrationId, body)
-      : this.integrationService.create(body);
-
-    obs$.subscribe({
+    this.integrationService.save(dto).subscribe({
       next: (res) => {
         if (res.success) {
-          this.message.success(res.message || 'Đã lưu cấu hình KNACK');
-          this.loadKnackIntegration(); // reload lại form
+          this.message.success(res.message || 'Đã lưu cấu hình KNACK!');
+          this.knackIntegrationId = res.data?.id ?? null;
+          this.knackForm.patchValue({ status: res.data?.status });
         }
       },
       error: () => this.message.error('Lỗi khi lưu cấu hình KNACK!')
     });
+
   }
 
   toggleKnackStatus(active: boolean): void {
@@ -189,7 +187,6 @@ export class IntegrationsComponent implements OnInit {
       },
       error: () => this.message.error("Kết nối KNACK không thành công!")
     });
-    this.message.info('✅ Kết nối KNACK: OK (demo)');
   }
 
   canPullKnack(): boolean {
