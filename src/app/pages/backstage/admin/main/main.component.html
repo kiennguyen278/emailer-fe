@@ -5,7 +5,7 @@
 
       <!-- Tên hệ thống -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'systemName'" nzRequired>Tên hệ thống</nz-form-label>
+        <nz-form-label [nzFor]="'systemName'" nzRequired>System name</nz-form-label>
         <nz-form-control [nzErrorTip]="'Vui lòng nhập tên hệ thống'">
           <input nz-input id="systemName" formControlName="systemName" placeholder="Tên hệ thống" />
         </nz-form-control>
@@ -13,7 +13,7 @@
 
       <!-- Email hệ thống -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'systemEmail'" nzRequired>Email hệ thống</nz-form-label>
+        <nz-form-label [nzFor]="'systemEmail'" nzRequired>System email</nz-form-label>
         <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
           <input nz-input id="systemEmail" formControlName="systemEmail" placeholder="Email hệ thống" />
         </nz-form-control>
@@ -21,7 +21,7 @@
 
       <!-- Dùng SMTP mặc định -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'enableDefaultSmtp'">Dùng SMTP mặc định</nz-form-label>
+        <nz-form-label [nzFor]="'enableDefaultSmtp'">Always use System SMTP </nz-form-label>
         <nz-form-control>
           <nz-switch id="enableDefaultSmtp" formControlName="enableDefaultSmtp"></nz-switch>
         </nz-form-control>
@@ -29,7 +29,7 @@
 
       <!-- Cho phép gửi email -->
       <nz-form-item>
-        <nz-form-label [nzFor]="'enabledSending'">Cho phép gửi email</nz-form-label>
+        <nz-form-label [nzFor]="'enabledSending'">Enabled/Disable Send Mail</nz-form-label>
         <nz-form-control>
           <nz-switch id="enabledSending" formControlName="enabledSending"></nz-switch>
         </nz-form-control>
