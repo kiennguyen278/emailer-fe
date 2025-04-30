@@ -25,11 +25,11 @@ export class IntegrationService extends BaseApiService {
   }
 
   fetchSubscribersFromKnack(id: number): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/fetchSubscribersFromKnack`, {});
+    return this.http.post<ApiResponse<string>>(`${this.api}/fetchSubscribersFromKnack`, {});
   }
 
   fetchAllSubscribersFromKnack(id: number): Observable<ApiResponse<string>> {
-    return this.http.post<ApiResponse<string>>(`${this.api}/${id}/fetchAllSubscribersFromKnack`, {});
+    return this.http.post<ApiResponse<string>>(`${this.api}/fetchAllSubscribersFromKnack`, {});
   }
-  
+
 }
