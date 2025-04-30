@@ -67,7 +67,6 @@ export class IntegrationsComponent implements OnInit {
       status: ['INACTIVE']
     });
     this.knackIntegrationId = null;
-    this.knackForm.reset(); // Hoặc giữ giá trị rỗng
     this.knackForm.disable(); // ✅ Tắt form ban đầu
     this.isKnackEnabled = false; // ✅ Switch OFF
 
@@ -213,7 +212,6 @@ export class IntegrationsComponent implements OnInit {
     this.convertkitForm.disable();
 
     this.convertkitIntegrationId  = null;
-    this.convertkitForm.reset(); // Hoặc giữ giá trị rỗng
     this.convertkitForm.disable(); // ✅ Tắt form ban đầu
     this.isConvertkitEnabled = false; // ✅ Switch OFF
 
