@@ -6,7 +6,7 @@
       <nz-card nzTitle="Thông tin doanh nghiệp" [nzSize]="'default'">
         <form [formGroup]="businessForm" nz-form [nzLayout]="'vertical'" >
           <nz-row [nzGutter]="16">
-            <nz-col [nzSpan]="12">
+            <nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label>Tên doanh nghiệp</nz-form-label>
                 <nz-form-control>
@@ -17,7 +17,7 @@
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
-            <nz-col [nzSpan]="12">
+            <nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label>Email doanh nghiệp</nz-form-label>
                 <nz-form-control>
@@ -29,6 +29,18 @@
                     <nz-tag *ngIf="emailVerificationStatus.isVerified" nzColor="green">Đã xác minh</nz-tag>
                     <nz-tag *ngIf="!emailVerificationStatus.isVerified" nzColor="red">Chưa xác minh</nz-tag>
                   </div>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+            <nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label>Domain doanh nghiệp</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="businessDomain"
+                    placeholder="Nhập tên domain doanh nghiệp"/>
                 </nz-form-control>
               </nz-form-item>
             </nz-col>

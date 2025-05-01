@@ -55,6 +55,7 @@ export class MainComponent implements OnInit {
   initBusinessForm() {
     this.businessForm = this.fb.group({
       businessName: ['', Validators.required],
+      businessDomain: [''],
       businessEmail: ['', [Validators.required, Validators.email]]
     });
   }
@@ -66,7 +67,8 @@ export class MainComponent implements OnInit {
           const data = res.data;
           this.businessForm.patchValue({
             businessName: data.businessName,
-            businessEmail: data.businessEmail
+            businessEmail: data.businessEmail,
+            businessDomain: data.businessDomain
           });
           this.emailVerificationStatus.isVerified = data.isVerified ?? false;
 
