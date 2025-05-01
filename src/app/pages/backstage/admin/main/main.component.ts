@@ -19,6 +19,9 @@ export class MainComponent implements OnInit {
 
   isProcessing = false;
 
+  downloadingLog = false;
+  logDownloadedAt: Date | null = null;
+
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
@@ -40,6 +43,7 @@ export class MainComponent implements OnInit {
       systemUrl: ['', Validators.required],
       frontendUrl: ['', Validators.required],
       systemEmail: ['', [Validators.required, Validators.email]],
+      logPath: ['', Validators.required],
       isMaintenanceMode: [false],
       usedSystemSmtp: [false],
       enableDefaultSmtp: [true],
@@ -185,6 +189,29 @@ export class MainComponent implements OnInit {
     this.adminService.saveSystemSmtpSetting(this.smtpForm.value).subscribe({
       next: () => this.message.success('✅ Cấu hình SMTP đã được lưu!'),
       error: err => this.message.error( err?.error?.message || 'Lỗi khi lưu SMTP')
+    });
+  }
+
+  downloadLogs(): void {
+    this.downloadingLog = true;
+    this.adminService.downloadSystemLogs().subscribe({
+      next: (blob) => {
+        const now = new Date();
+        const filename = `logs_${now.toISOString().replace(/[:.]/g, '_')}.zip`;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.logDownloadedAt = now;
+      },
+      error: (err) => {
+        console.error('Lỗi khi tải log:', err);
+      },
+      complete: () => {
+        this.downloadingLog = false;
+      }
     });
   }
 }

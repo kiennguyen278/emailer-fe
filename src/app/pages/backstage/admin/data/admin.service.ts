@@ -88,4 +88,11 @@ export class AdminService extends BaseApiService {
     return this.http.get<ApiResponse<SmtpSetting>>(url);
   }
 
+  downloadSystemLogs(): Observable<Blob> {
+    const url = this.buildUrl(`admin/logs/download`);
+    return this.http.get(url, {
+      responseType: 'blob'
+    });
+  }
+
 }

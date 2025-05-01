@@ -26,6 +26,7 @@ export interface GeneralSettings {
 
   systemUrl: string | null;
   frontendUrl: string | null;
+  logPath: string | null;
   isMaintenanceMode: boolean;
 }
 
