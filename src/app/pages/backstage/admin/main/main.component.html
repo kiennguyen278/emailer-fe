@@ -30,7 +30,7 @@
       <!-- systemUrl-->
       <nz-form-item>
         <nz-form-label [nzFor]="'systemUrl'" nzRequired>System Url</nz-form-label>
-        <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
+        <nz-form-control [nzErrorTip]="'Url không hợp lệ hoặc chưa nhập'">
           <input nz-input id="systemUrl" formControlName="systemUrl" placeholder="System Url" />
         </nz-form-control>
       </nz-form-item>
@@ -38,8 +38,16 @@
       <!-- frontendUrl-->
       <nz-form-item>
         <nz-form-label [nzFor]="'frontendUrl'" nzRequired>Frontend Url</nz-form-label>
-        <nz-form-control [nzErrorTip]="'Email không hợp lệ hoặc chưa nhập'">
+        <nz-form-control [nzErrorTip]="'Url không hợp lệ hoặc chưa nhập'">
           <input nz-input id="frontendUrl" formControlName="frontendUrl" placeholder="Frontend Url" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- logPath-->
+      <nz-form-item>
+        <nz-form-label [nzFor]="'logPath'" nzRequired>Log Path</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Log path không hợp lệ hoặc chưa nhập'">
+          <input nz-input id="logPath" formControlName="logPath" placeholder="Log Path" />
         </nz-form-control>
       </nz-form-item>
 
@@ -152,6 +160,18 @@
   </nz-tab>
 
   <nz-tab nzTitle="Advanced Settings">
-    <div class="p-4">Coming soon...</div>
+    <div class="p-4 bg-white rounded shadow">
+      <h3 class="text-lg font-semibold mb-3">Download Logs</h3>
+      <p class="mb-3 text-gray-600">
+        Bạn có thể tải toàn bộ log hệ thống để kiểm tra lỗi hoặc phân tích. File log sẽ được nén (.zip) tự động trước khi tải.
+      </p>
+      <button nz-button nzType="primary" (click)="downloadLogs()" [nzLoading]="downloadingLog">
+        📥 Tải log hệ thống
+      </button>
+      <p *ngIf="logDownloadedAt" class="mt-2 text-green-600">
+        ✅ Đã tải lúc {{ logDownloadedAt | date:'HH:mm:ss dd/MM/yyyy' }}
+      </p>
+    </div>
   </nz-tab>
+
 </nz-tabset>
