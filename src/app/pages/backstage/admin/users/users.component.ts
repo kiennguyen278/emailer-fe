@@ -17,6 +17,7 @@ import {DATE_TIME_FORMAT} from '@core/constants';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
+  modalRef: any; // Dùng để đóng modal từ bên trong
   @ViewChild('modalUserForm', { static: true }) modalUserFormTpl!: TemplateRef<any>;
   formSearch: FormGroup;
   formUser: FormGroup;
@@ -173,9 +174,9 @@ export class UsersComponent implements OnInit {
 
   showCreateModal(): void {
     this.formUser.reset({ status: 'INACTIVE' });
-    this.modal.create({
+    this.modalRef = this.modal.create({
       nzTitle: 'Thêm User mới',
-      nzContent: this.modalUserFormTpl, // ✅ dùng TemplateRef
+      nzContent: this.modalUserFormTpl,
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: false
@@ -261,4 +262,9 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  closeUserModal(): void {
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
 }
