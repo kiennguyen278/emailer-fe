@@ -93,11 +93,17 @@ export class MainComponent implements OnInit {
       return;
     }
 
+    this.isProcessing = true;
     this.settingsService.updateBusinessInfo(this.businessForm.value).subscribe({
       next: () => {
         this.message.success('✅ Chúng tôi đã gửi một email yêu cầu xác minh email doanh nghiệp của bạn!')
       },
-      error: err => this.message.error(err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
+      error: err => {
+        this.message.error(err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
+      },
+      complete: () => {
+      this.isProcessing = false;
+    }
     });
   }
 

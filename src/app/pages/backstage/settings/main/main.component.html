@@ -38,13 +38,18 @@
             <button
               nz-button
               nzType="primary"
-              [disabled]="emailVerificationStatus.isVerified"
+              [disabled]="emailVerificationStatus.isVerified || isProcessing"
               (click)="saveBusinessInfo()">
               Lưu thay đổi
             </button>
 
           </div>
         </form>
+
+        <div *ngIf="isProcessing" class="text-center text-blue-500 mb-2 text-lg">
+          ⏳ Đang xử lý, vui lòng chờ...
+        </div>
+
       </nz-card>
     </nz-tab>
 
