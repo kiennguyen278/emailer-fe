@@ -111,6 +111,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   isViewModalVisible = false;
 
   selectedSubscriber: SubscriberDetailDTO | null = null;
+  checkboxSelectedSubscriber: SubscriberDTO[] = [];
 
   findItemsAction = getListSubscribers as (arg: { payload: any }) => any;
   selectItems = selectDataGetSubscriberList;
@@ -385,6 +386,40 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     if (this.modalImportSubcriberRef){
       this.modalImportSubcriberRef.destroy();
     }
+  }
+
+  onSelectedItem(items: SubscriberDTO[]): void {
+    console.log('SubscriberDTO', items);
+
+    this.checkboxSelectedSubscriber = items;
+  }
+
+  onBulkDelete(items: SubscriberDTO[]): void {
+
+    const ids: number[] = items.map(item => item.id);
+
+    this.subscribersService.bulkDeleteSubscriber(ids).subscribe({
+      next: (res) => {
+        console.log('res bulkDeleteSubscriber', res)
+        if (res.success) {
+          this.checkboxSelectedSubscriber = [];
+          this.notification.open({
+            type: 'success',
+            content: res.message || 'Đã xoá danh sách subscriber đã chọn'
+          });
+          this.findItems();
+        }
+      },
+      error: ({error}) => {
+        console.log('error bulkDeleteSubscriber', error)
+        this.notification.open({
+          type: 'error',
+          content: error?.message || 'Có lỗi khi xóa danh sách subscriber'
+        })
+      }
+    });
+
+
   }
 
   showViewModal(subscriber: any): void {

@@ -83,4 +83,17 @@ export class SubscribersService extends BaseApiService{
     return this.http.get<ApiResponse<SubscriberStatsDTO>>(url);
   }
 
+
+  bulkDeleteSubscriber(subscriberIds: number[]): Observable<any> {
+    const url = this.buildUrl(`/subscribers/batch-delete`);
+    return this.http.request('DELETE', url, {
+      body: subscriberIds,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+
+
 }
