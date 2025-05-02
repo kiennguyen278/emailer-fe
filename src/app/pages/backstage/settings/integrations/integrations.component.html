@@ -42,32 +42,37 @@
           <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input type="number" formControlName="tagId" />
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Giải thích:
+            <div class="ant-form-text text-gray-500 mt-2 font-semibold">
+              🔍 Giải thích chi tiết:
             </div>
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Tag ID trong hệ thống Mailer ( Trong menu : Subcribers -> Tags), sẽ được dùng để gắn tag cho subscriber khi import từ integration.
+            <div class="ant-form-text text-gray-500 mt-1">
+              • <strong>Tag ID</strong> là ID của một thẻ (tag) trong hệ thống Mailer. Bạn có thể tìm thấy trong menu <strong>Subscribers → Tags</strong>.
             </div>
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Test connection : Để kiểm tra kết nối đến KNACK với những thông tin đã nhập.
+            <div class="ant-form-text text-gray-500 mt-1">
+              • Khi tích hợp với hệ thống khác (ví dụ: KNACK), hệ thống sẽ <strong>gắn tag này cho subscriber</strong> khi import.
             </div>
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Save : Sau khi thiết lập xong và Save thành công, hệ thống sẽ TỰ ĐỘNG CẬP NHẬT Leads mới từ KNACK một tiếng một lần!
+            <div class="ant-form-text text-gray-500 mt-1">
+              • <strong>Test connection</strong>: Kiểm tra kết nối đến KNACK với các thông tin đã nhập.
             </div>
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Pull : Sẽ thực hiện cập nhật Leads mới từ hệ thống KNACK sang một cách thủ công. (Chỉ khi được khi đã thực hiện Save)
+            <div class="ant-form-text text-gray-500 mt-1">
+              • <strong>Save</strong>: Lưu thiết lập. Sau khi lưu thành công, hệ thống sẽ <strong>tự động đồng bộ Leads mới từ KNACK mỗi giờ</strong>.
             </div>
 
-            <div class="ant-form-text" style="color: rgba(0,0,0,0.45); margin-top: 4px;">
-              Pull All : Chỉ dùng nếu muốn đồng bộ toàn bộ Leads từ hệ thống KNACK sang Mailer,(Chỉ khi được khi đã thực hiện Save)
+            <div class="ant-form-text text-gray-500 mt-1">
+              • <strong>Pull</strong>: Đồng bộ ngay lập tức các Leads mới từ KNACK sang Mailer. <span class="italic">(Chỉ thực hiện được sau khi đã Save)</span>
+            </div>
+
+            <div class="ant-form-text text-gray-500 mt-1">
+              • <strong>Pull All</strong>: Đồng bộ toàn bộ Leads từ KNACK sang Mailer. <span class="italic">(Chỉ thực hiện được sau khi đã Save)</span>
             </div>
 
           </nz-form-control>
         </nz-form-item>
+
 
         <div class="text-right">
           <button nz-button (click)="testKnackConnection()" [disabled]="knackForm.disabled || knackProcessing">Test Connection</button>
