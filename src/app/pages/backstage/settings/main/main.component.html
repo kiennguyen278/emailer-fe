@@ -8,7 +8,7 @@
           <nz-row [nzGutter]="16">
             <nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label>Tên doanh nghiệp</nz-form-label>
+                <nz-form-label nzRequired>Tên doanh nghiệp</nz-form-label>
                 <nz-form-control>
                   <input
                     nz-input
@@ -17,17 +17,18 @@
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
+
             <nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label>Email doanh nghiệp</nz-form-label>
+                <nz-form-label nzRequired >Email doanh nghiệp</nz-form-label>
                 <nz-form-control>
                   <input
                     nz-input
                     formControlName="businessEmail"
-                    placeholder="Nhập email" />
+                    placeholder="Nhập email"   [disabled]="isBusinessEmailVerified"/>
                   <div class="mt-1">
-                    <nz-tag *ngIf="emailVerificationStatus.isVerified" nzColor="green">Đã xác minh</nz-tag>
-                    <nz-tag *ngIf="!emailVerificationStatus.isVerified" nzColor="red">Chưa xác minh</nz-tag>
+                    <nz-tag *ngIf="isBusinessEmailVerified" nzColor="green">Đã xác minh</nz-tag>
+                    <nz-tag *ngIf="!isBusinessEmailVerified" nzColor="red">Chưa xác minh</nz-tag>
                   </div>
                 </nz-form-control>
               </nz-form-item>
@@ -35,22 +36,67 @@
 
             <nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label>Domain doanh nghiệp</nz-form-label>
+                <nz-form-label nzRequired>Domain doanh nghiệp</nz-form-label>
                 <nz-form-control>
-                  <input
-                    nz-input
-                    formControlName="businessDomain"
+                  <input nz-input formControlName="businessDomain"
                     placeholder="Nhập tên domain doanh nghiệp"/>
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
           </nz-row>
 
+          <nz-row [nzGutter]="16">
+            <nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired >Tên mô hình kinh doanh</nz-form-label>
+                <nz-form-control>
+                  <input
+                    nz-input
+                    formControlName="brandModelName"
+                    placeholder="Global Digital Business"/>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+            <nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired >Số điện thoại sử dụng Zalo</nz-form-label>
+                <nz-form-control>
+                  <input  nz-input  formControlName="phone"
+                    placeholder="Nhập Số điện thoại sử dụng Zalo"/>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+          </nz-row>
+
+          <nz-row [nzGutter]="16">
+            <nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label nzRequired >Fanpage hoặc Facebook cá nhân</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="facebookUrl"
+                         placeholder="Nhập địa chỉ facebook cá nhân"/>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+            <nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label>Webinar Url</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="webinarUrl"
+                         placeholder="Nhập Webinar Url"/>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+          </nz-row>
+
           <div class="text-right mt-3">
             <button
               nz-button
               nzType="primary"
-              [disabled]="emailVerificationStatus.isVerified || isProcessing"
+              [disabled]="isProcessing"
               (click)="saveBusinessInfo()">
               Lưu thay đổi
             </button>
@@ -104,14 +150,14 @@
           </nz-form-control>
 
           <nz-form-item>
-            <nz-form-label>SMTP Host</nz-form-label>
+            <nz-form-label nzRequired>SMTP Host</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="smtpServer" placeholder="smtp.example.com" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>SMTP Port</nz-form-label>
+            <nz-form-label nzRequired>SMTP Port</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="smtpPort" [nzPlaceHolder]="'Chọn cổng SMTP'" [nzAllowClear]="false">
                 <nz-option [nzValue]="587" nzLabel="587 (STARTTLS)"></nz-option>
@@ -122,14 +168,14 @@
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Username</nz-form-label>
+            <nz-form-label nzRequired>Username</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="username" placeholder="user@example.com" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Password</nz-form-label>
+            <nz-form-label nzRequired>Password</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="password" type="password" placeholder="••••••••" />
             </nz-form-control>
@@ -156,7 +202,7 @@
       </nz-card>
     </nz-tab>
 
-    <nz-tab nzTitle="Integration Settings">
+    <nz-tab nzTitle="Kết nối với hệ thống khác">
       <app-integrations></app-integrations>
     </nz-tab>
 
@@ -165,21 +211,21 @@
       <nz-card [nzSize]="'default'">
         <form [formGroup]="passwordForm" nz-form [nzLayout]="'vertical'">
           <nz-form-item>
-            <nz-form-label>Mật khẩu cũ</nz-form-label>
+            <nz-form-label nzRequired>Mật khẩu cũ</nz-form-label>
             <nz-form-control>
               <input nz-input type="password" formControlName="oldPassword" placeholder="Nhập mật khẩu cũ" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Mật khẩu mới</nz-form-label>
+            <nz-form-label nzRequired>Mật khẩu mới</nz-form-label>
             <nz-form-control>
               <input nz-input type="password" formControlName="newPassword" placeholder="Nhập mật khẩu mới" />
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Nhập lại mật khẩu</nz-form-label>
+            <nz-form-label nzRequired>Nhập lại mật khẩu</nz-form-label>
             <nz-form-control>
               <input nz-input type="password" formControlName="confirmPassword" placeholder="Nhập lại mật khẩu mới" />
             </nz-form-control>

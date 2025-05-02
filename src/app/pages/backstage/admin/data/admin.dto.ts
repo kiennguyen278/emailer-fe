@@ -8,10 +8,15 @@ export interface UserDTO {
 
   businessEmail?: string;
   businessName?: string;
-  domain?: string;
+  businessDomain?: string;
   statusBusinessEmail?: string;
   useCustomSmtp?: boolean; // true | false
   activeStatus?: boolean; // true | false
+
+  brandModelName: string;
+  phone: string;
+  facebookUrl: string;
+  webinarUrl: string;
 
   createdAt?: string;
 }

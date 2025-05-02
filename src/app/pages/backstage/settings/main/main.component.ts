@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
 
   // Business Info
   businessForm!: FormGroup;
-  emailVerificationStatus = { isVerified: false };
+  isBusinessEmailVerified = false;
 
   // SMTP
   smtpForm!: FormGroup;
@@ -56,7 +56,11 @@ export class MainComponent implements OnInit {
     this.businessForm = this.fb.group({
       businessName: ['', Validators.required],
       businessDomain: [''],
-      businessEmail: ['', [Validators.required, Validators.email]]
+      businessEmail: ['', [Validators.required, Validators.email]],
+      brandModelName: ['Global Digital Business', Validators.required],
+      phone:  ['', Validators.required],
+      facebookUrl: ['', Validators.required],
+      webinarUrl:  ['']
     });
   }
 
@@ -68,14 +72,17 @@ export class MainComponent implements OnInit {
           this.businessForm.patchValue({
             businessName: data.businessName,
             businessEmail: data.businessEmail,
-            businessDomain: data.businessDomain
+            businessDomain: data.businessDomain,
+            brandModelName: data.brandModelName,
+            phone: data.phone,
+            facebookUrl: data.facebookUrl,
+            webinarUrl: data.webinarUrl,
           });
-          this.emailVerificationStatus.isVerified = data.isVerified ?? false;
-
+          this.isBusinessEmailVerified = data.isVerified ?? false;
           this.useCustomSmtp = data.useCustomSmtp;
 
-          if (this.emailVerificationStatus.isVerified) {
-            this.businessForm.disable(); // ✅ Quan trọng: disable input tại đây
+          if (this.isBusinessEmailVerified) {
+            this.businessForm.get('businessEmail')?.disable();
           }
 
         } else {
@@ -91,23 +98,26 @@ export class MainComponent implements OnInit {
   saveBusinessInfo() {
     if (this.businessForm.invalid) {
       this.message.error('Vui lòng điền đầy đủ và hợp lệ tất cả các trường bắt buộc!');
-      this.businessForm.markAllAsTouched(); // ⚠️ Đánh dấu toàn bộ control để hiển thị lỗi
+      this.businessForm.markAllAsTouched();
       return;
     }
 
     this.isProcessing = true;
     this.settingsService.updateBusinessInfo(this.businessForm.value).subscribe({
-      next: () => {
-        this.message.success('✅ Chúng tôi đã gửi một email yêu cầu xác minh email doanh nghiệp của bạn!')
+      next: (res) => {
+        const msg = res?.message || '✅ Cập nhật thông tin thành công!';
+        this.message.success(msg);
       },
       error: err => {
-        this.message.error(err?.error?.message || 'Lỗi khi cập nhật thông tin doanh nghiệp!')
+        const msg = err?.error?.message || '❌ Lỗi khi cập nhật thông tin doanh nghiệp!';
+        this.message.error(msg);
       },
       complete: () => {
-      this.isProcessing = false;
-    }
+        this.isProcessing = false;
+      }
     });
   }
+
 
   // -------------------- SMTP --------------------
   initSmtpForm() {

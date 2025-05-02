@@ -16,6 +16,10 @@ export interface BusinessInfo {
   businessName: string;
   businessEmail: string;
   businessDomain: string;
+  brandModelName: string;
+  phone: string;
+  facebookUrl: string;
+  webinarUrl: string;
   isVerified?: boolean; // trạng thái xác minh email
   useCustomSmtp?: boolean;
 }

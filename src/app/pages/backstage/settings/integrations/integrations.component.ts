@@ -23,13 +23,6 @@ export class IntegrationsComponent implements OnInit {
   isKnackEnabled = false;
 
 
-  // ConvertKit Integration
-  isConvertkitEnabled = false;
-  convertkitForm!: FormGroup;
-  convertkitIntegrationId: number | null = null;
-  convertkitUnderConstruction = true;
-
-
   constructor(
     private integrationService: IntegrationService,
     private modal: NzModalService,
@@ -227,109 +220,12 @@ export class IntegrationsComponent implements OnInit {
     return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null && !this.knackProcessing;
   }
 
-  initConvertkitForm(): void {
-    this.convertkitForm = this.fb.group({
-      endpointUrl: ['https://api.convertkit.com/v3/', Validators.required],
-      apiKey: ['', Validators.required],
-      tagId: [null, Validators.required],
-      status: ['INACTIVE']
-    });
-    this.convertkitIntegrationId  = null;
-    this.isConvertkitEnabled = false; // ✅ Switch OFF
-  }
 
-  loadConvertkitIntegration(): void {
-    const convertkit = this.findIntegration('convertkit');
-    if (convertkit && convertkit.id) {
-      this.convertkitIntegrationId = convertkit.id;
-      this.convertkitForm.patchValue({
-        endpointUrl: convertkit.endpointUrl || 'https://api.convertkit.com/v3/',
-        apiKey: convertkit.apiKey,
-        tagId: convertkit.tagId,
-        status: convertkit.status
-      });
-      this.isConvertkitEnabled = convertkit.status === 'ACTIVE';
-      convertkit.status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
-    }
-  }
 
+  // ConvertKit Integration
+  isConvertkitEnabled = false;
   toggleConvertkitStatus(active: boolean): void {
-    const status = active ? 'ACTIVE' : 'INACTIVE';
     this.isConvertkitEnabled = active;
-    if (!this.convertkitIntegrationId) {
-      this.convertkitForm.patchValue({ status });
-      status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
-      return;
-    }
-
-    const body = {
-      ...this.convertkitForm.getRawValue(),
-      status,
-      sourceType: 'CONVERTKIT',
-      systemName: 'ConvertKit'
-    };
-
-    this.integrationService.update(this.convertkitIntegrationId, body).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.convertkitForm.patchValue({ status });
-          status === 'ACTIVE' ? this.convertkitForm.enable() : this.convertkitForm.disable();
-          this.message.success(`Đã ${status === 'ACTIVE' ? 'bật' : 'tắt'} ConvertKit`);
-        }
-      },
-      error: () => this.message.error('Lỗi khi cập nhật trạng thái ConvertKit!')
-    });
-  }
-
-  canPullConvertkit(): boolean {
-    return this.convertkitForm.value.status === 'ACTIVE' && this.convertkitIntegrationId !== null;
-  }
-
-  testConvertkitConnection(): void {
-    if (this.convertkitForm.invalid) {
-      this.convertkitForm.markAllAsTouched();
-      this.message.warning('Vui lòng nhập đầy đủ thông tin trước khi kiểm tra kết nối!');
-      return;
-    }
-
-    this.message.info('✅ Kết nối ConvertKit: OK (demo)');
-  }
-
-  saveConvertkitIntegration(): void {
-    if (this.convertkitForm.invalid) {
-      this.convertkitForm.markAllAsTouched();
-      this.message.warning('Vui lòng nhập đầy đủ thông tin!');
-      return;
-    }
-
-    const body = {
-      ...this.convertkitForm.getRawValue(),
-      sourceType: 'CONVERTKIT',
-      systemName: 'ConvertKit'
-    };
-
-    const request$ = this.convertkitIntegrationId
-      ? this.integrationService.update(this.convertkitIntegrationId, body)
-      : this.integrationService.create(body);
-
-    request$.subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.message.success('Đã lưu cấu hình ConvertKit!');
-          this.convertkitForm.patchValue({ status: body.status });
-
-          if (!this.convertkitIntegrationId && res.data?.id) {
-            this.convertkitIntegrationId = res.data.id;
-          }
-        }
-      },
-      error: () => this.message.error('Lỗi khi lưu cấu hình ConvertKit!')
-    });
-  }
-
-  pullAllConvertkitData(): void {
-    if (!this.convertkitIntegrationId) return;
-    this.message.info("Under construction...")
   }
 
 }
