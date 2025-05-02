@@ -137,14 +137,13 @@
   </div>
 
   <div class="table-list pt-3">
-    {{pagination | json}}
     <div class="basis-0 grow shrink">
       <app-table
         [columns]="columns"
         [items]="items"
         [scrollX]="'900px'"
         [loading]="loading$ | async"
-        [showPagination]="pagination.total > 1"
+        [showPagination]="pagination.total > pagination.size"
         (queryParams)="onQueryParams($event)"
         [pagination]="pagination"
 
