@@ -56,7 +56,12 @@ export class UserDetailModalComponent implements OnInit {
     this.form.patchValue({
       businessName: this.user.businessName,
       businessEmail: this.user.businessEmail,
-      businessDomain: this.user.domain,
+      businessDomain: this.user.businessDomain,
+      brandModelName: this.user.brandModelName,
+      phone: this.user.phone,
+      facebookUrl: this.user.facebookUrl,
+      webinarUrl: this.user.webinarUrl,
+      createdAt: this.user.createdAt,
     });
     this.statusBusinessEmail = this.user.statusBusinessEmail == 'ACTIVE'
     if (this.user.useCustomSmtp) {
@@ -125,7 +130,11 @@ export class UserDetailModalComponent implements OnInit {
     this.form = this.fb.group({
       businessName: [null, [ValidatorUtil.required('Tên doanh nghiệp không được để trống!')]],
       businessEmail: [null, [ValidatorUtil.required('Email doanh nghiệp không được để trống!'), ValidatorUtil.email('Email không đúng định dạng!')]],
-      businessDomain: [null],
+      businessDomain: ['', [ValidatorUtil.required('Domain không được để trống!')]],
+      brandModelName: ['', [ValidatorUtil.required('Tên mô hình kinh doanh không được để trống!')]],
+      phone: ['', [ValidatorUtil.required('Phone không được để trống!')]],
+      facebookUrl: ['', [ValidatorUtil.required('FacebookUrl không được để trống!')]],
+      webinarUrl: [''],
     });
 
   }
