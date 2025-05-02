@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {DashboardService} from '../data/dashboard.service';
 
 import { DatePipe } from '@angular/common';
@@ -10,7 +10,7 @@ import {EmailTrendItem} from "../data/dashboard.models";
   styleUrls: ['./dashboard.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
   importantNotices: { type: 'warning' | 'info' | 'error' | 'success', message: string }[] = [];
 
