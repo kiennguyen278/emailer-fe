@@ -394,6 +394,16 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
     this.checkboxSelectedSubscriber = items;
   }
 
+
+  confirmBulkDelete(items: SubscriberDTO[]): void {
+    this.modal.confirm({
+      nzTitle: `Bạn có chắc muốn xoá danh sách subscriber đang chọn?`,
+      nzOkText: 'Xoá',
+      nzOkDanger: true,
+      nzOnOk: () => this.onBulkDelete(items)
+    });
+  }
+
   onBulkDelete(items: SubscriberDTO[]): void {
 
     const ids: number[] = items.map(item => item.id);
