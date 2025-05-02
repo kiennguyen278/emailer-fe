@@ -17,6 +17,7 @@
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
+
             <nz-col [nzSpan]="8">
               <nz-form-item>
                 <nz-form-label nzRequired >Email doanh nghiệp</nz-form-label>
@@ -24,10 +25,10 @@
                   <input
                     nz-input
                     formControlName="businessEmail"
-                    placeholder="Nhập email"   [disabled]="emailVerificationStatus.isVerified"/>
+                    placeholder="Nhập email"   [disabled]="isBusinessEmailVerified"/>
                   <div class="mt-1">
-                    <nz-tag *ngIf="emailVerificationStatus.isVerified" nzColor="green">Đã xác minh</nz-tag>
-                    <nz-tag *ngIf="!emailVerificationStatus.isVerified" nzColor="red">Chưa xác minh</nz-tag>
+                    <nz-tag *ngIf="isBusinessEmailVerified" nzColor="green">Đã xác minh</nz-tag>
+                    <nz-tag *ngIf="!isBusinessEmailVerified" nzColor="red">Chưa xác minh</nz-tag>
                   </div>
                 </nz-form-control>
               </nz-form-item>

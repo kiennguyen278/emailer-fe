@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
 
   // Business Info
   businessForm!: FormGroup;
-  emailVerificationStatus = { isVerified: false };
+  isBusinessEmailVerified = false;
 
   // SMTP
   smtpForm!: FormGroup;
@@ -58,8 +58,8 @@ export class MainComponent implements OnInit {
       businessDomain: [''],
       businessEmail: ['', [Validators.required, Validators.email]],
       brandModelName: ['Global Digital Business', Validators.required],
-      phone:  [''],
-      facebookUrl:  [''],
+      phone:  ['', Validators.required],
+      facebookUrl: ['', Validators.required],
       webinarUrl:  ['']
     });
   }
@@ -78,8 +78,12 @@ export class MainComponent implements OnInit {
             facebookUrl: data.facebookUrl,
             webinarUrl: data.webinarUrl,
           });
-          this.emailVerificationStatus.isVerified = data.isVerified ?? false;
+          this.isBusinessEmailVerified = data.isVerified ?? false;
           this.useCustomSmtp = data.useCustomSmtp;
+
+          if (this.isBusinessEmailVerified) {
+            this.businessForm.get('businessEmail')?.disable();
+          }
 
         } else {
           console.warn('Không có dữ liệu thông tin doanh nghiệp');
