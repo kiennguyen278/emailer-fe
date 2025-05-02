@@ -56,7 +56,11 @@ export class MainComponent implements OnInit {
     this.businessForm = this.fb.group({
       businessName: ['', Validators.required],
       businessDomain: [''],
-      businessEmail: ['', [Validators.required, Validators.email]]
+      businessEmail: ['', [Validators.required, Validators.email]],
+      brandModelName: ['Global Digital Business', Validators.required],
+      phone:  [''],
+      facebookUrl:  [''],
+      webinarUrl:  ['']
     });
   }
 
@@ -68,15 +72,14 @@ export class MainComponent implements OnInit {
           this.businessForm.patchValue({
             businessName: data.businessName,
             businessEmail: data.businessEmail,
-            businessDomain: data.businessDomain
+            businessDomain: data.businessDomain,
+            brandModelName: data.brandModelName,
+            phone: data.phone,
+            facebookUrl: data.facebookUrl,
+            webinarUrl: data.webinarUrl,
           });
           this.emailVerificationStatus.isVerified = data.isVerified ?? false;
-
           this.useCustomSmtp = data.useCustomSmtp;
-
-          if (this.emailVerificationStatus.isVerified) {
-            this.businessForm.disable(); // ✅ Quan trọng: disable input tại đây
-          }
 
         } else {
           console.warn('Không có dữ liệu thông tin doanh nghiệp');
