@@ -63,9 +63,16 @@ export interface SaveSubscriberRequest {
 }
 
 export interface EmailLog {
+  id: string;
   status: string;
   subject: string;
+  email: string;
+  subscriberId: string;
+  campaignId: string;
+  sequenceId: string;
   createdAt: string;
+  openedAt: string;
+  clickedAt: string;
 }
 
 export interface EmailStatsDTO {

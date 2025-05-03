@@ -359,19 +359,20 @@
             <th>Tiêu đề</th>
             <th>Trạng thái</th>
             <th>Thời gian gửi</th>
+            <th>Thời gian Open</th>
+            <th>Thời gian Click </th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let email of selectedSubscriber.emailHistorys">
             <td>{{ email.subject }}</td>
-
-
             <nz-tag [nzColor]="getStatusColor(email.status)">
               <i nz-icon [nzType]="getStatusIcon(email.status)" class="mr-1"></i>
               {{ email.status }}
             </nz-tag>
-
             <td>{{ email.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ email.openedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ email.clickedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
           </tr>
           </tbody>
         </nz-table>
