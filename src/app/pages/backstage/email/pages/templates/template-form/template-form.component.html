@@ -53,9 +53,9 @@
             <ng-container *ngIf="form.controls['type'].value == 'HTML'; else controlArea">
 
                 <app-form-control>
-                  <app-richtext-email
+                  <app-richtext-tinymce
                     formControlName="htmlBody"
-                    [extraTpl]="extraTpl"></app-richtext-email>
+                    [extraTpl]="extraTpl"></app-richtext-tinymce>
                 </app-form-control>
 
                 <ng-template #extraTpl>

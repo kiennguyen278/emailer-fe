@@ -20,7 +20,9 @@ import { QuillModule } from 'ngx-quill';
 import { SelectComponent } from '@shared/controls/select/select.component';
 import { TextareaComponent } from '@shared/controls/textarea/textarea.component';
 import { SwitchComponent } from '@shared/controls/switch/switch.component';
+import {EditorModule, TINYMCE_SCRIPT_SRC} from '@tinymce/tinymce-angular';
 import {RichtextEmailComponent} from "@shared/controls/richtext-email/richtext-email.component";
+import {RichtextTinymceComponent} from "@shared/controls/richtext-tinymce/richtext-tinymce.component";
 
 const components = [
   CheckboxComponent,
@@ -37,6 +39,7 @@ const components = [
   RadioGroupConfirmComponent,
   RichtextComponent,
   RichtextEmailComponent,
+  RichtextTinymceComponent,
   SelectComponent,
   TextareaComponent,
   SwitchComponent,
@@ -51,8 +54,12 @@ const components = [
     TranslateModule,
     QuillModule.forRoot(),
     ReactiveFormsModule,
+    EditorModule,
   ],
   declarations: components,
-  exports: components
+  exports: components,
+  providers: [
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
+  ]
 })
 export class ControlsModule {}
