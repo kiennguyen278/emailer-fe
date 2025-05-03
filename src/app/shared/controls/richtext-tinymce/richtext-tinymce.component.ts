@@ -56,7 +56,7 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
   tinyConfig = {
     base_url: '/tinymce', // 👈 dòng này là bắt buộc
     suffix: '.min',       // 👈 dùng file tinymce.min.js
-    height: 500,
+    height: 900,
     menubar: true,
     plugins: [
       'advlist',          // Danh sách nâng cao (số thứ tự/bullet)
