@@ -56,7 +56,6 @@ export class IntegrationsComponent implements OnInit {
   initKnackForm(): void {
     // knackForm
     this.knackForm = this.fb.group({
-      endpointUrl: ['https://webmedius.knack.com/dream-team-admin-v2#business-owners-v2/viewmyleads/', Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
       tagId: [null, Validators.required],
@@ -73,7 +72,6 @@ export class IntegrationsComponent implements OnInit {
       this.isKnackEnabled = knack.status === 'ACTIVE';
       this.knackIntegrationId = knack.id;
       this.knackForm.patchValue({
-        endpointUrl: knack.endpointUrl || 'https://webmedius.knack.com/dream-team-admin-v2#business-owners-v2/viewmyleads/',
         username: knack.username,
         password: knack.password,
         tagId: knack.tagId,
@@ -226,8 +224,6 @@ export class IntegrationsComponent implements OnInit {
   canPullKnack(): boolean {
     return this.knackForm.value.status === 'ACTIVE' && this.knackIntegrationId !== null && !this.knackProcessing;
   }
-
-
 
   // ConvertKit Integration
   isConvertkitEnabled = false;

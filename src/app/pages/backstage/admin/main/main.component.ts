@@ -42,6 +42,7 @@ export class MainComponent implements OnInit {
       systemName: ['', Validators.required],
       systemUrl: ['', Validators.required],
       frontendUrl: ['', Validators.required],
+      knackUrl: ['', Validators.required],
       systemEmail: ['', [Validators.required, Validators.email]],
       logPath: ['', Validators.required],
       isMaintenanceMode: [false],

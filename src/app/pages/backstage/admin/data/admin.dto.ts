@@ -31,6 +31,7 @@ export interface GeneralSettings {
 
   systemUrl: string | null;
   frontendUrl: string | null;
+  knackUrl: string | null;
   logPath: string | null;
   isMaintenanceMode: boolean;
 }

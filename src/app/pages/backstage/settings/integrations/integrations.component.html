@@ -17,13 +17,6 @@
     <form *ngIf="isKnackEnabled" [formGroup]="knackForm">
       <div class="grid-form">
         <nz-form-item>
-          <nz-form-label [nzSpan]="6" nzRequired>Endpoint URL</nz-form-label>
-          <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
-            <input nz-input formControlName="endpointUrl" [readonly]="true" />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired>Username</nz-form-label>
           <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
             <input nz-input formControlName="username" />
