@@ -40,7 +40,15 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="6" nzRequired>Tag ID</nz-form-label>
           <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
-            <input nz-input type="number" formControlName="tagId" />
+
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzRequired>Tag</nz-form-label>
+              <nz-form-control [nzSpan]="18" nzErrorTip="Không được để trống">
+                <nz-select formControlName="tagId" nzShowSearch nzPlaceHolder="Chọn tag">
+                  <nz-option *ngFor="let opt of (tagOptions$ | async)" [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
 
             <div class="ant-form-text text-gray-500 mt-2 font-semibold">
               🔍 Giải thích chi tiết:

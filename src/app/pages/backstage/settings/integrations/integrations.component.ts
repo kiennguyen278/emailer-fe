@@ -4,6 +4,8 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IntegrationService} from "../data/integration.service";
 import {IntegrationSettingDTO} from "../data/setting.model";
+import {Observable} from "rxjs";
+import {TagService} from "@core/services/tag.service";
 
 @Component({
   selector: 'app-integrations',
@@ -15,6 +17,7 @@ export class IntegrationsComponent implements OnInit {
 
   list: IntegrationSettingDTO[] = [];
 
+  tagOptions$: Observable<{ label: string; value: number }[]>;
 
   // KNACK Integration
   knackProcessing = false;
@@ -27,11 +30,12 @@ export class IntegrationsComponent implements OnInit {
     private integrationService: IntegrationService,
     private modal: NzModalService,
     private message: NzMessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private tagService: TagService,
   ) {}
 
   ngOnInit(): void {
-
+    this.tagOptions$ = this.tagService.getOptions();
     this.initKnackForm();  // ✅ luôn khởi tạo form trống ban đầu
     this.loadList();       // ✅ sau đó load dữ liệu để patch nếu có
   }
@@ -84,6 +88,9 @@ export class IntegrationsComponent implements OnInit {
 
   // ✅ Save cấu hình KNACK
   saveKnackIntegration(): void {
+
+    console.log('🔍 Form Value:', this.knackForm.value);
+
     if (this.knackForm.invalid) {
       this.knackForm.markAllAsTouched(); // ✅ hiện lỗi ngay
       this.message.warning('Vui lòng nhập đầy đủ thông tin cấu hình!');
