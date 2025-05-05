@@ -3,13 +3,10 @@ import {
   EventEmitter,
   forwardRef,
   Input,
-  OnInit,
   Output, TemplateRef, ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ModuleQuill } from '@core/constants';
-import {QuillEditorComponent} from "ngx-quill";
 import {DomSanitizer} from "@angular/platform-browser";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NotificationService} from "@core/services/notification.service";
@@ -36,7 +33,6 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
   @Input() extraTpl?: TemplateRef<any>;
 
   @ViewChild('preview') preview!: TemplateRef<any>;
-  @ViewChild('myIframe') iframeRef!: ElementRef;
 
   contentPreviewHTML: any;
   editorInstance: any;
