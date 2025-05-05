@@ -51,7 +51,7 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
   tinyConfig = {
     base_url: '/tinymce', // 👈 dòng này là bắt buộc
     suffix: '.min',       // 👈 dùng file tinymce.min.js
-    height: 900,
+    height: 820,
     menubar: true,
     plugins: [
       'advlist',          // Danh sách nâng cao (số thứ tự/bullet)
@@ -70,14 +70,16 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
       'media',            // Chèn media (video/audio)
       'table',            // Chèn bảng
       'paste',            // Quản lý paste
-      'help',             // Hỗ trợ
+      // 'help',             // Hỗ trợ
       'wordcount'         // Đếm từ
     ],
+    branding: false,
+    statusbar: true,
     toolbar: 'undo redo | blocks | bold italic underline strikethrough | \
            forecolor backcolor | alignleft aligncenter alignright alignjustify | \
            bullist numlist outdent indent | link image media table | \
            removeformat | code fullscreen preview | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    content_style: 'body { font-family:"Times New Roman", serif; font-size:14px }',
     setup: (editor: any) => {
       this.editorInstance = editor;
 

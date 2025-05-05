@@ -111,7 +111,7 @@ export class TemplatesComponent implements OnInit, OnDestroy {
         emailTemplate: item || null
       },
       nzFooter: null,
-      nzWidth: '860px',
+      nzWidth: 1100,
       nzMaskClosable: false
     });
 
