@@ -35,12 +35,11 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
   @Output() enter = new EventEmitter<boolean>();
   @Input() extraTpl?: TemplateRef<any>;
 
-  @ViewChild('quillEditor') quillEditorComponent!: QuillEditorComponent;
   @ViewChild('preview') preview!: TemplateRef<any>;
   @ViewChild('myIframe') iframeRef!: ElementRef;
 
-  moduleQuill = ModuleQuill;
   contentPreviewHTML: any;
+  editorInstance: any;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -82,7 +81,18 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
            forecolor backcolor | alignleft aligncenter alignright alignjustify | \
            bullist numlist outdent indent | link image media table | \
            removeformat | code fullscreen preview | help',
-    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    setup: (editor: any) => {
+      this.editorInstance = editor;
+
+      // Tạo custom button chèn nội dung
+      editor.ui.registry.addButton('mybutton', {
+        text: 'Chèn đoạn',
+        onAction: () => {
+          editor.insertContent('<strong>[Đoạn chèn vào]</strong>');
+        }
+      });
+    }
   }
 
   onChange(event: any): void {
@@ -115,15 +125,9 @@ export class RichtextTinymceComponent implements ControlValueAccessor {
   }
 
 
-
   insertPlaceholder(text: string) {
-    const editor = this.quillEditorComponent?.quillEditor;
-    const selection = editor?.getSelection(true);
-
-    if (selection) {
-      editor.insertText(selection.index, text);
-      // @ts-ignore
-      editor.setSelection(selection.index + text.length);
+    if (this.editorInstance) {
+      this.editorInstance.insertContent(text);
     }
   }
 

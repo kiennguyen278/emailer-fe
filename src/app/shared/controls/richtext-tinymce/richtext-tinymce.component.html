@@ -1,47 +1,88 @@
 <div class="relative">
-  <div class="space-x-2 text-sm text-gray-600 mb-2 flex justify-between">
-    <div>
-      <span>🔖 Chèn Placeholder:</span>
-      <button
-        type="button"
-        class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
-        (click)="insertPlaceholder('{{ contact.first_name }}')">
-        Tên
-      </button>
-      <button
-        type="button"
-        class="px-2 py-1 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
-        (click)="insertPlaceholder('{{ contact.email }}')">
-        Email
-      </button>
-    </div>
+  <div class="text-sm text-gray-600">
+      <div class="flex justify-between items-center mb-2">
+        <div>🔖 Chèn Placeholder:</div>
+        <div>
+          <ng-container *ngIf="extraTpl">
+            <ng-container *ngTemplateOutlet="extraTpl"></ng-container>
+          </ng-container>
 
+          <button
+            type="button"
+            class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2"
+            (click)="showPreview()">
+            Xem trước
+          </button>
+        </div>
 
-    <div>
-      <ng-container *ngIf="extraTpl">
-        <ng-container *ngTemplateOutlet="extraTpl"></ng-container>
-      </ng-container>
+      </div>
 
-      <button
-        type="button"
-        class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded ml-2"
-        (click)="showPreview()">
-        Xem trước
-      </button>
-    </div>
+      <div>
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{contact.first_name}}')">
+          Tên
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{subscriber.first_name}}')">
+          Tên Lead
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.brand_model_name}}')">
+          Business Model
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.business_name}}')">
+          Business Name
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.business_domain}}')">
+          Business Domain
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.phone}}')">
+          Zalo
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.facebook_url}}')">
+          Facebook
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{user.webinar_url}}')">
+          Webinar
+        </button>
+
+        <button
+          type="button"
+          class="px-2 py-1 mb-2 ml-2 bg-gray-100 hover:bg-gray-200 rounded"
+          (click)="insertPlaceholder('{{unsubscribe_link}}')">
+          Unsubscribe
+        </button>
+      </div>
 
   </div>
-
-<!--  <quill-editor-->
-<!--    #quillEditor-->
-<!--    class="editor tool bg-white"-->
-<!--    [modules]="moduleQuill"-->
-<!--    [styles]="{height: '300px'}"-->
-<!--    placeholder="{{ placeholder }}"-->
-<!--    [(ngModel)]="value"-->
-<!--    (ngModelChange)="onChange($event)"-->
-<!--    [disabled]="disabled"-->
-<!--  ></quill-editor>-->
 
   <editor
     [(ngModel)]="value"
