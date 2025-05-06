@@ -24,6 +24,7 @@ export const Status = {
 
 
 export const OptionDelayDate: OptionModel<Number>[] = [
+  {label: 'Immediately', value: 0},
   {label: 'After 1 day', value: 1},
   {label: 'After 2 days', value: 2},
   {label: 'After 3 days', value: 3},
