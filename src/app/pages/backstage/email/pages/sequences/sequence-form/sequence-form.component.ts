@@ -46,7 +46,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
     this.buildForm();
   }
 
-  crrStep = 0;
+  crrStep = 0; // danh sách step là formArray, nhưng khi edit chỉ hiện 1 item, nên sử dụng crrStep để check xem index nào trong formArray đang đc chọn để hiển thị item bằng đk: crrStep == index, nên khi xóa, thêm step, chỉ cần đổi value của crrStep là đc;
   optionDelayDate = OptionDelayDate;
 
   DATE_TIME_FORMAT = DATE_TIME_FORMAT;
@@ -59,6 +59,7 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   }
 
   isLoadingSave = false
+  loadingDelStep = false
 
   form: FormGroup;
   formStep: FormGroup;
@@ -124,43 +125,43 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
   }
 
 
-  saveSequence() {
-    const formVal = this.form.getRawValue();
+  deleteStep(index: number) {
 
-    FormUtil.validate(this.form);
+    const currentStepControl = this.steps?.at(index) as FormGroup;
 
-    this.isLoadingSave = true;
+    const currentStepValue = currentStepControl.getRawValue();
+    if (currentStepValue.id){
+      this.loadingDelStep = true;
+      this.emailService.deleteStepSequence(currentStepValue.id).pipe()
+        .subscribe({
+          next: (res) => {
+            this.notification.open({
+              type: 'success',
+              content: res?.message || 'Xóa step thành công'
+            })
+            this.loadingDelStep = false;
 
-    const request = {
-      ...formVal,
-      status: formVal.status === Status.ACTIVE ? 'ACTIVE' : 'INACTIVE',
+            this.steps.removeAt(index);
+            if (this.steps.length > 0) {
+              this.editStep(index != 0 ? index - 1 : 0);
+            }
+          },
+          error: ({error}) => {
+            this.notification.open({
+              type: 'error',
+              content: error?.message || 'Thao tác thất bại'
+            });
+            this.loadingDelStep = false;
+          }
+        });
+    } else {
+      this.steps.removeAt(index);
+      if (this.steps.length > 0) {
+        this.editStep(index - 1);
+      }
     }
 
-    const request2: SaveSequenceRequest = this.sequence?.id ? {id: this.sequence.id, ...request} : request;
 
-    this.emailService.saveSequence(request2).pipe()
-      .subscribe({
-        next: (res) => {
-          this.notification.open({
-            type: 'success',
-            content: res?.message || (this.sequence?.id ? 'Cập nhật sequence thành công' : 'Thêm sequence mới thành công')
-          })
-          this.isLoadingSave = false;
-          console.log('res', res);
-          if (!this.sequence?.id){
-            this.sequence = res.data;
-          } else {
-            // this.modalRef.destroy(true);
-          }
-        },
-        error: ({error}) => {
-          this.notification.open({
-            type: 'error',
-            content: error?.message || 'Thao tác thất bại'
-          });
-          this.isLoadingSave = false;
-        }
-      });
   }
 
   buildForm(){

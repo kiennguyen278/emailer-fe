@@ -87,7 +87,7 @@
 
                   <ng-container *ngIf="crrStep == index">
                     <div nz-row [nzGutter]="16">
-                      <div nz-col [nzSpan]="19">
+                      <div nz-col [nzSpan]="18">
                         <div class="field-item mb-3">
                           <div class="mb-1">Subject line (<span class="text-[#f00]">*</span>)</div>
                           <div class="flex-[1_0_0]">
@@ -100,15 +100,29 @@
                         </div>
                       </div>
 
-                      <div nz-col [nzSpan]="5">
-                        <div class="field-item mb-3">
-                          <div class="mb-1">Send this email (<span class="text-[#f00]">*</span>)</div>
-                          <div class="flex-[1_0_0]">
-                            <app-form-control>
-                              <app-select formControlName="delayDays"
-                                          [options]="optionDelayDate"
-                                          placeholder="Subject line"></app-select>
-                            </app-form-control>
+                      <div nz-col [nzSpan]="6">
+                        <div class="flex">
+                          <div class="field-item mb-3 flex-[1_0_0]">
+                            <div class="mb-1">Send this email (<span class="text-[#f00]">*</span>)</div>
+                            <div>
+                              <app-form-control>
+                                <app-select formControlName="delayDays"
+                                            [options]="optionDelayDate"
+                                            placeholder="Subject line"></app-select>
+                              </app-form-control>
+                            </div>
+                          </div>
+
+                          <div class="field-item mb-3 ml-3 flex-[30px_0_0]">
+                            <div class="mb-1">&nbsp;</div>
+                            <div>
+                              <button nz-button nzType="text" nzShape="circle" (click)="deleteStep(index)" class="p-0 text-[#ff6c00]"
+                                      type="button"
+                                      [nzLoading]="loadingDelStep"
+                              style="border-radius: 50px; border: 1px solid #ff6c00; height: 30px; width: 30px; margin: 1px; min-width: 0; min-height: 0;">
+                                <i class="text-[16px] relative top-[-2px]" nz-icon nzType="delete" nz-tooltip nzTooltipTitle="Xóa step sequence"></i>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -170,8 +184,8 @@
                      [ngClass]="{'border-[#ff6c00]': crrStep == index, 'text-[#ff6c00]': crrStep == index}"
                      (click)="editStep(index)"
                      [formGroupName]="index" cdkDrag>
-                  <div class="whitespace-nowrap text-ellipsis">
-                    <div>{{formStep.controls['steps']?.value[index]?.subject}}</div>
+                  <div class="">
+                    <div class="two-line" [title]="formStep.controls['steps']?.value[index]?.subject">{{formStep.controls['steps']?.value[index]?.subject}}</div>
                     <ng-container *ngIf="!formStep.controls['steps']?.value[index]?.id">
                       <span class="text-[9px] px-[3px] border border-[#f5674a] text-[#f5674a] rounded-md">DRAFT</span>
                     </ng-container>

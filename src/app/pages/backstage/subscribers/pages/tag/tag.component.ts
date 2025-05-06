@@ -100,7 +100,7 @@ export class TagComponent implements OnInit, OnDestroy {
     this.modalRef = this.modal.create({
       nzTitle: tag?.id ? `Cập nhật tag "${tag.name}"` : 'Thêm mới tag',
       nzContent: this.modalEditTag,
-      nzFooter: null
+      nzFooter: null,
     });
   }
 

@@ -164,6 +164,10 @@ export class EmailService extends BaseApiService{
   }
 
 
+  deleteStepSequence(stepId: number): Observable<any> {
+    const url = this.buildUrl(`/sequences/steps/${stepId}`);
+    return this.http.delete<ApiResponse<any>>(url);
+  }
 
   saveOrderStepSequence(request: ReOrderStepsSequenceRequest): Observable<any> {
       const url = this.buildUrl(`/sequences/${request.sequenceId}/reorder-steps`);
