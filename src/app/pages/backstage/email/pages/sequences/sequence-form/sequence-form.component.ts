@@ -160,9 +160,17 @@ export class SequenceFormComponent implements OnInit, OnDestroy {
         this.editStep(index - 1);
       }
     }
-
-
   }
+
+  confirmDeleteStep(index: number): void {
+    this.modal.confirm({
+      nzTitle: `Bạn có chắc muốn xoá step?`,
+      nzOkText: 'Xoá',
+      nzOkDanger: true,
+      nzOnOk: () => this.deleteStep(index)
+    });
+  }
+
 
   buildForm(){
     this.form = this.fb.group({
