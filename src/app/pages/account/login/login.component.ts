@@ -35,8 +35,8 @@ export class LoginComponent implements OnInit {
 
   buildForm() {
     this.form = this.fb.group({
-      email: ['demo@test.com', [ValidatorUtil.required('Tên đăng nhập không được để trống')]],
-      password: ['123456', [ValidatorUtil.required('Mật khẩu không được để trống')]],
+      email: [null, [ValidatorUtil.required('Tên đăng nhập không được để trống')]],
+      password: [null, [ValidatorUtil.required('Mật khẩu không được để trống')]],
     });
 
   }

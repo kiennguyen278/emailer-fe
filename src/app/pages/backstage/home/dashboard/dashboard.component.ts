@@ -69,7 +69,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadSubscriberGrowth() {
-    this.dashboardService.getSubscriberGrowth().subscribe((res) => {
+    this.dashboardService.getSubscriberGrowth().pipe()
+      .subscribe((res) => {
       if (res.success) {
         const data = res.data;
         this.subscriberGrowthItems = [
