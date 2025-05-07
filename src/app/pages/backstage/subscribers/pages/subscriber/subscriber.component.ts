@@ -8,7 +8,7 @@ import { NotificationService } from '@core/services/notification.service';
 import {Observable, of} from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ActivatedRoute } from '@angular/router';
-import { isNil, omitBy } from 'lodash';
+import {cloneDeep, isNil, omitBy, pick} from 'lodash';
 import {BaseCrudListComponent} from "@core/components";
 import {OptionModel} from "@core/models/option.model";
 import {
@@ -47,13 +47,15 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   tagOptions$: Observable<OptionModel<number>[]> = this.store.select(selectOptionsTagsList); // làm option select ở addnew/edit Subscriber
 
   //  PENDING,ACTIVE, INACTIVE, UNSUBSCRIBED, BOUNCED
-  subscriberStatusOptions$ = of([
+  subscriberStatusOptions: OptionModel[] = [
     { label: 'Active', value: 'ACTIVE' },
     { label: 'Pending', value: 'PENDING' },
     { label: 'Inactive', value: 'INACTIVE' },
     { label: 'Unsubscribed', value: 'UNSUBSCRIBED' },
     { label: 'Bounced', value: 'BOUNCED' }
-  ]);
+  ];
+
+  subscriberStatusOptionsEdit: OptionModel[] = [...this.subscriberStatusOptions];
 
   overviewStats: SubscriberStatsDTO | null = null;
 
@@ -88,6 +90,10 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       sortable: true,
       nzWidth: '100px',
       tdClass: 'text-center',
+      pipe: 'optionLabel',
+      filter: {
+        options: this.subscriberStatusOptions
+      }
     },
 
     {
@@ -158,11 +164,34 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
         id: item.subscriberId,
         tagIds: tagIds
       });
+
+      switch (item.status) {
+        case 'ACTIVE':
+          this.subscriberStatusOptionsEdit = this.subscriberStatusOptions.filter(option => ['ACTIVE', 'INACTIVE', 'UNSUBSCRIBED'].includes(option.value));
+          break;
+
+        case 'INACTIVE':
+          this.subscriberStatusOptionsEdit = this.subscriberStatusOptions.filter(option => ['ACTIVE', 'INACTIVE'].includes(option.value));
+          break;
+
+        case 'PENDING':
+          this.subscriberStatusOptionsEdit = this.subscriberStatusOptions.filter(option => ['ACTIVE', 'INACTIVE', 'UNSUBSCRIBED', 'PENDING'].includes(option.value));
+          break;
+
+        default:
+          this.subscriberStatusOptionsEdit = this.subscriberStatusOptions.filter(option => item.status == option.value);
+          break;
+
+      }
+
       this.form.controls['email'].disable();
+      this.form.controls['status'].enable();
     } else {
-      this.form.reset();
+      this.form.reset({status: 'ACTIVE'});
+      this.form.controls['status'].disable();
       this.form.controls['email'].enable();
     }
+
     this.modalEditSubcriberRef = this.modal.create({
       nzTitle: item?.subscriberId ? `Cập nhật subscriber "${item.firstName}"` : 'Thêm mới subscriber',
       nzContent: this.modalEditSubscriber,
@@ -230,7 +259,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
         }
       },
       error: (err) => {
-        console.error(err);
         this.message.error('Lỗi kết nối hoặc định dạng không hợp lệ!');
       },
       complete: () => {
@@ -348,6 +376,7 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       firstName: [null, [ValidatorUtil.required('First Name không được để trống!')]],
       lastName: [null],
       tagIds: [null],
+      status: ['ACTIVE'],
     });
 
     // search form
@@ -389,8 +418,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
   }
 
   onSelectedItem(items: SubscriberDTO[]): void {
-    console.log('SubscriberDTO', items);
-
     this.checkboxSelectedSubscriber = items;
   }
 
@@ -410,7 +437,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
 
     this.subscribersService.bulkDeleteSubscriber(ids).subscribe({
       next: (res) => {
-        console.log('res bulkDeleteSubscriber', res)
         if (res.success) {
           this.checkboxSelectedSubscriber = [];
           this.notification.open({
@@ -421,7 +447,6 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
         }
       },
       error: ({error}) => {
-        console.log('error bulkDeleteSubscriber', error)
         this.notification.open({
           type: 'error',
           content: error?.message || 'Có lỗi khi xóa danh sách subscriber'
