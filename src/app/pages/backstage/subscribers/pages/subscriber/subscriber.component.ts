@@ -185,10 +185,9 @@ export class SubscriberComponent extends BaseCrudListComponent implements OnInit
       }
 
       this.form.controls['email'].disable();
-      this.form.controls['status'].enable();
     } else {
+      this.subscriberStatusOptionsEdit = this.subscriberStatusOptions.filter(option => ['ACTIVE', 'PENDING'].includes(option.value));
       this.form.reset({status: 'ACTIVE'});
-      this.form.controls['status'].disable();
       this.form.controls['email'].enable();
     }
 
